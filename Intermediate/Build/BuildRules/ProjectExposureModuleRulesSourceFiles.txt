@@ -1,0 +1,3 @@
+D:\Game_Development\Git\ProjectExposure\Source\ProjectExposure\ProjectExposure.Build.cs
+D:\Game_Development\Git\ProjectExposure\Source\ProjectExposure.Target.cs
+D:\Game_Development\Git\ProjectExposure\Source\ProjectExposureEditor.Target.cs

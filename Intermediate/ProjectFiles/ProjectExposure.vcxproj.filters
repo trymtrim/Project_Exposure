@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<ItemGroup>
+		<None Include="..\..\ProjectExposure.uproject" />
+		<Filter Include="Source">
+			<UniqueIdentifier>{E0279B39-A47F-4057-BB08-E43E6B5DAB8B}</UniqueIdentifier>
+		</Filter>
+		<None Include="..\..\Source\ProjectExposure.Target.cs">
+			<Filter>Source</Filter>
+		</None >
+		<None Include="..\..\Source\ProjectExposureEditor.Target.cs">
+			<Filter>Source</Filter>
+		</None >
+		<Filter Include="Config">
+			<UniqueIdentifier>{A6EE2F2A-3DFE-420D-A9F5-7493D2C2BA54}</UniqueIdentifier>
+		</Filter>
+		<None Include="..\..\Config\DefaultEditor.ini">
+			<Filter>Config</Filter>
+		</None >
+		<None Include="..\..\Config\DefaultEngine.ini">
+			<Filter>Config</Filter>
+		</None >
+		<None Include="..\..\Config\DefaultGame.ini">
+			<Filter>Config</Filter>
+		</None >
+		<None Include="..\..\Config\DefaultInput.ini">
+			<Filter>Config</Filter>
+		</None >
+		<Filter Include="Source\ProjectExposure">
+			<UniqueIdentifier>{8753DAFC-C048-4860-83FB-DEF80A73D661}</UniqueIdentifier>
+		</Filter>
+		<ClCompile Include="..\..\Source\ProjectExposure\MainGameMode.cpp">
+			<Filter>Source\ProjectExposure</Filter>
+		</ClCompile >
+		<ClInclude Include="..\..\Source\ProjectExposure\MainGameMode.h">
+			<Filter>Source\ProjectExposure</Filter>
+		</ClInclude >
+		<ClCompile Include="..\..\Source\ProjectExposure\MainPlayerController.cpp">
+			<Filter>Source\ProjectExposure</Filter>
+		</ClCompile >
+		<ClInclude Include="..\..\Source\ProjectExposure\MainPlayerController.h">
+			<Filter>Source\ProjectExposure</Filter>
+		</ClInclude >
+		<ClCompile Include="..\..\Source\ProjectExposure\PlaceableUnit.cpp">
+			<Filter>Source\ProjectExposure</Filter>
+		</ClCompile >
+		<ClInclude Include="..\..\Source\ProjectExposure\PlaceableUnit.h">
+			<Filter>Source\ProjectExposure</Filter>
+		</ClInclude >
+		<None Include="..\..\Source\ProjectExposure\ProjectExposure.Build.cs">
+			<Filter>Source\ProjectExposure</Filter>
+		</None >
+		<ClCompile Include="..\..\Source\ProjectExposure\ProjectExposure.cpp">
+			<Filter>Source\ProjectExposure</Filter>
+		</ClCompile >
+		<ClInclude Include="..\..\Source\ProjectExposure\ProjectExposure.h">
+			<Filter>Source\ProjectExposure</Filter>
+		</ClInclude >
+		<ClCompile Include="..\..\Source\ProjectExposure\SimulationGameController.cpp">
+			<Filter>Source\ProjectExposure</Filter>
+		</ClCompile >
+		<ClInclude Include="..\..\Source\ProjectExposure\SimulationGameController.h">
+			<Filter>Source\ProjectExposure</Filter>
+		</ClInclude >
+	</ItemGroup>
+</Project>

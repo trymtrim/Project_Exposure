@@ -1,0 +1,14 @@
+﻿  Creating makefile for hot reloading ProjectExposureEditor (no existing makefile)
+  Compiling game modules for hot reload
+  Parsing headers for ProjectExposureEditor
+    Running UnrealHeaderTool "D:\Game_Development\Git\ProjectExposure\ProjectExposure.uproject" "D:\Game_Development\Git\ProjectExposure\Intermediate\Build\Win64\ProjectExposureEditor\Development\ProjectExposureEditor.uhtmanifest" -LogCmds="loginit warning, logexit warning, logdatabase error" -Unattended -WarningsAsErrors -installed
+  Reflection code generated for ProjectExposureEditor in 10,5571091 seconds
+  Performing 4 actions (4 in parallel)
+  SimulationGameController.cpp
+  SimulationGameController.gen.cpp
+  [3/4] Link UE4Editor-ProjectExposure-7373.dll
+  [4/4] Link UE4Editor-ProjectExposure-7373.lib
+     Creating library D:\Game_Development\Git\ProjectExposure\Intermediate\Build\Win64\UE4Editor\Development\UE4Editor-ProjectExposure-7373.lib and object D:\Game_Development\Git\ProjectExposure\Intermediate\Build\Win64\UE4Editor\Development\UE4Editor-ProjectExposure-7373.exp
+     Creating library D:\Game_Development\Git\ProjectExposure\Intermediate\Build\Win64\UE4Editor\Development\UE4Editor-ProjectExposure-7373.suppressed.lib and object D:\Game_Development\Git\ProjectExposure\Intermediate\Build\Win64\UE4Editor\Development\UE4Editor-ProjectExposure-7373.suppressed.exp
+  Deploying ProjectExposureEditor Win64 Development...
+  Total build time: 34,95 seconds (Local executor: 14,06 seconds)

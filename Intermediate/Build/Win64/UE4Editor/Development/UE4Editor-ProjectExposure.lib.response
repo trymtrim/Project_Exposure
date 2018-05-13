@@ -1,0 +1,22 @@
+/NOLOGO
+/errorReport:prompt
+/MACHINE:x64
+/SUBSYSTEM:WINDOWS
+/DEF
+/NAME:"UE4Editor-ProjectExposure.dll"
+/IGNORE:4221
+/NODEFAULTLIB
+"C:\Program Files\Epic Games\UE_4.19\Engine\Intermediate\Build\Win64\UE4Editor\Development\Engine\SharedPCH.Engine.h.obj"
+"D:\Game_Development\Git\ProjectExposure\Intermediate\Build\Win64\UE4Editor\Development\ProjectExposure\MainGameMode.cpp.obj"
+"D:\Game_Development\Git\ProjectExposure\Intermediate\Build\Win64\UE4Editor\Development\ProjectExposure\MainPlayerController.cpp.obj"
+"D:\Game_Development\Git\ProjectExposure\Intermediate\Build\Win64\UE4Editor\Development\ProjectExposure\PlaceableUnit.cpp.obj"
+"D:\Game_Development\Git\ProjectExposure\Intermediate\Build\Win64\UE4Editor\Development\ProjectExposure\ProjectExposure.cpp.obj"
+"D:\Game_Development\Git\ProjectExposure\Intermediate\Build\Win64\UE4Editor\Development\ProjectExposure\SimulationGameController.cpp.obj"
+"D:\Game_Development\Git\ProjectExposure\Intermediate\Build\Win64\UE4Editor\Development\ProjectExposure\MainGameMode.gen.cpp.obj"
+"D:\Game_Development\Git\ProjectExposure\Intermediate\Build\Win64\UE4Editor\Development\ProjectExposure\MainPlayerController.gen.cpp.obj"
+"D:\Game_Development\Git\ProjectExposure\Intermediate\Build\Win64\UE4Editor\Development\ProjectExposure\PlaceableUnit.gen.cpp.obj"
+"D:\Game_Development\Git\ProjectExposure\Intermediate\Build\Win64\UE4Editor\Development\ProjectExposure\ProjectExposure.init.gen.cpp.obj"
+"D:\Game_Development\Git\ProjectExposure\Intermediate\Build\Win64\UE4Editor\Development\ProjectExposure\SimulationGameController.gen.cpp.obj"
+"C:\Program Files\Epic Games\UE_4.19\Engine\Intermediate\Build\Win64\UE4Editor\Development\ProjectExposure\PCLaunch.rc.res"
+"C:\Program Files\Epic Games\UE_4.19\Engine\Intermediate\Build\Win64\UE4Editor\Development\ModuleVersionResource.rc.inl.res"
+/OUT:"D:\Game_Development\Git\ProjectExposure\Intermediate\Build\Win64\UE4Editor\Development\UE4Editor-ProjectExposure.lib"
