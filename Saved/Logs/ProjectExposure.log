@@ -546,3 +546,5 @@ LogInit: Object subsystem initialized
 [2018.05.13-23.49.05:471][490]EditorErrors: Warning: No assets to check in!
 [2018.05.13-23.49.10:626][797]LogEditorViewport: Clicking on Actor (LMB): BP_Sky_Sphere_C (BP_Sky_Sphere)
 [2018.05.13-23.49.59:537][615]LogSlate: FSceneViewport::OnFocusLost() reason 2
+[2018.05.13-23.53.28:043][290]LogSlate: Window 'Source Control Login' being destroyed
+[2018.05.13-23.55.23:593][755]LogSlate: Took 0.118831 seconds to synchronously load lazily loaded font '../../../Engine/Content/Slate/Fonts/Roboto-Italic.ttf' (157K)
