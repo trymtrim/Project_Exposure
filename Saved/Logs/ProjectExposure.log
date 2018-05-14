@@ -1,4 +1,4 @@
-﻿Log file open, 05/14/18 01:20:36
+﻿Log file open, 05/14/18 01:45:51
 LogWindows: Failed to load 'aqProf.dll' (GetLastError=126)
 LogWindows: File 'aqProf.dll' does not exist
 LogWindows: Failed to load 'VtuneApi.dll' (GetLastError=126)
@@ -7,12 +7,12 @@ LogWindows: Failed to load 'VtuneApi32e.dll' (GetLastError=126)
 LogWindows: File 'VtuneApi32e.dll' does not exist
 LogInit: Display: Running engine for game: ProjectExposure
 LogPlatformFile: Not using cached read wrapper
-LogInit: Display: RandInit(780754961) SRandInit(780754961).
+LogInit: Display: RandInit(687730309) SRandInit(687730309).
 LogInit: Read version file with build ID '3944462'
 LogInit: Overriding engine version to CL 4033788, compatible CL 3944462
 LogInit: Registered custom module enumerator with build ID '3944462'
 LogTaskGraph: Started task graph with 5 named threads and 23 total threads with 3 sets of task threads.
-LogStats: Stats thread started at 0.287349
+LogStats: Stats thread started at 0.273332
 LogD3D11RHI: Aftermath initialized
 LogICUInternationalization: Display: ICU TimeZone Detection - Raw Offset: +1:00, Platform Override: ''
 LogPluginManager: Mounting plugin Paper2D
@@ -85,8 +85,8 @@ LogPluginManager: Mounting plugin ProceduralMeshComponent
 LogPluginManager: Mounting plugin RuntimePhysXCooking
 LogPluginManager: Mounting plugin SteamVR
 LogPluginManager: Mounting plugin WindowsMoviePlayer
-LogStreaming: Display: Took  0.105s to configure plugins.
-LogModuleManager: Display: Found up-to-date module file D:/Game_Development/Git/Project_Exposure/Binaries/Win64/UE4Editor-ProjectExposure-7373.dll (API version 3944462).
+LogStreaming: Display: Took  0.076s to configure plugins.
+LogModuleManager: Display: Found up-to-date module file ../../../../../Unreal/ProjectUnreal/Binaries/Win64/UE4Editor-ProjectExposure-7373.dll (API version 3944462).
 LogModuleManager: Display: Found up-to-date module file ../../../Engine/Plugins/2D/Paper2D/Binaries/Win64/UE4Editor-Paper2D.dll (API version 3944462).
 LogModuleManager: Display: Found up-to-date module file ../../../Engine/Plugins/2D/Paper2D/Binaries/Win64/UE4Editor-Paper2DEditor.dll (API version 3944462).
 LogModuleManager: Display: Found up-to-date module file ../../../Engine/Plugins/2D/Paper2D/Binaries/Win64/UE4Editor-PaperSpriteSheetImporter.dll (API version 3944462).
@@ -194,7 +194,7 @@ LogInit:  - CertBundlePath = nullptr  - Libcurl will use whatever was configured
 LogInit:  - MaxHostConnections = 16  - Libcurl will limit the number of connections to a host
 LogInit:  - LocalHostAddr = Default
 LogInit: WinSock: version 1.1 (2.2), MaxSocks=32767, MaxUdp=65467
-LogInit: WinSock: I am LAPTOP-5P6GUPO7 (192.168.1.14:0)
+LogInit: WinSock: I am DESKTOP-1MHE06P (192.168.1.19:0)
 LogInit: Build: ++UE4+Release-4.19-CL-4033788
 LogInit: Engine Version: 4.19.2-4033788+++UE4+Release-4.19
 LogInit: Compatible Engine Version: 4.19.0-3944462+++UE4+Release-4.19
@@ -223,259 +223,328 @@ LogInit: Compiled with Visual C++: 19.00.24215.01
 LogInit: Build Configuration: Development
 LogInit: Branch Name: ++UE4+Release-4.19
 LogInit: Command Line: -EpicPortal 
-LogInit: Base Directory: C:/Program Files/Epic Games/UE_4.19/Engine/Binaries/Win64/
+LogInit: Base Directory: D:/Software/UE_4.19/Engine/Binaries/Win64/
 LogInit: Installed Engine Build: 1
 LogStreaming: Display: Took  0.001s to delete old logs.
 LogInit: Presizing for max 8388607 objects, including 0 objects not considered by GC, pre-allocating 0 bytes for permanent pool.
 LogInit: Object subsystem initialized
-[2018.05.13-23.20.39:734][  0]LogInit: Selected Device Profile: [Windows]
-[2018.05.13-23.20.39:734][  0]LogInit: Applying CVar settings loaded from the selected device profile: [Windows]
-[2018.05.13-23.20.39:743][  0]LogInit: Computer: LAPTOP-5P6GUPO7
-[2018.05.13-23.20.39:743][  0]LogInit: User: Trym
-[2018.05.13-23.20.39:743][  0]LogInit: CPU Page size=4096, Cores=4
-[2018.05.13-23.20.39:743][  0]LogInit: High frequency timer resolution =2.531249 MHz
-[2018.05.13-23.20.39:744][  0]LogMemory: Memory total: Physical=15.9GB (16GB approx)
-[2018.05.13-23.20.39:744][  0]LogMemory: Platform Memory Stats for Windows
-[2018.05.13-23.20.39:744][  0]LogMemory: Process Physical Memory: 276.51 MB used, 276.51 MB peak
-[2018.05.13-23.20.39:744][  0]LogMemory: Process Virtual Memory: 264.96 MB used, 264.96 MB peak
-[2018.05.13-23.20.39:744][  0]LogMemory: Physical Memory: 7746.91 MB used,  8517.87 MB free, 16264.78 MB total
-[2018.05.13-23.20.39:744][  0]LogMemory: Virtual Memory: 679.24 MB used,  8517.87 MB free, 134217728.00 MB total
-[2018.05.13-23.20.39:769][  0]LogInit: Using OS detected language (nb-NO).
-[2018.05.13-23.20.39:769][  0]LogInit: Using OS detected locale (nb-NO).
-[2018.05.13-23.20.39:773][  0]LogTextLocalizationManager: No localization for 'nb-NO' exists, so 'en' will be used for the language.
-[2018.05.13-23.20.40:262][  0]LogStreaming: Display: Took  0.493s to EndInitTextLocalization.
-[2018.05.13-23.20.40:262][  0]LogInit: Setting process to per monitor DPI aware
-[2018.05.13-23.20.40:301][  0]LogSlate: New Slate User Created.  User Index 0, Is Virtual User: 0
-[2018.05.13-23.20.40:301][  0]LogSlate: Slate User Registered.  User Index 0, Is Virtual User: 0
-[2018.05.13-23.20.40:546][  0]LogD3D11RHI: D3D11 adapters:
-[2018.05.13-23.20.40:581][  0]LogD3D11RHI:    0. 'NVIDIA GeForce GTX 960M' (Feature Level 11_0)
-[2018.05.13-23.20.40:581][  0]LogD3D11RHI:       4064/0/8132 MB DedicatedVideo/DedicatedSystem/SharedSystem, Outputs:1, VendorId:0x10de
-[2018.05.13-23.20.40:589][  0]LogD3D11RHI:    1. 'Intel(R) HD Graphics 530' (Feature Level 11_0)
-[2018.05.13-23.20.40:589][  0]LogD3D11RHI:       128/0/8132 MB DedicatedVideo/DedicatedSystem/SharedSystem, Outputs:0, VendorId:0x8086
-[2018.05.13-23.20.40:592][  0]LogD3D11RHI:    2. 'Microsoft Basic Render Driver' (Feature Level 11_0)
-[2018.05.13-23.20.40:592][  0]LogD3D11RHI:       0/0/8132 MB DedicatedVideo/DedicatedSystem/SharedSystem, Outputs:0, VendorId:0x1414
-[2018.05.13-23.20.40:592][  0]LogD3D11RHI: Chosen D3D11 Adapter: 0
-[2018.05.13-23.20.40:600][  0]LogD3D11RHI: Creating new Direct3DDevice
-[2018.05.13-23.20.40:600][  0]LogD3D11RHI:     GPU DeviceId: 0x139b (for the marketing name, search the web for "GPU Device Id")
-[2018.05.13-23.20.40:600][  0]LogWindows: EnumDisplayDevices:
-[2018.05.13-23.20.40:600][  0]LogWindows:    0. 'Intel(R) HD Graphics 530' (P:1 D:1)
-[2018.05.13-23.20.40:600][  0]LogWindows:    1. 'Intel(R) HD Graphics 530' (P:0 D:0)
-[2018.05.13-23.20.40:600][  0]LogWindows:    2. 'Intel(R) HD Graphics 530' (P:0 D:0)
-[2018.05.13-23.20.40:601][  0]LogWindows: DebugString: GetVideoDriverDetailsInvalid PrimaryIsNotTheChoosenAdapter GetVideoDriverDetailsInvalid PrimaryIsNotTheChoosenAdapter GetVideoDriverDetailsInvalid PrimaryIsNotTheChoosenAdapter FoundDriverCount:0 
-[2018.05.13-23.20.40:601][  0]LogD3D11RHI:     Adapter Name: NVIDIA GeForce GTX 960M
-[2018.05.13-23.20.40:601][  0]LogD3D11RHI:   Driver Version: Unknown (internal:Unknown, unified:Unknown)
-[2018.05.13-23.20.40:601][  0]LogD3D11RHI:      Driver Date: Unknown
-[2018.05.13-23.20.40:601][  0]LogRHI: Texture pool is 2845 MB (70% of 4064 MB)
-[2018.05.13-23.20.40:619][  0]LogD3D11RHI: [Aftermath] Aftermath enabled but failed to initialize
-[2018.05.13-23.20.40:619][  0]LogD3D11RHI: [Aftermath] Aftermath enabled and primed
-[2018.05.13-23.20.40:619][  0]LogD3D11RHI: Async texture creation enabled
-[2018.05.13-23.20.40:633][  0]LogD3D11RHI: GPU Timing Frequency: 1000.000000 (Debug: 2 1)
-[2018.05.13-23.20.40:635][  0]LogShaderCompilers: Guid format shader working directory is 4 characters bigger than the processId version (D:/Game_Development/Git/Project_Exposure/Intermediate/Shaders/WorkingDirectory/15772/).
-[2018.05.13-23.20.40:635][  0]LogShaderCompilers: Cleaned the shader compiler working directory 'C:/Users/Trym/AppData/Local/Temp/UnrealShaderWorkingDir/1695FA244D311DF44AB7FD9640B89E30/'.
-[2018.05.13-23.20.40:928][  0]LogTemp: Display: Loaded TP AllDesktopTargetPlatform
-[2018.05.13-23.20.40:944][  0]LogTemp: Display: Loaded TP MacClientTargetPlatform
-[2018.05.13-23.20.40:961][  0]LogTemp: Display: Loaded TP MacNoEditorTargetPlatform
-[2018.05.13-23.20.40:977][  0]LogTemp: Display: Loaded TP MacServerTargetPlatform
-[2018.05.13-23.20.40:993][  0]LogTemp: Display: Loaded TP MacTargetPlatform
-[2018.05.13-23.20.41:009][  0]LogTemp: Display: Loaded TP WindowsClientTargetPlatform
-[2018.05.13-23.20.41:026][  0]LogTemp: Display: Loaded TP WindowsNoEditorTargetPlatform
-[2018.05.13-23.20.41:041][  0]LogTemp: Display: Loaded TP WindowsServerTargetPlatform
-[2018.05.13-23.20.41:049][  0]LogTemp: Display: Loaded TP WindowsTargetPlatform
-[2018.05.13-23.20.41:062][  0]LogTemp: Display: Loaded TP Android_ASTCTargetPlatform
-[2018.05.13-23.20.41:076][  0]LogTemp: Display: Loaded TP Android_ATCTargetPlatform
-[2018.05.13-23.20.41:089][  0]LogTemp: Display: Loaded TP Android_DXTTargetPlatform
-[2018.05.13-23.20.41:104][  0]LogTemp: Display: Loaded TP Android_ETC1aTargetPlatform
-[2018.05.13-23.20.41:118][  0]LogTemp: Display: Loaded TP Android_ETC1TargetPlatform
-[2018.05.13-23.20.41:131][  0]LogTemp: Display: Loaded TP Android_ETC2TargetPlatform
-[2018.05.13-23.20.41:158][  0]LogTemp: Display: Loaded TP Android_MultiTargetPlatform
-[2018.05.13-23.20.41:158][  0]LogTemp: Display: Loaded TP Android_PVRTCTargetPlatform
-[2018.05.13-23.20.41:172][  0]LogTemp: Display: Loaded TP AndroidTargetPlatform
-[2018.05.13-23.20.41:174][  0]LogTemp: Display: Loaded TP HTML5TargetPlatform
-[2018.05.13-23.20.41:213][  0]LogTemp: Display: Loaded TP IOSTargetPlatform
-[2018.05.13-23.20.41:226][  0]LogTemp: Display: Loaded TP TVOSTargetPlatform
-[2018.05.13-23.20.41:238][  0]LogTemp: Display: Loaded TP LinuxClientTargetPlatform
-[2018.05.13-23.20.41:252][  0]LogTemp: Display: Loaded TP LinuxNoEditorTargetPlatform
-[2018.05.13-23.20.41:265][  0]LogTemp: Display: Loaded TP LinuxServerTargetPlatform
-[2018.05.13-23.20.41:280][  0]LogTemp: Display: Loaded TP LinuxTargetPlatform
-[2018.05.13-23.20.41:280][  0]LogTargetPlatformManager: Display: Building Assets For Windows
-[2018.05.13-23.20.41:431][  0]LogXGEController: Cannot use XGE Controller as Incredibuild is not installed on this machine.
-[2018.05.13-23.20.41:431][  0]LogShaderCompilers: Cannot use XGE Shader Compiler as Incredibuild is not installed on this machine.
-[2018.05.13-23.20.41:431][  0]LogShaderCompilers: Display: Using Local Shader Compiler.
-[2018.05.13-23.20.42:168][  0]LogDerivedDataCache: Display: Max Cache Size: 512 MB
-[2018.05.13-23.20.42:235][  0]LogDerivedDataCache: Loaded boot cache 0.07s 74MB C:/Users/Trym/AppData/Local/UnrealEngine/4.19/DerivedDataCache/Boot.ddc.
-[2018.05.13-23.20.42:235][  0]LogDerivedDataCache: Display: Loaded Boot cache: C:/Users/Trym/AppData/Local/UnrealEngine/4.19/DerivedDataCache/Boot.ddc
-[2018.05.13-23.20.42:235][  0]LogDerivedDataCache: FDerivedDataBackendGraph:  Pak pak cache file D:/Game_Development/Git/Project_Exposure/DerivedDataCache/DDC.ddp not found, will not use a pak cache.
-[2018.05.13-23.20.42:235][  0]LogDerivedDataCache: Unable to find inner node Pak for hierarchical cache Hierarchy.
-[2018.05.13-23.20.42:235][  0]LogDerivedDataCache: FDerivedDataBackendGraph:  CompressedPak pak cache file D:/Game_Development/Git/Project_Exposure/DerivedDataCache/Compressed.ddp not found, will not use a pak cache.
-[2018.05.13-23.20.42:235][  0]LogDerivedDataCache: Unable to find inner node CompressedPak for hierarchical cache Hierarchy.
-[2018.05.13-23.20.42:251][  0]LogDerivedDataCache: Display: Pak cache opened for reading ../../../Engine/DerivedDataCache/Compressed.ddp.
-[2018.05.13-23.20.42:263][  0]LogDerivedDataCache: Using Local data cache path C:/Users/Trym/AppData/Local/UnrealEngine/Common/DerivedDataCache: Writable
-[2018.05.13-23.20.42:263][  0]LogDerivedDataCache: Shared data cache path not found in *engine.ini, will not use an Shared cache.
-[2018.05.13-23.20.42:263][  0]LogDerivedDataCache: Unable to find inner node Shared for hierarchical cache Hierarchy.
-[2018.05.13-23.20.42:276][  0]LogMaterial: Verifying Global Shaders for PCD3D_SM5
-[2018.05.13-23.20.42:277][  0]LogSlate: Using Freetype 2.6.0
-[2018.05.13-23.20.42:278][  0]LogSlate: SlateFontCache - WITH_FREETYPE: 1, WITH_HARFBUZZ: 1
-[2018.05.13-23.20.42:278][  0]LogSlate: SlateFontCache - WITH_FREETYPE: 1, WITH_HARFBUZZ: 1
-[2018.05.13-23.20.42:442][  0]LogAssetRegistry: FAssetRegistry took 0.0263 seconds to start up
-[2018.05.13-23.20.42:761][  0]LogInit: Selected Device Profile: [Windows]
-[2018.05.13-23.20.42:936][  0]LogSimplygon: Simplygon DLL not present - disabling.
-[2018.05.13-23.20.42:940][  0]LogMeshReduction: Using SimplygonSwarm for distributed automatic mesh merging
-[2018.05.13-23.20.42:940][  0]LogMeshReduction: Using QuadricMeshReduction for automatic static mesh reduction
-[2018.05.13-23.20.42:940][  0]LogMeshReduction: No automatic skeletal mesh reduction module available
-[2018.05.13-23.20.42:940][  0]LogMeshReduction: No automatic mesh merging module available
-[2018.05.13-23.20.42:940][  0]LogMeshMerging: No automatic mesh merging module available
-[2018.05.13-23.20.42:983][  0]LogNetVersion: ProjectExposure , NetCL: 3944462, EngineNetVer: 2, GameNetVer: 0 (Checksum: 2950170889)
-[2018.05.13-23.20.43:412][  0]LogPackageLocalizationCache: Processed 9 localized package path(s) for 1 prioritized culture(s) in 0.035300 seconds
-[2018.05.13-23.20.43:418][  0]LogUObjectArray: 36728 objects as part of root set at end of initial load.
-[2018.05.13-23.20.43:418][  0]LogUObjectAllocator: 7314312 out of 0 bytes used by permanent object pool.
-[2018.05.13-23.20.43:418][  0]LogUObjectArray: CloseDisregardForGC: 0/0 objects in disregard for GC pool
-[2018.05.13-23.20.45:402][  0]LogSubstanceCoreModule: Substance [CPU] Engine Loaded, Max Texture Size = 2048
-[2018.05.13-23.20.45:432][  0]LogTcpMessaging: Initializing TcpMessaging bridge
-[2018.05.13-23.20.45:469][  0]LogUdpMessaging: Initializing bridge on interface 0.0.0.0:0 to multicast group 230.0.0.1:6666.
-[2018.05.13-23.20.45:987][  0]SourceControl: Source control is disabled
-[2018.05.13-23.20.45:987][  0]LogWindows: Warning: CreateProc failed: Systemet finner ikke angitt fil. (0x00000002)
-[2018.05.13-23.20.45:987][  0]LogWindows: Warning: URL: C:/Program Files/Git/bin/git.exe version
-[2018.05.13-23.20.45:987][  0]LogWindows: Warning: CreateProc failed: Systemet finner ikke angitt fil. (0x00000002)
-[2018.05.13-23.20.45:987][  0]LogWindows: Warning: URL: C:/Program Files (x86)/Git/bin/git.exe version
-[2018.05.13-23.20.45:988][  0]LogWindows: Warning: CreateProc failed: Systemet finner ikke angitt fil. (0x00000002)
-[2018.05.13-23.20.45:988][  0]LogWindows: Warning: URL: C:\Users\Trym\AppData\Local/Programs/Git/cmd/git.exe version
-[2018.05.13-23.20.45:988][  0]LogWindows: Warning: CreateProc failed: Systemet finner ikke angitt fil. (0x00000002)
-[2018.05.13-23.20.45:988][  0]LogWindows: Warning: URL: C:/Program Files (x86)/SmartGit/git/bin/git.exe version
-[2018.05.13-23.20.45:988][  0]LogWindows: Warning: CreateProc failed: Systemet finner ikke angitt fil. (0x00000002)
-[2018.05.13-23.20.45:989][  0]LogWindows: Warning: URL: C:/Program Files (x86)/SmartGit/bin/git.exe version
-[2018.05.13-23.20.47:546][  0]LogAndroidPermission: UAndroidPermissionCallbackProxy::GetInstance
-[2018.05.13-23.20.47:793][  0]LogOcInput: OculusInput pre-init called
-[2018.05.13-23.20.48:110][  0]LogEngine: Initializing Engine...
-[2018.05.13-23.20.48:111][  0]LogHMD: Failed to initialize OpenVR with code 110
-[2018.05.13-23.20.48:113][  0]LogStats: UGameplayTagsManager::ConstructGameplayTagTree: Construct from data asset -  0.000 s
-[2018.05.13-23.20.48:113][  0]LogStats: UGameplayTagsManager::ConstructGameplayTagTree: GameplayTagTreeChangedEvent.Broadcast -  0.000 s
-[2018.05.13-23.20.48:341][  0]LogAIModule: Creating AISystem for world Untitled
-[2018.05.13-23.20.48:363][  0]LogInit: XAudio2 using 'Høyttalere (G510 Gaming Keyboard)' : 2 channels at 48 kHz using 16 bits per sample (channel mask 0x3)
-[2018.05.13-23.20.48:375][  0]LogInit: FAudioDevice initialized.
-[2018.05.13-23.20.48:501][  0]LogDerivedDataCache: Saved boot cache 0.13s 74MB C:/Users/Trym/AppData/Local/UnrealEngine/4.19/DerivedDataCache/Boot.ddc.
-[2018.05.13-23.20.48:505][  0]LogInit: Texture streaming: Enabled
-[2018.05.13-23.20.48:527][  0]LogEngineSessionManager: EngineSessionManager initialized
-[2018.05.13-23.20.48:546][  0]LogInit: Transaction tracking system initialized
-[2018.05.13-23.20.48:582][  0]BlueprintLog: New page: Editor Load
-[2018.05.13-23.20.48:682][  0]LocalizationService: Localization service is disabled
-[2018.05.13-23.20.48:798][  0]LogLinker: Warning: Can't find file '/Game/TopDownCPP/TopDownOverview'
-[2018.05.13-23.20.48:798][  0]LogLinker: Warning: Can't find file '/Game/TopDownCPP/TopDownOverview'
-[2018.05.13-23.20.48:798][  0]LogUObjectGlobals: Warning: Failed to find object 'Class /Game/TopDownCPP/TopDownOverview.TopDownOverview_C'
-[2018.05.13-23.20.48:827][  0]LogConsoleResponse: Display: 
-[2018.05.13-23.20.49:008][  0]LogCook: Display: Max memory allowance for cook 16384mb min free memory 0mb
-[2018.05.13-23.20.49:008][  0]LogCook: Display: Mobile HDR setting 1
-[2018.05.13-23.20.49:008][  0]LogGameplayTags: Display: UGameplayTagsManager::DoneAddingNativeTags. DelegateIsBound: 0
-[2018.05.13-23.20.49:008][  0]LogStats: UGameplayTagsManager::ConstructGameplayTagTree: Construct from data asset -  0.000 s
-[2018.05.13-23.20.49:009][  0]LogStats: UGameplayTagsManager::ConstructGameplayTagTree: GameplayTagTreeChangedEvent.Broadcast -  0.000 s
-[2018.05.13-23.20.49:201][  0]LogFileCache: Scanning file cache for directory 'D:/Game_Development/Git/Project_Exposure/Content/' took 0.01s
-[2018.05.13-23.20.49:549][  0]Cmd: MAP LOAD FILE="D:/Game_Development/Git/Project_Exposure/Content/StarterContent/Maps/Minimal_Default.umap" TEMPLATE=0 SHOWPROGRESS=1 FEATURELEVEL=3
-[2018.05.13-23.20.49:549][  0]LogEditorServer: Warning: Can't find file 'D:/Game_Development/Git/Project_Exposure/Content/StarterContent/Maps/Minimal_Default.umap'
-[2018.05.13-23.20.49:549][  0]Cmd: MAP CHECKDEP NOCLEARLOG
-[2018.05.13-23.20.49:626][  0]MapCheck: Map check complete: 0 Error(s), 0 Warning(s), took 76,928ms to complete.
-[2018.05.13-23.20.49:626][  0]LogFileHelpers: Loading map 'Minimal_Default' took 0.077
-[2018.05.13-23.20.49:773][  0]LogCollectionManager: Loaded 0 collections in 0.002731 seconds
-[2018.05.13-23.20.49:817][  0]LogFileCache: Scanning file cache for directory 'D:/Game_Development/Git/Project_Exposure/Saved/Collections/' took 0.01s
-[2018.05.13-23.20.49:817][  0]LogFileCache: Scanning file cache for directory 'D:/Game_Development/Git/Project_Exposure/Content/Developers/Trym/Collections/' took 0.01s
-[2018.05.13-23.20.49:818][  0]LogFileCache: Scanning file cache for directory 'D:/Game_Development/Git/Project_Exposure/Content/Collections/' took 0.01s
-[2018.05.13-23.20.49:818][  0]LogCollectionManager: Rebuilt the GUID cache for 0 collections in 0.000001 seconds
-[2018.05.13-23.20.49:830][  0]LogContentBrowser: Native class hierarchy populated in 0.0122 seconds. Added 2470 classes and 566 folders.
-[2018.05.13-23.20.49:843][  0]LogContentBrowser: Native class hierarchy updated for 'WidgetCarousel' in 0.0007 seconds. Added 0 classes and 0 folders.
-[2018.05.13-23.20.49:918][  0]LogContentBrowser: Native class hierarchy updated for 'AddContentDialog' in 0.0008 seconds. Added 0 classes and 0 folders.
-[2018.05.13-23.20.49:926][  0]LogContentBrowser: Native class hierarchy updated for 'SceneOutliner' in 0.0007 seconds. Added 1 classes and 2 folders.
-[2018.05.13-23.20.49:997][  0]LogSlate: Took 0.000360 seconds to synchronously load lazily loaded font '../../../Engine/Content/Slate/Fonts/Roboto-Regular.ttf' (155K)
-[2018.05.13-23.20.50:003][  0]LogSlate: Took 0.000317 seconds to synchronously load lazily loaded font '../../../Engine/Content/Slate/Fonts/Roboto-Bold.ttf' (160K)
-[2018.05.13-23.20.50:007][  0]LogSlate: Took 0.000390 seconds to synchronously load lazily loaded font '../../../Engine/Content/Editor/Slate/Fonts/FontAwesome.ttf' (139K)
-[2018.05.13-23.20.50:013][  0]LogSlate: Took 0.000347 seconds to synchronously load lazily loaded font '../../../Engine/Content/Slate/Fonts/DroidSansMono.ttf' (77K)
-[2018.05.13-23.20.50:175][  0]LogRenderer: Reallocating scene render targets to support 1096x500 Format 10 NumSamples 1 (Frame:1).
-[2018.05.13-23.20.50:384][  0]LogContentBrowser: Native class hierarchy updated for 'HierarchicalLODOutliner' in 0.0006 seconds. Added 0 classes and 0 folders.
-[2018.05.13-23.20.50:384][  0]LogLoad: (Engine Initialization) Total time: 15.10 seconds
-[2018.05.13-23.20.50:384][  0]LogLoad: (Engine Initialization) Total Blueprint compile time: 0.00 seconds
-[2018.05.13-23.20.50:402][  0]LogWindowsTextInputMethodSystem: Display: IME system now deactivated.
-[2018.05.13-23.20.50:422][  0]LogContentStreaming: Texture pool size now 1000 MB
-[2018.05.13-23.20.50:458][  1]LogSubstanceLiveLink: Warning: Unable to send data along socket, closing connection
-[2018.05.13-23.20.50:467][  1]LogAssetRegistry: Asset discovery search completed in 8.0469 seconds
-[2018.05.13-23.20.50:470][  1]LogCollectionManager: Rebuilt the object cache for 0 collections in 0.000001 seconds (found 0 objects)
-[2018.05.13-23.20.50:470][  1]LogCollectionManager: Fixed up redirectors for 0 collections in 0.000227 seconds (updated 0 objects)
-[2018.05.13-23.20.54:475][231]LogSlate: FSceneViewport::OnFocusLost() reason 0
-[2018.05.13-23.20.55:447][289]LogSlate: Took 0.000440 seconds to synchronously load lazily loaded font '../../../Engine/Content/Slate/Fonts/Roboto-Light.ttf' (167K)
-[2018.05.13-23.20.55:576][289]LogLinker: Warning: Can't find file '/Game/StarterContent/Textures/T_MacroVariation'
-[2018.05.13-23.20.55:576][289]LogLinker: Warning: Can't find file for asset '/Game/StarterContent/Textures/T_MacroVariation' while loading D:/Game_Development/Git/Project_Exposure/Content/StarterContent/Materials/M_Metal_Brushed_Nickel.uasset.
-[2018.05.13-23.20.55:576][289]LoadErrors: Error: /Game/StarterContent/Materials/M_Metal_Brushed_Nickel : Can't find file for asset. /Game/StarterContent/Textures/T_MacroVariation
-[2018.05.13-23.20.55:577][289]LogLinker: Warning: Can't find file '/Game/StarterContent/Textures/T_MacroVariation'
-[2018.05.13-23.20.55:577][289]LogLinker: Warning: Can't find file for asset '/Game/StarterContent/Textures/T_MacroVariation' while loading D:/Game_Development/Git/Project_Exposure/Content/StarterContent/Materials/M_Metal_Brushed_Nickel.uasset.
-[2018.05.13-23.20.55:581][289]LogLinker: Warning: Can't find file '/Game/StarterContent/Materials/M_Basic_Floor'
-[2018.05.13-23.20.55:581][289]LogLinker: Warning: Can't find file for asset '/Game/StarterContent/Materials/M_Basic_Floor' while loading D:/Game_Development/Git/Project_Exposure/Content/StarterContent/Architecture/Floor_400x400.uasset.
-[2018.05.13-23.20.55:581][289]LoadErrors: Error: /Game/StarterContent/Architecture/Floor_400x400 : Can't find file for asset. /Game/StarterContent/Materials/M_Basic_Floor
-[2018.05.13-23.20.55:582][289]LogLinker: Warning: Can't find file '/Game/StarterContent/Materials/M_Basic_Floor'
-[2018.05.13-23.20.55:582][289]LogLinker: Warning: Can't find file for asset '/Game/StarterContent/Materials/M_Basic_Floor' while loading D:/Game_Development/Git/Project_Exposure/Content/StarterContent/Architecture/Floor_400x400.uasset.
-[2018.05.13-23.20.55:585][289]LogUObjectGlobals: Created PersistentFrame Addr=0x0000022ea022bbf8, Size=4, Default__SimulationUI_C Function /Game/UI_Blueprints/SimulationUI.SimulationUI_C:ExecuteUbergraph_SimulationUI
-[2018.05.13-23.20.55:588][289]LogUObjectGlobals: Destroyed PersistentFrame Addr=0x0000022ea022bbf8, Size=4
-[2018.05.13-23.20.55:588][289]LogUObjectGlobals: Created PersistentFrame Addr=0x0000022ea022bbf8, Size=4, Default__SimulationUI_C Function /Engine/Transient.REINST_SimulationUI_C_0:ExecuteUbergraph_SimulationUI
-[2018.05.13-23.20.55:590][289]LogUObjectGlobals: Created PersistentFrame Addr=0x0000022ea022ba60, Size=4, Default__SimulationUI_C Function /Game/UI_Blueprints/SimulationUI.SimulationUI_C:ExecuteUbergraph_SimulationUI
-[2018.05.13-23.20.55:593][289]LogUObjectGlobals: Created PersistentFrame Addr=0x0000022ea0180730, Size=16, Default__Game_C Function /Game/Levels/Game.Game_C:ExecuteUbergraph_Game
-[2018.05.13-23.20.55:596][289]LogUObjectGlobals: Destroyed PersistentFrame Addr=0x0000022ea0180730, Size=16
-[2018.05.13-23.20.55:596][289]LogUObjectGlobals: Created PersistentFrame Addr=0x0000022ea0180730, Size=16, Default__Game_C Function /Engine/Transient.REINST_Game_C_12:ExecuteUbergraph_Game
-[2018.05.13-23.20.55:597][289]LogUObjectGlobals: Created PersistentFrame Addr=0x0000022ea0180610, Size=16, Default__Game_C Function /Game/Levels/Game.Game_C:ExecuteUbergraph_Game
-[2018.05.13-23.20.55:604][289]LogLinker: Warning: Can't find file '/Game/StarterContent/Textures/T_MacroVariation'
-[2018.05.13-23.20.55:605][289]LoadErrors: Failed to load /Game/StarterContent/Textures/T_MacroVariation.T_MacroVariation Referenced by MaterialExpressionTextureSample_49
-[2018.05.13-23.20.55:605][289]LogLinker: Warning: Can't find file for asset '/Game/StarterContent/Textures/T_MacroVariation' while loading NULL.
-[2018.05.13-23.20.55:605][289]LogLinker: Warning: Can't find file '/Game/StarterContent/Textures/T_MacroVariation'
-[2018.05.13-23.20.55:606][289]LoadErrors: Failed to load /Game/StarterContent/Textures/T_MacroVariation.T_MacroVariation Referenced by MaterialExpressionTextureSample_50
-[2018.05.13-23.20.55:606][289]LogLinker: Warning: Can't find file for asset '/Game/StarterContent/Textures/T_MacroVariation' while loading NULL.
-[2018.05.13-23.20.55:606][289]LogLinker: Warning: Can't find file '/Game/StarterContent/Textures/T_MacroVariation'
-[2018.05.13-23.20.55:606][289]LoadErrors: Failed to load /Game/StarterContent/Textures/T_MacroVariation.T_MacroVariation Referenced by MaterialExpressionTextureSample_51
-[2018.05.13-23.20.55:607][289]LogLinker: Warning: Can't find file for asset '/Game/StarterContent/Textures/T_MacroVariation' while loading NULL.
-[2018.05.13-23.20.55:609][289]LogLinker: Warning: Can't find file '/Game/StarterContent/Materials/M_Basic_Floor'
-[2018.05.13-23.20.55:610][289]LoadErrors: Failed to load /Game/StarterContent/Materials/M_Basic_Floor.M_Basic_Floor Referenced by Floor_400x400
-[2018.05.13-23.20.55:610][289]LogLinker: Warning: Can't find file for asset '/Game/StarterContent/Materials/M_Basic_Floor' while loading NULL.
-[2018.05.13-23.20.55:610][289]LogLinker: Warning: Can't find file '/Game/StarterContent/Materials/M_Basic_Floor'
-[2018.05.13-23.20.55:611][289]LogLinker: Warning: Can't find file for asset '/Game/StarterContent/Materials/M_Basic_Floor' while loading NULL.
-[2018.05.13-23.20.55:619][289]LogMaterial: Missing cached shader map for material M_Metal_Brushed_Nickel, compiling. 
-[2018.05.13-23.20.55:620][289]LogMaterial: Warning: D:\Game_Development\Git\Project_Exposure\Content\StarterContent\Materials\M_Metal_Brushed_Nickel.uasset: Failed to compile Material for platform PCD3D_SM5, Default Material will be used in game.
-[2018.05.13-23.20.55:620][289]LogMaterial: 	(Node TextureSample) Texture Sample> Missing input texture
-[2018.05.13-23.20.55:712][289]LogAIModule: Creating AISystem for world Game
-[2018.05.13-23.20.55:739][289]LogUObjectGlobals: Destroyed PersistentFrame Addr=0x0000022ea022bbf8, Size=4
-[2018.05.13-23.20.55:740][289]LogUObjectGlobals: Destroyed PersistentFrame Addr=0x0000022ea0180730, Size=16
-[2018.05.13-23.20.55:741][289]Cmd: MAP LOAD FILE="D:/Game_Development/Git/Project_Exposure/Content/Levels/Game.umap" TEMPLATE=0 SHOWPROGRESS=1 FEATURELEVEL=3
-[2018.05.13-23.20.55:742][289]LightingResults: New page: Lighting Build
-[2018.05.13-23.20.55:746][289]LogContentBrowser: Native class hierarchy updated for 'StatsViewer' in 0.0007 seconds. Added 5 classes and 0 folders.
-[2018.05.13-23.20.55:747][289]LoadErrors: New page: Loading map: Game.umap
-[2018.05.13-23.20.55:747][289]MapCheck: New page: Map Check
-[2018.05.13-23.20.55:747][289]LightingResults: New page: Lighting Build
-[2018.05.13-23.20.55:821][289]LogEditorServer: Finished looking for orphan Actors (0.000 secs)
-[2018.05.13-23.20.55:849][289]Cmd: MAP CHECKDEP NOCLEARLOG
-[2018.05.13-23.20.55:933][289]MapCheck: Map check complete: 0 Error(s), 0 Warning(s), took 83,519ms to complete.
-[2018.05.13-23.20.55:935][289]LogFileHelpers: Loading map 'Game' took 0.194
-[2018.05.13-23.21.00:696][566]LogSlate: FSceneViewport::OnFocusLost() reason 2
-[2018.05.13-23.21.17:510][543]LogSlate: Window 'File History' being destroyed
-[2018.05.13-23.21.21:571][745]LogSourceControl: Writed 'D:/Game_Development/Git/Project_Exposure/Saved/Diff/temp-8b91dea2fef241ed59abea25868a79a75a8a01f6-Game.umap' (3524225o)
-[2018.05.13-23.21.21:583][745]LogUObjectGlobals: Created PersistentFrame Addr=0x0000022e910f6240, Size=16, Default__Game_C Function /Temp/Diff/temp-8b91dea2fef241ed59abea25868a79a75a8a01f6-Game.Game_C:ExecuteUbergraph_Game
-[2018.05.13-23.21.21:615][745]LogAIModule: Creating AISystem for world temp-8b91dea2fef241ed59abea25868a79a75a8a01f6-Game
-[2018.05.13-23.21.58:360][676]LogSlate: Window 'Submit Files' being destroyed
-[2018.05.13-23.22.09:927][361]LogContentBrowser: Verbose: The majority of assets in the view are of type: World
-[2018.05.13-23.22.16:957][774]LogSlate: Took 0.000280 seconds to synchronously load lazily loaded font '../../../Engine/Content/Slate/Fonts/Roboto-Light.ttf' (167K)
-[2018.05.13-23.22.23:528][ 92]LogSlate: Window 'Pick Parent Class' being destroyed
-[2018.05.13-23.22.27:367][295]Cmd: OBJ SAVEPACKAGE PACKAGE="/Game/Levels/NewBlueprint" FILE="D:/Game_Development/Git/Project_Exposure/Content/Levels/NewBlueprint.uasset" SILENT=true
-[2018.05.13-23.22.27:378][295]LogSavePackage: Save=8.89ms
-[2018.05.13-23.22.27:378][295]LogSavePackage: Moving 'D:/Game_Development/Git/Project_Exposure/Saved/NewBlueprint65342A224DE51C7DB93139ABB3F0C648.tmp' to 'D:/Game_Development/Git/Project_Exposure/Content/Levels/NewBlueprint.uasset'
-[2018.05.13-23.22.27:382][295]LogSavePackage: Display: Finished SavePackage D:/Game_Development/Git/Project_Exposure/Content/Levels/NewBlueprint.uasset
-[2018.05.13-23.22.31:983][551]SourceControl: fatal: C:/Program Files/Epic Games/UE_4.19/Engine/Content: 'C:/Program Files/Epic Games/UE_4.19/Engine/Content' is outside repository
-[2018.05.13-23.22.35:399][551]LogSlate: Window 'Submit Files' being destroyed
-[2018.05.13-23.22.39:600][651]LogSlate: Window 'Delete Assets' being destroyed
-[2018.05.13-23.22.40:107][651]SourceControl: rm 'Content/Levels/NewBlueprint.uasset'
-[2018.05.13-23.22.42:891][803]Cmd: OBJ SAVEPACKAGE PACKAGE="/Game/Levels/Game" FILE="D:/Game_Development/Git/Project_Exposure/Content/Levels/Game.umap" SILENT=true AUTOSAVING=false KEEPDIRTY=false
-[2018.05.13-23.22.42:928][803]LogUObjectGlobals: Destroyed PersistentFrame Addr=0x0000022ea0180610, Size=16
-[2018.05.13-23.22.42:928][803]LogUObjectGlobals: Created PersistentFrame Addr=0x0000022eabced4b0, Size=16, Default__Game_C Function /Engine/Transient.REINST_Game_C_18:ExecuteUbergraph_Game
-[2018.05.13-23.22.42:930][803]LogUObjectGlobals: Created PersistentFrame Addr=0x0000022eabcec270, Size=16, Default__Game_C Function /Game/Levels/Game.Game_C:ExecuteUbergraph_Game
-[2018.05.13-23.22.43:047][803]LogSavePackage: Save=141.30ms
-[2018.05.13-23.22.43:048][803]LogSavePackage: Moving 'D:/Game_Development/Git/Project_Exposure/Saved/Game042D437F4BC880438874B3AF9E58DB7B.tmp' to 'D:/Game_Development/Git/Project_Exposure/Content/Levels/Game.umap'
-[2018.05.13-23.22.43:051][803]LogSavePackage: Display: Finished SavePackage D:/Game_Development/Git/Project_Exposure/Content/Levels/Game.umap
-[2018.05.13-23.22.44:838][902]SourceControl: fatal: C:/Program Files/Epic Games/UE_4.19/Engine/Content: 'C:/Program Files/Epic Games/UE_4.19/Engine/Content' is outside repository
-[2018.05.13-23.22.49:692][902]LogSlate: Window 'Submit Files' being destroyed
-[2018.05.13-23.22.51:365][902]LogSourceControl: commit successful: [master c9ff658] HEEY ERLEND
-[2018.05.13-23.22.51:601][902]SourceControl: [master c9ff658] HEEY ERLEND
-[2018.05.13-23.22.51:601][902]SourceControl:  6 files changed, 0 insertions(+), 0 deletions(-)
-[2018.05.13-23.22.51:601][902]SourceControl:  rewrite Content/StarterContent/Shapes/Shape_TriPyramid.uasset (98%)
-[2018.05.13-23.22.51:602][902]SourceControl:  rewrite Content/StarterContent/Shapes/Shape_Wedge_A.uasset (98%)
-[2018.05.13-23.22.51:602][902]SourceControl:  rewrite Content/StarterContent/Shapes/Shape_Wedge_B.uasset (97%)
-[2018.05.13-23.22.51:608][902]SourceControl: Commited [master c9ff658] HEEY ERLEND.
+[2018.05.13-23.45.53:344][  0]LogInit: Selected Device Profile: [Windows]
+[2018.05.13-23.45.53:344][  0]LogInit: Applying CVar settings loaded from the selected device profile: [Windows]
+[2018.05.13-23.45.53:361][  0]LogInit: Computer: DESKTOP-1MHE06P
+[2018.05.13-23.45.53:361][  0]LogInit: User: erlen
+[2018.05.13-23.45.53:361][  0]LogInit: CPU Page size=4096, Cores=4
+[2018.05.13-23.45.53:361][  0]LogInit: High frequency timer resolution =2.531250 MHz
+[2018.05.13-23.45.53:362][  0]LogMemory: Memory total: Physical=15.9GB (16GB approx)
+[2018.05.13-23.45.53:362][  0]LogMemory: Platform Memory Stats for Windows
+[2018.05.13-23.45.53:362][  0]LogMemory: Process Physical Memory: 276.37 MB used, 276.37 MB peak
+[2018.05.13-23.45.53:362][  0]LogMemory: Process Virtual Memory: 264.56 MB used, 264.56 MB peak
+[2018.05.13-23.45.53:362][  0]LogMemory: Physical Memory: 8543.30 MB used,  7704.44 MB free, 16247.74 MB total
+[2018.05.13-23.45.53:362][  0]LogMemory: Virtual Memory: 693.42 MB used,  7704.44 MB free, 134217728.00 MB total
+[2018.05.13-23.45.53:382][  0]LogInit: Using OS detected language (nb-NO).
+[2018.05.13-23.45.53:382][  0]LogInit: Using OS detected locale (nb-NO).
+[2018.05.13-23.45.53:384][  0]LogTextLocalizationManager: No localization for 'nb-NO' exists, so 'en' will be used for the language.
+[2018.05.13-23.45.53:875][  0]LogStreaming: Display: Took  0.493s to EndInitTextLocalization.
+[2018.05.13-23.45.53:875][  0]LogInit: Setting process to per monitor DPI aware
+[2018.05.13-23.45.53:902][  0]LogSlate: New Slate User Created.  User Index 0, Is Virtual User: 0
+[2018.05.13-23.45.53:902][  0]LogSlate: Slate User Registered.  User Index 0, Is Virtual User: 0
+[2018.05.13-23.45.54:127][  0]LogD3D11RHI: D3D11 adapters:
+[2018.05.13-23.45.54:174][  0]LogD3D11RHI:    0. 'NVIDIA GeForce GTX 970M' (Feature Level 11_0)
+[2018.05.13-23.45.54:174][  0]LogD3D11RHI:       3040/0/8123 MB DedicatedVideo/DedicatedSystem/SharedSystem, Outputs:2, VendorId:0x10de
+[2018.05.13-23.45.54:182][  0]LogD3D11RHI:    1. 'Intel(R) HD Graphics 530' (Feature Level 11_0)
+[2018.05.13-23.45.54:182][  0]LogD3D11RHI:       128/0/8123 MB DedicatedVideo/DedicatedSystem/SharedSystem, Outputs:0, VendorId:0x8086
+[2018.05.13-23.45.54:185][  0]LogD3D11RHI:    2. 'Microsoft Basic Render Driver' (Feature Level 11_0)
+[2018.05.13-23.45.54:185][  0]LogD3D11RHI:       0/0/8123 MB DedicatedVideo/DedicatedSystem/SharedSystem, Outputs:0, VendorId:0x1414
+[2018.05.13-23.45.54:185][  0]LogD3D11RHI: Chosen D3D11 Adapter: 0
+[2018.05.13-23.45.54:193][  0]LogD3D11RHI: Creating new Direct3DDevice
+[2018.05.13-23.45.54:193][  0]LogD3D11RHI:     GPU DeviceId: 0x13d8 (for the marketing name, search the web for "GPU Device Id")
+[2018.05.13-23.45.54:193][  0]LogWindows: EnumDisplayDevices:
+[2018.05.13-23.45.54:194][  0]LogWindows:    0. 'Intel(R) HD Graphics 530' (P:1 D:1)
+[2018.05.13-23.45.54:194][  0]LogWindows:    1. 'Intel(R) HD Graphics 530' (P:0 D:1)
+[2018.05.13-23.45.54:194][  0]LogWindows:    2. 'Intel(R) HD Graphics 530' (P:0 D:0)
+[2018.05.13-23.45.54:194][  0]LogWindows: DebugString: GetVideoDriverDetailsInvalid PrimaryIsNotTheChoosenAdapter GetVideoDriverDetailsInvalid PrimaryIsNotTheChoosenAdapter GetVideoDriverDetailsInvalid PrimaryIsNotTheChoosenAdapter FoundDriverCount:0 
+[2018.05.13-23.45.54:194][  0]LogD3D11RHI:     Adapter Name: NVIDIA GeForce GTX 970M
+[2018.05.13-23.45.54:194][  0]LogD3D11RHI:   Driver Version: Unknown (internal:Unknown, unified:Unknown)
+[2018.05.13-23.45.54:194][  0]LogD3D11RHI:      Driver Date: Unknown
+[2018.05.13-23.45.54:194][  0]LogRHI: Texture pool is 2128 MB (70% of 3040 MB)
+[2018.05.13-23.45.54:220][  0]LogD3D11RHI: [Aftermath] Aftermath enabled and primed
+[2018.05.13-23.45.54:220][  0]LogD3D11RHI: [Aftermath] Aftermath enabled and primed
+[2018.05.13-23.45.54:220][  0]LogD3D11RHI: Async texture creation enabled
+[2018.05.13-23.45.54:235][  0]LogD3D11RHI: GPU Timing Frequency: 1000.000000 (Debug: 2 1)
+[2018.05.13-23.45.54:236][  0]LogShaderCompilers: Guid format shader working directory is 11 characters bigger than the processId version (../../../../../Unreal/ProjectUnreal/Intermediate/Shaders/WorkingDirectory/1408/).
+[2018.05.13-23.45.54:236][  0]LogShaderCompilers: Cleaned the shader compiler working directory 'C:/Users/erlen/AppData/Local/Temp/UnrealShaderWorkingDir/E78A148043362AB9E04226B03FD15539/'.
+[2018.05.13-23.45.54:491][  0]LogTemp: Display: Loaded TP AllDesktopTargetPlatform
+[2018.05.13-23.45.54:505][  0]LogTemp: Display: Loaded TP MacClientTargetPlatform
+[2018.05.13-23.45.54:519][  0]LogTemp: Display: Loaded TP MacNoEditorTargetPlatform
+[2018.05.13-23.45.54:533][  0]LogTemp: Display: Loaded TP MacServerTargetPlatform
+[2018.05.13-23.45.54:549][  0]LogTemp: Display: Loaded TP MacTargetPlatform
+[2018.05.13-23.45.54:563][  0]LogTemp: Display: Loaded TP WindowsClientTargetPlatform
+[2018.05.13-23.45.54:577][  0]LogTemp: Display: Loaded TP WindowsNoEditorTargetPlatform
+[2018.05.13-23.45.54:591][  0]LogTemp: Display: Loaded TP WindowsServerTargetPlatform
+[2018.05.13-23.45.54:598][  0]LogTemp: Display: Loaded TP WindowsTargetPlatform
+[2018.05.13-23.45.54:611][  0]LogTemp: Display: Loaded TP Android_ASTCTargetPlatform
+[2018.05.13-23.45.54:625][  0]LogTemp: Display: Loaded TP Android_ATCTargetPlatform
+[2018.05.13-23.45.54:639][  0]LogTemp: Display: Loaded TP Android_DXTTargetPlatform
+[2018.05.13-23.45.54:652][  0]LogTemp: Display: Loaded TP Android_ETC1aTargetPlatform
+[2018.05.13-23.45.54:666][  0]LogTemp: Display: Loaded TP Android_ETC1TargetPlatform
+[2018.05.13-23.45.54:679][  0]LogTemp: Display: Loaded TP Android_ETC2TargetPlatform
+[2018.05.13-23.45.54:706][  0]LogTemp: Display: Loaded TP Android_MultiTargetPlatform
+[2018.05.13-23.45.54:706][  0]LogTemp: Display: Loaded TP Android_PVRTCTargetPlatform
+[2018.05.13-23.45.54:718][  0]LogTemp: Display: Loaded TP AndroidTargetPlatform
+[2018.05.13-23.45.54:720][  0]LogTemp: Display: Loaded TP HTML5TargetPlatform
+[2018.05.13-23.45.54:756][  0]LogTemp: Display: Loaded TP IOSTargetPlatform
+[2018.05.13-23.45.54:770][  0]LogTemp: Display: Loaded TP TVOSTargetPlatform
+[2018.05.13-23.45.54:782][  0]LogTemp: Display: Loaded TP LinuxClientTargetPlatform
+[2018.05.13-23.45.54:796][  0]LogTemp: Display: Loaded TP LinuxNoEditorTargetPlatform
+[2018.05.13-23.45.54:808][  0]LogTemp: Display: Loaded TP LinuxServerTargetPlatform
+[2018.05.13-23.45.54:822][  0]LogTemp: Display: Loaded TP LinuxTargetPlatform
+[2018.05.13-23.45.54:822][  0]LogTargetPlatformManager: Display: Building Assets For Windows
+[2018.05.13-23.45.54:903][  0]LogXGEController: Cannot use XGE Controller as Incredibuild is not installed on this machine.
+[2018.05.13-23.45.54:903][  0]LogShaderCompilers: Cannot use XGE Shader Compiler as Incredibuild is not installed on this machine.
+[2018.05.13-23.45.54:903][  0]LogShaderCompilers: Display: Using Local Shader Compiler.
+[2018.05.13-23.45.55:689][  0]LogDerivedDataCache: Display: Max Cache Size: 512 MB
+[2018.05.13-23.45.55:772][  0]LogDerivedDataCache: Loaded boot cache 0.08s 74MB C:/Users/erlen/AppData/Local/UnrealEngine/4.19/DerivedDataCache/Boot.ddc.
+[2018.05.13-23.45.55:772][  0]LogDerivedDataCache: Display: Loaded Boot cache: C:/Users/erlen/AppData/Local/UnrealEngine/4.19/DerivedDataCache/Boot.ddc
+[2018.05.13-23.45.55:772][  0]LogDerivedDataCache: FDerivedDataBackendGraph:  Pak pak cache file ../../../../../Unreal/ProjectUnreal/DerivedDataCache/DDC.ddp not found, will not use a pak cache.
+[2018.05.13-23.45.55:772][  0]LogDerivedDataCache: Unable to find inner node Pak for hierarchical cache Hierarchy.
+[2018.05.13-23.45.55:772][  0]LogDerivedDataCache: FDerivedDataBackendGraph:  CompressedPak pak cache file ../../../../../Unreal/ProjectUnreal/DerivedDataCache/Compressed.ddp not found, will not use a pak cache.
+[2018.05.13-23.45.55:772][  0]LogDerivedDataCache: Unable to find inner node CompressedPak for hierarchical cache Hierarchy.
+[2018.05.13-23.45.55:790][  0]LogDerivedDataCache: Display: Pak cache opened for reading ../../../Engine/DerivedDataCache/Compressed.ddp.
+[2018.05.13-23.45.55:803][  0]LogDerivedDataCache: Using Local data cache path C:/Users/erlen/AppData/Local/UnrealEngine/Common/DerivedDataCache: Writable
+[2018.05.13-23.45.55:803][  0]LogDerivedDataCache: Shared data cache path not found in *engine.ini, will not use an Shared cache.
+[2018.05.13-23.45.55:803][  0]LogDerivedDataCache: Unable to find inner node Shared for hierarchical cache Hierarchy.
+[2018.05.13-23.45.55:817][  0]LogMaterial: Verifying Global Shaders for PCD3D_SM5
+[2018.05.13-23.45.55:817][  0]LogSlate: Using Freetype 2.6.0
+[2018.05.13-23.45.55:818][  0]LogSlate: SlateFontCache - WITH_FREETYPE: 1, WITH_HARFBUZZ: 1
+[2018.05.13-23.45.55:818][  0]LogSlate: SlateFontCache - WITH_FREETYPE: 1, WITH_HARFBUZZ: 1
+[2018.05.13-23.45.55:936][  0]LogAssetRegistry: FAssetRegistry took 0.0271 seconds to start up
+[2018.05.13-23.45.56:281][  0]LogInit: Selected Device Profile: [Windows]
+[2018.05.13-23.45.56:442][  0]LogSimplygon: Simplygon DLL not present - disabling.
+[2018.05.13-23.45.56:444][  0]LogMeshReduction: Using SimplygonSwarm for distributed automatic mesh merging
+[2018.05.13-23.45.56:444][  0]LogMeshReduction: Using QuadricMeshReduction for automatic static mesh reduction
+[2018.05.13-23.45.56:444][  0]LogMeshReduction: No automatic skeletal mesh reduction module available
+[2018.05.13-23.45.56:444][  0]LogMeshReduction: No automatic mesh merging module available
+[2018.05.13-23.45.56:444][  0]LogMeshMerging: No automatic mesh merging module available
+[2018.05.13-23.45.56:484][  0]LogNetVersion: ProjectExposure , NetCL: 3944462, EngineNetVer: 2, GameNetVer: 0 (Checksum: 2950170889)
+[2018.05.13-23.45.56:965][  0]LogPackageLocalizationCache: Processed 9 localized package path(s) for 1 prioritized culture(s) in 0.051209 seconds
+[2018.05.13-23.45.56:971][  0]LogUObjectArray: 36728 objects as part of root set at end of initial load.
+[2018.05.13-23.45.56:972][  0]LogUObjectAllocator: 7314304 out of 0 bytes used by permanent object pool.
+[2018.05.13-23.45.56:972][  0]LogUObjectArray: CloseDisregardForGC: 0/0 objects in disregard for GC pool
+[2018.05.13-23.45.58:737][  0]LogSubstanceCoreModule: Substance [CPU] Engine Loaded, Max Texture Size = 2048
+[2018.05.13-23.45.58:788][  0]LogTcpMessaging: Initializing TcpMessaging bridge
+[2018.05.13-23.45.58:812][  0]LogUdpMessaging: Initializing bridge on interface 0.0.0.0:0 to multicast group 230.0.0.1:6666.
+[2018.05.13-23.45.59:128][  0]SourceControl: Source control is disabled
+[2018.05.13-23.45.59:129][  0]LogWindows: Warning: CreateProc failed: Systemet finner ikke angitt fil. (0x00000002)
+[2018.05.13-23.45.59:129][  0]LogWindows: Warning: URL: C:/Program Files/Git/bin/git.exe version
+[2018.05.13-23.45.59:129][  0]LogWindows: Warning: CreateProc failed: Systemet finner ikke angitt fil. (0x00000002)
+[2018.05.13-23.45.59:129][  0]LogWindows: Warning: URL: C:/Program Files (x86)/Git/bin/git.exe version
+[2018.05.13-23.45.59:129][  0]LogWindows: Warning: CreateProc failed: Systemet finner ikke angitt fil. (0x00000002)
+[2018.05.13-23.45.59:129][  0]LogWindows: Warning: URL: C:\Users\erlen\AppData\Local/Programs/Git/cmd/git.exe version
+[2018.05.13-23.45.59:129][  0]LogWindows: Warning: CreateProc failed: Systemet finner ikke angitt fil. (0x00000002)
+[2018.05.13-23.45.59:129][  0]LogWindows: Warning: URL: C:/Program Files (x86)/SmartGit/git/bin/git.exe version
+[2018.05.13-23.45.59:130][  0]LogWindows: Warning: CreateProc failed: Systemet finner ikke angitt fil. (0x00000002)
+[2018.05.13-23.45.59:130][  0]LogWindows: Warning: URL: C:/Program Files (x86)/SmartGit/bin/git.exe version
+[2018.05.13-23.46.00:172][  0]LogAndroidPermission: UAndroidPermissionCallbackProxy::GetInstance
+[2018.05.13-23.46.00:327][  0]LogOcInput: OculusInput pre-init called
+[2018.05.13-23.46.01:119][  0]LogEngine: Initializing Engine...
+[2018.05.13-23.46.01:120][  0]LogHMD: Failed to initialize OpenVR with code 110
+[2018.05.13-23.46.01:121][  0]LogStats: UGameplayTagsManager::ConstructGameplayTagTree: Construct from data asset -  0.000 s
+[2018.05.13-23.46.01:121][  0]LogStats: UGameplayTagsManager::ConstructGameplayTagTree: GameplayTagTreeChangedEvent.Broadcast -  0.000 s
+[2018.05.13-23.46.01:382][  0]LogAIModule: Creating AISystem for world Untitled
+[2018.05.13-23.46.01:410][  0]LogInit: XAudio2 using 'Høyttalere +SSE3 (Realtek High Definition Audio)' : 2 channels at 48 kHz using 32 bits per sample (channel mask 0x3)
+[2018.05.13-23.46.01:437][  0]LogInit: FAudioDevice initialized.
+[2018.05.13-23.46.01:570][  0]LogDerivedDataCache: Saved boot cache 0.13s 74MB C:/Users/erlen/AppData/Local/UnrealEngine/4.19/DerivedDataCache/Boot.ddc.
+[2018.05.13-23.46.01:579][  0]LogInit: Texture streaming: Enabled
+[2018.05.13-23.46.01:591][  0]LogEngineSessionManager: EngineSessionManager initialized
+[2018.05.13-23.46.01:607][  0]LogInit: Transaction tracking system initialized
+[2018.05.13-23.46.01:624][  0]BlueprintLog: New page: Editor Load
+[2018.05.13-23.46.01:692][  0]LocalizationService: Localization service is disabled
+[2018.05.13-23.46.01:760][  0]LogLinker: Warning: Can't find file '/Game/FirstPersonBP/FirstPersonOverview'
+[2018.05.13-23.46.01:760][  0]LogLinker: Warning: Can't find file '/Game/FirstPersonBP/FirstPersonOverview'
+[2018.05.13-23.46.01:760][  0]LogUObjectGlobals: Warning: Failed to find object 'Class /Game/FirstPersonBP/FirstPersonOverview.FirstPersonOverview_C'
+[2018.05.13-23.46.01:787][  0]LogUObjectGlobals: Created PersistentFrame Addr=0x000001974f591960, Size=88, Default__Landscape_Sculpt_Mode_C Function /Engine/Tutorial/Landscape/Landscape_Sculpt_Mode.Landscape_Sculpt_Mode_C:ExecuteUbergraph_Landscape_Sculpt_Mode
+[2018.05.13-23.46.01:790][  0]LogUObjectGlobals: Destroyed PersistentFrame Addr=0x000001974f591960, Size=88
+[2018.05.13-23.46.01:790][  0]LogUObjectGlobals: Created PersistentFrame Addr=0x000001974f591960, Size=88, Default__Landscape_Sculpt_Mode_C Function /Engine/Transient.REINST_Landscape_Sculpt_Mode_C_3:ExecuteUbergraph_Landscape_Sculpt_Mode
+[2018.05.13-23.46.01:792][  0]LogUObjectGlobals: Created PersistentFrame Addr=0x00000197528671f0, Size=80, Default__Landscape_Sculpt_Mode_C Function /Engine/Tutorial/Landscape/Landscape_Sculpt_Mode.Landscape_Sculpt_Mode_C:ExecuteUbergraph_Landscape_Sculpt_Mode
+[2018.05.13-23.46.01:850][  0]LogConsoleResponse: Display: 
+[2018.05.13-23.46.02:017][  0]LogCook: Display: Max memory allowance for cook 16384mb min free memory 0mb
+[2018.05.13-23.46.02:017][  0]LogCook: Display: Mobile HDR setting 1
+[2018.05.13-23.46.02:018][  0]LogGameplayTags: Display: UGameplayTagsManager::DoneAddingNativeTags. DelegateIsBound: 0
+[2018.05.13-23.46.02:018][  0]LogFileCache: Scanning file cache for directory 'D:/Unreal/ProjectUnreal/Content/' took 0.02s
+[2018.05.13-23.46.02:018][  0]LogStats: UGameplayTagsManager::ConstructGameplayTagTree: Construct from data asset -  0.000 s
+[2018.05.13-23.46.02:018][  0]LogStats: UGameplayTagsManager::ConstructGameplayTagTree: GameplayTagTreeChangedEvent.Broadcast -  0.000 s
+[2018.05.13-23.46.02:297][  0]Cmd: MAP LOAD FILE="../../../../../Unreal/ProjectUnreal/Content/StarterContent/Maps/Minimal_Default.umap" TEMPLATE=0 SHOWPROGRESS=1 FEATURELEVEL=3
+[2018.05.13-23.46.02:298][  0]LogEditorServer: Warning: Can't find file '../../../../../Unreal/ProjectUnreal/Content/StarterContent/Maps/Minimal_Default.umap'
+[2018.05.13-23.46.02:298][  0]Cmd: MAP CHECKDEP NOCLEARLOG
+[2018.05.13-23.46.02:332][  0]MapCheck: Map check complete: 0 Error(s), 0 Warning(s), took 34,172ms to complete.
+[2018.05.13-23.46.02:332][  0]LogFileHelpers: Loading map 'Minimal_Default' took 0.035
+[2018.05.13-23.46.02:627][  0]LogCollectionManager: Loaded 0 collections in 0.001124 seconds
+[2018.05.13-23.46.02:682][  0]LogFileCache: Scanning file cache for directory 'D:/Unreal/ProjectUnreal/Saved/Collections/' took 0.01s
+[2018.05.13-23.46.02:682][  0]LogFileCache: Scanning file cache for directory 'D:/Unreal/ProjectUnreal/Content/Developers/erlen/Collections/' took 0.01s
+[2018.05.13-23.46.02:682][  0]LogFileCache: Scanning file cache for directory 'D:/Unreal/ProjectUnreal/Content/Collections/' took 0.01s
+[2018.05.13-23.46.02:683][  0]LogCollectionManager: Rebuilt the GUID cache for 0 collections in 0.000000 seconds
+[2018.05.13-23.46.02:697][  0]LogContentBrowser: Native class hierarchy populated in 0.0144 seconds. Added 2471 classes and 568 folders.
+[2018.05.13-23.46.02:706][  0]LogContentBrowser: Native class hierarchy updated for 'WidgetCarousel' in 0.0007 seconds. Added 0 classes and 0 folders.
+[2018.05.13-23.46.05:108][  0]LogContentBrowser: Native class hierarchy updated for 'AddContentDialog' in 0.0005 seconds. Added 0 classes and 0 folders.
+[2018.05.13-23.46.05:129][  0]LogSlate: Took 0.000218 seconds to synchronously load lazily loaded font '../../../Engine/Content/Slate/Fonts/Roboto-Regular.ttf' (155K)
+[2018.05.13-23.46.05:132][  0]LogSlate: Took 0.000480 seconds to synchronously load lazily loaded font '../../../Engine/Content/Slate/Fonts/Roboto-Bold.ttf' (160K)
+[2018.05.13-23.46.05:170][  0]LogSlate: Took 0.028915 seconds to synchronously load lazily loaded font '../../../Engine/Content/Editor/Slate/Fonts/FontAwesome.ttf' (139K)
+[2018.05.13-23.46.05:349][  0]LogRenderer: Reallocating scene render targets to support 860x412 Format 10 NumSamples 1 (Frame:1).
+[2018.05.13-23.46.05:395][  0]LogContentBrowser: Verbose: The majority of assets in the view are of type: Class
+[2018.05.13-23.46.05:498][  0]LogContentBrowser: Native class hierarchy updated for 'HierarchicalLODOutliner' in 0.0005 seconds. Added 0 classes and 0 folders.
+[2018.05.13-23.46.05:498][  0]LogLoad: (Engine Initialization) Total time: 14.84 seconds
+[2018.05.13-23.46.05:498][  0]LogLoad: (Engine Initialization) Total Blueprint compile time: 0.00 seconds
+[2018.05.13-23.46.05:517][  0]LogWindowsTextInputMethodSystem: Display: IME system now deactivated.
+[2018.05.13-23.46.05:535][  0]LogContentStreaming: Texture pool size now 1000 MB
+[2018.05.13-23.46.05:571][  1]LogSubstanceLiveLink: Warning: Unable to send data along socket, closing connection
+[2018.05.13-23.46.10:088][271]LogAssetRegistry: Asset discovery search completed in 14.1745 seconds
+[2018.05.13-23.46.10:090][271]LogCollectionManager: Rebuilt the object cache for 0 collections in 0.000000 seconds (found 0 objects)
+[2018.05.13-23.46.10:091][271]LogCollectionManager: Fixed up redirectors for 0 collections in 0.000055 seconds (updated 0 objects)
+[2018.05.13-23.46.11:402][347]LogSlate: FSceneViewport::OnFocusLost() reason 0
+[2018.05.13-23.46.11:476][351]LogContentBrowser: Verbose: The majority of assets in the view are of type: MapBuildDataRegistry
+[2018.05.13-23.46.13:627][478]LogSlate: Took 0.033445 seconds to synchronously load lazily loaded font '../../../Engine/Content/Slate/Fonts/Roboto-Light.ttf' (167K)
+[2018.05.13-23.46.13:757][478]LogLinker: Warning: Can't find file '/Game/StarterContent/Textures/T_MacroVariation'
+[2018.05.13-23.46.13:758][478]LogLinker: Warning: Can't find file for asset '/Game/StarterContent/Textures/T_MacroVariation' while loading ../../../../../Unreal/ProjectUnreal/Content/StarterContent/Materials/M_Metal_Brushed_Nickel.uasset.
+[2018.05.13-23.46.13:758][478]LoadErrors: Error: /Game/StarterContent/Materials/M_Metal_Brushed_Nickel : Can't find file for asset. /Game/StarterContent/Textures/T_MacroVariation
+[2018.05.13-23.46.13:758][478]LogLinker: Warning: Can't find file '/Game/StarterContent/Textures/T_MacroVariation'
+[2018.05.13-23.46.13:758][478]LogLinker: Warning: Can't find file for asset '/Game/StarterContent/Textures/T_MacroVariation' while loading ../../../../../Unreal/ProjectUnreal/Content/StarterContent/Materials/M_Metal_Brushed_Nickel.uasset.
+[2018.05.13-23.46.13:759][478]LogLinker: Warning: Can't find file '/Game/StarterContent/Materials/M_Metal_Copper'
+[2018.05.13-23.46.13:759][478]LogLinker: Warning: Can't find file for asset '/Game/StarterContent/Materials/M_Metal_Copper' while loading ../../../../../Unreal/ProjectUnreal/Content/Levels/Game.umap.
+[2018.05.13-23.46.13:759][478]LoadErrors: Error: /Game/Levels/Game : Can't find file for asset. /Game/StarterContent/Materials/M_Metal_Copper
+[2018.05.13-23.46.13:761][478]LogLinker: Warning: Can't find file '/Game/StarterContent/Materials/M_Basic_Floor'
+[2018.05.13-23.46.13:761][478]LogLinker: Warning: Can't find file for asset '/Game/StarterContent/Materials/M_Basic_Floor' while loading ../../../../../Unreal/ProjectUnreal/Content/StarterContent/Architecture/Floor_400x400.uasset.
+[2018.05.13-23.46.13:761][478]LoadErrors: Error: /Game/StarterContent/Architecture/Floor_400x400 : Can't find file for asset. /Game/StarterContent/Materials/M_Basic_Floor
+[2018.05.13-23.46.13:761][478]LogLinker: Warning: Can't find file '/Game/StarterContent/Materials/M_Basic_Floor'
+[2018.05.13-23.46.13:761][478]LogLinker: Warning: Can't find file for asset '/Game/StarterContent/Materials/M_Basic_Floor' while loading ../../../../../Unreal/ProjectUnreal/Content/StarterContent/Architecture/Floor_400x400.uasset.
+[2018.05.13-23.46.13:762][478]LogLinker: Warning: Can't find file '/Game/StarterContent/Audio/Starter_Background_Cue'
+[2018.05.13-23.46.13:762][478]LogLinker: Warning: Can't find file for asset '/Game/StarterContent/Audio/Starter_Background_Cue' while loading ../../../../../Unreal/ProjectUnreal/Content/Levels/Game.umap.
+[2018.05.13-23.46.13:762][478]LoadErrors: Error: /Game/Levels/Game : Can't find file for asset. /Game/StarterContent/Audio/Starter_Background_Cue
+[2018.05.13-23.46.13:762][478]LogLinker: Warning: Can't find file '/Game/StarterContent/Materials/M_Metal_Copper'
+[2018.05.13-23.46.13:762][478]LogLinker: Warning: Can't find file for asset '/Game/StarterContent/Materials/M_Metal_Copper' while loading ../../../../../Unreal/ProjectUnreal/Content/Levels/Game.umap.
+[2018.05.13-23.46.13:765][478]LogUObjectGlobals: Created PersistentFrame Addr=0x0000019704faa700, Size=4, Default__SimulationUI_C Function /Game/UI_Blueprints/SimulationUI.SimulationUI_C:ExecuteUbergraph_SimulationUI
+[2018.05.13-23.46.13:768][478]LogUObjectGlobals: Destroyed PersistentFrame Addr=0x0000019704faa700, Size=4
+[2018.05.13-23.46.13:768][478]LogUObjectGlobals: Created PersistentFrame Addr=0x0000019704faa700, Size=4, Default__SimulationUI_C Function /Engine/Transient.REINST_SimulationUI_C_0:ExecuteUbergraph_SimulationUI
+[2018.05.13-23.46.13:769][478]LogUObjectGlobals: Created PersistentFrame Addr=0x0000019704faaa50, Size=4, Default__SimulationUI_C Function /Game/UI_Blueprints/SimulationUI.SimulationUI_C:ExecuteUbergraph_SimulationUI
+[2018.05.13-23.46.13:770][478]LogLinker: Warning: Can't find file '/Game/StarterContent/Audio/Starter_Background_Cue'
+[2018.05.13-23.46.13:770][478]LogLinker: Warning: Can't find file for asset '/Game/StarterContent/Audio/Starter_Background_Cue' while loading ../../../../../Unreal/ProjectUnreal/Content/Levels/Game.umap.
+[2018.05.13-23.46.13:773][478]LogUObjectGlobals: Created PersistentFrame Addr=0x000001971869c6c0, Size=16, Default__Game_C Function /Game/Levels/Game.Game_C:ExecuteUbergraph_Game
+[2018.05.13-23.46.13:774][478]LogLinker: Warning: Can't find file '/Game/StarterContent/Materials/M_Metal_Copper'
+[2018.05.13-23.46.13:774][478]LogLinker: Warning: Can't find file for asset '/Game/StarterContent/Materials/M_Metal_Copper' while loading NULL.
+[2018.05.13-23.46.13:774][478]LogLinker: Warning: Can't find file '/Game/StarterContent/Audio/Starter_Background_Cue'
+[2018.05.13-23.46.13:774][478]LogLinker: Warning: Can't find file for asset '/Game/StarterContent/Audio/Starter_Background_Cue' while loading NULL.
+[2018.05.13-23.46.13:774][478]LogLinker: Warning: Can't find file '/Game/StarterContent/Materials/M_Metal_Copper'
+[2018.05.13-23.46.13:774][478]LogLinker: Warning: Can't find file for asset '/Game/StarterContent/Materials/M_Metal_Copper' while loading NULL.
+[2018.05.13-23.46.13:774][478]LogLinker: Warning: Can't find file '/Game/StarterContent/Audio/Starter_Background_Cue'
+[2018.05.13-23.46.13:774][478]LogLinker: Warning: Can't find file for asset '/Game/StarterContent/Audio/Starter_Background_Cue' while loading NULL.
+[2018.05.13-23.46.13:777][478]LogUObjectGlobals: Destroyed PersistentFrame Addr=0x000001971869c6c0, Size=16
+[2018.05.13-23.46.13:777][478]LogUObjectGlobals: Created PersistentFrame Addr=0x000001971869c6c0, Size=16, Default__Game_C Function /Engine/Transient.REINST_Game_C_14:ExecuteUbergraph_Game
+[2018.05.13-23.46.13:779][478]LogUObjectGlobals: Created PersistentFrame Addr=0x000001971869c580, Size=16, Default__Game_C Function /Game/Levels/Game.Game_C:ExecuteUbergraph_Game
+[2018.05.13-23.46.13:786][478]LogLinker: Warning: Can't find file '/Game/StarterContent/Audio/Starter_Background_Cue'
+[2018.05.13-23.46.13:786][478]LoadErrors: Failed to load /Game/StarterContent/Audio/Starter_Background_Cue.Starter_Background_Cue Referenced by Starter_Background_Cue_2
+[2018.05.13-23.46.13:786][478]LogLinker: Warning: Can't find file for asset '/Game/StarterContent/Audio/Starter_Background_Cue' while loading NULL.
+[2018.05.13-23.46.13:790][478]LogLinker: Warning: Can't find file '/Game/StarterContent/Materials/M_Metal_Copper'
+[2018.05.13-23.46.13:790][478]LoadErrors: Failed to load /Game/StarterContent/Materials/M_Metal_Copper.M_Metal_Copper Referenced by Floor
+[2018.05.13-23.46.13:790][478]LogLinker: Warning: Can't find file for asset '/Game/StarterContent/Materials/M_Metal_Copper' while loading NULL.
+[2018.05.13-23.46.13:792][478]LogLinker: Warning: Can't find file '/Game/StarterContent/Materials/M_Basic_Floor'
+[2018.05.13-23.46.13:792][478]LoadErrors: Failed to load /Game/StarterContent/Materials/M_Basic_Floor.M_Basic_Floor Referenced by Floor_400x400
+[2018.05.13-23.46.13:792][478]LogLinker: Warning: Can't find file for asset '/Game/StarterContent/Materials/M_Basic_Floor' while loading NULL.
+[2018.05.13-23.46.13:793][478]LogLinker: Warning: Can't find file '/Game/StarterContent/Materials/M_Basic_Floor'
+[2018.05.13-23.46.13:793][478]LogLinker: Warning: Can't find file for asset '/Game/StarterContent/Materials/M_Basic_Floor' while loading NULL.
+[2018.05.13-23.46.13:793][478]LogLinker: Warning: Can't find file '/Game/StarterContent/Textures/T_MacroVariation'
+[2018.05.13-23.46.13:793][478]LoadErrors: Failed to load /Game/StarterContent/Textures/T_MacroVariation.T_MacroVariation Referenced by MaterialExpressionTextureSample_49
+[2018.05.13-23.46.13:793][478]LogLinker: Warning: Can't find file for asset '/Game/StarterContent/Textures/T_MacroVariation' while loading NULL.
+[2018.05.13-23.46.13:793][478]LogLinker: Warning: Can't find file '/Game/StarterContent/Textures/T_MacroVariation'
+[2018.05.13-23.46.13:793][478]LoadErrors: Failed to load /Game/StarterContent/Textures/T_MacroVariation.T_MacroVariation Referenced by MaterialExpressionTextureSample_50
+[2018.05.13-23.46.13:793][478]LogLinker: Warning: Can't find file for asset '/Game/StarterContent/Textures/T_MacroVariation' while loading NULL.
+[2018.05.13-23.46.13:794][478]LogLinker: Warning: Can't find file '/Game/StarterContent/Textures/T_MacroVariation'
+[2018.05.13-23.46.13:794][478]LoadErrors: Failed to load /Game/StarterContent/Textures/T_MacroVariation.T_MacroVariation Referenced by MaterialExpressionTextureSample_51
+[2018.05.13-23.46.13:794][478]LogLinker: Warning: Can't find file for asset '/Game/StarterContent/Textures/T_MacroVariation' while loading NULL.
+[2018.05.13-23.46.13:961][478]LogMaterial: Missing cached shader map for material M_Metal_Brushed_Nickel, compiling. 
+[2018.05.13-23.46.13:961][478]LogMaterial: Warning: D:\Unreal\ProjectUnreal\Content\StarterContent\Materials\M_Metal_Brushed_Nickel.uasset: Failed to compile Material for platform PCD3D_SM5, Default Material will be used in game.
+[2018.05.13-23.46.13:961][478]LogMaterial: 	(Node TextureSample) Texture Sample> Missing input texture
+[2018.05.13-23.46.13:962][478]LogAIModule: Creating AISystem for world Game
+[2018.05.13-23.46.14:002][478]LogUObjectGlobals: Destroyed PersistentFrame Addr=0x000001974f591960, Size=88
+[2018.05.13-23.46.14:002][478]LogUObjectGlobals: Destroyed PersistentFrame Addr=0x0000019704faa700, Size=4
+[2018.05.13-23.46.14:002][478]LogUObjectGlobals: Destroyed PersistentFrame Addr=0x000001971869c6c0, Size=16
+[2018.05.13-23.46.14:005][478]Cmd: MAP LOAD FILE="../../../../../Unreal/ProjectUnreal/Content/Levels/Game.umap" TEMPLATE=0 SHOWPROGRESS=1 FEATURELEVEL=3
+[2018.05.13-23.46.14:005][478]LightingResults: New page: Lighting Build
+[2018.05.13-23.46.14:007][478]LogContentBrowser: Native class hierarchy updated for 'StatsViewer' in 0.0004 seconds. Added 5 classes and 0 folders.
+[2018.05.13-23.46.14:007][478]LoadErrors: New page: Loading map: Game.umap
+[2018.05.13-23.46.14:008][478]MapCheck: New page: Map Check
+[2018.05.13-23.46.14:008][478]LightingResults: New page: Lighting Build
+[2018.05.13-23.46.14:026][478]LogEditorServer: Finished looking for orphan Actors (0.000 secs)
+[2018.05.13-23.46.14:069][478]Cmd: MAP CHECKDEP NOCLEARLOG
+[2018.05.13-23.46.14:104][478]MapCheck: Map check complete: 0 Error(s), 0 Warning(s), took 34,728ms to complete.
+[2018.05.13-23.46.14:104][478]LogFileHelpers: Loading map 'Game' took 0.100
+[2018.05.13-23.46.21:852][936]LogRenderer: Reallocating scene render targets to support 864x412 Format 10 NumSamples 1 (Frame:397).
+[2018.05.13-23.46.21:918][939]LogRenderer: Reallocating scene render targets to support 868x412 Format 10 NumSamples 1 (Frame:399).
+[2018.05.13-23.46.21:962][940]LogRenderer: Reallocating scene render targets to support 872x412 Format 10 NumSamples 1 (Frame:401).
+[2018.05.13-23.46.22:007][941]LogRenderer: Reallocating scene render targets to support 876x412 Format 10 NumSamples 1 (Frame:403).
+[2018.05.13-23.46.22:049][942]LogRenderer: Reallocating scene render targets to support 880x412 Format 10 NumSamples 1 (Frame:405).
+[2018.05.13-23.46.22:092][943]LogRenderer: Reallocating scene render targets to support 888x412 Format 10 NumSamples 1 (Frame:407).
+[2018.05.13-23.46.22:135][944]LogRenderer: Reallocating scene render targets to support 904x412 Format 10 NumSamples 1 (Frame:409).
+[2018.05.13-23.46.22:179][945]LogRenderer: Reallocating scene render targets to support 908x412 Format 10 NumSamples 1 (Frame:411).
+[2018.05.13-23.46.25:926][165]LogTemp: Repeating last play command: Selected Viewport
+[2018.05.13-23.46.25:945][165]LogBlueprintUserMessages: Early PlayInEditor Detection: Level '/Game/Levels/Game.Game:PersistentLevel' has LevelScriptBlueprint '/Game/Levels/Game.Game:PersistentLevel.Game' with GeneratedClass '/Game/Levels/Game.Game_C' with ClassGeneratedBy '/Game/Levels/Game.Game:PersistentLevel.Game'
+[2018.05.13-23.46.25:945][165]LogPlayLevel: PlayLevel: No blueprints needed recompiling
+[2018.05.13-23.46.25:945][165]PIE: New page: PIE session: Game (14. mai 2018, 03.46.25)
+[2018.05.13-23.46.25:946][165]LogPlayLevel: Creating play world package: /Game/Levels/UEDPIE_0_Game
+[2018.05.13-23.46.25:951][165]LogPlayLevel: PIE: StaticDuplicateObject took: (0.005606s)
+[2018.05.13-23.46.25:953][165]LogAIModule: Creating AISystem for world Game
+[2018.05.13-23.46.25:953][165]LogPlayLevel: PIE: World Init took: (0.001665s)
+[2018.05.13-23.46.25:953][165]LogPlayLevel: PIE: Created PIE world by copying editor world from /Game/Levels/Game.Game to /Game/Levels/UEDPIE_0_Game.Game (0.007522s)
+[2018.05.13-23.46.25:970][165]LogInit: XAudio2 using 'Høyttalere +SSE3 (Realtek High Definition Audio)' : 2 channels at 48 kHz using 32 bits per sample (channel mask 0x3)
+[2018.05.13-23.46.25:992][165]LogInit: FAudioDevice initialized.
+[2018.05.13-23.46.26:038][165]LogLoad: Game class is 'MainGameMode'
+[2018.05.13-23.46.26:041][165]LogWorld: Bringing World /Game/Levels/UEDPIE_0_Game.Game up for play (max tick rate 60) at 2018.05.14-01.46.26
+[2018.05.13-23.46.26:042][165]LogWorld: Bringing up level for play took: 0.001606
+[2018.05.13-23.46.26:045][165]LogContentBrowser: Native class hierarchy updated for 'MovieSceneCapture' in 0.0005 seconds. Added 11 classes and 0 folders.
+[2018.05.13-23.46.26:047][165]PIE: Play in editor start time for /Game/Levels/UEDPIE_0_Game −0,797
+[2018.05.13-23.46.26:047][165]LogBlueprintUserMessages: Late PlayInEditor Detection: Level '/Game/Levels/Game.Game:PersistentLevel' has LevelScriptBlueprint '/Game/Levels/Game.Game:PersistentLevel.Game' with GeneratedClass '/Game/Levels/Game.Game_C' with ClassGeneratedBy '/Game/Levels/Game.Game:PersistentLevel.Game'
+[2018.05.13-23.46.27:816][269]LogSlate: FSceneViewport::OnFocusLost() reason 0
+[2018.05.13-23.46.29:366][362]LogSlate: FSceneViewport::OnFocusLost() reason 0
+[2018.05.13-23.46.30:633][438]LogSlate: FSceneViewport::OnFocusLost() reason 0
+[2018.05.13-23.46.32:484][549]LogSlate: FSceneViewport::OnFocusLost() reason 0
+[2018.05.13-23.46.33:284][597]LogSlate: FSceneViewport::OnFocusLost() reason 0
+[2018.05.13-23.46.34:934][696]LogSlate: FSceneViewport::OnFocusLost() reason 0
+[2018.05.13-23.46.35:884][753]LogSlate: FSceneViewport::OnFocusLost() reason 0
+[2018.05.13-23.46.38:384][903]LogSlate: FSceneViewport::OnFocusLost() reason 0
+[2018.05.13-23.46.40:656][ 39]LogBlueprintUserMessages: Early EndPlayMap Detection: Level '/Game/Levels/Game.Game:PersistentLevel' has LevelScriptBlueprint '/Game/Levels/Game.Game:PersistentLevel.Game' with GeneratedClass '/Game/Levels/Game.Game_C' with ClassGeneratedBy '/Game/Levels/Game.Game:PersistentLevel.Game'
+[2018.05.13-23.46.40:689][ 39]LogBlueprintUserMessages: Late EndPlayMap Detection: Level '/Game/Levels/Game.Game:PersistentLevel' has LevelScriptBlueprint '/Game/Levels/Game.Game:PersistentLevel.Game' with GeneratedClass '/Game/Levels/Game.Game_C' with ClassGeneratedBy '/Game/Levels/Game.Game:PersistentLevel.Game'
+[2018.05.13-23.46.44:702][276]LogSlate: FSceneViewport::OnFocusLost() reason 2
+[2018.05.13-23.46.48:219][486]SourceControl: fatal: D:/Software/UE_4.19/Engine/Content: 'D:/Software/UE_4.19/Engine/Content' is outside repository
+[2018.05.13-23.46.48:292][486]EditorErrors: Warning: No assets to check in!
+[2018.05.13-23.46.51:405][670]LogSlate: FSceneViewport::OnFocusLost() reason 0
+[2018.05.13-23.46.55:767][769]LogSlate: Window 'Pick Parent Class' being destroyed
+[2018.05.13-23.46.59:622][999]LogContentBrowser: Verbose: The majority of assets in the view are of type: None
+[2018.05.13-23.47.11:305][673]LogContentBrowser: Verbose: The majority of assets in the view are of type: Material
+[2018.05.13-23.47.33:992][ 14]Cmd: OBJ SAVEPACKAGE PACKAGE="/Game/Levels/Game" FILE="../../../../../Unreal/ProjectUnreal/Content/Levels/Game.umap" SILENT=true AUTOSAVING=false KEEPDIRTY=false
+[2018.05.13-23.47.34:036][ 14]LogUObjectGlobals: Destroyed PersistentFrame Addr=0x000001971869c580, Size=16
+[2018.05.13-23.47.34:036][ 14]LogUObjectGlobals: Created PersistentFrame Addr=0x0000019718b058d0, Size=16, Default__Game_C Function /Engine/Transient.REINST_Game_C_18:ExecuteUbergraph_Game
+[2018.05.13-23.47.34:037][ 14]LogUObjectGlobals: Created PersistentFrame Addr=0x0000019718b04cb0, Size=16, Default__Game_C Function /Game/Levels/Game.Game_C:ExecuteUbergraph_Game
+[2018.05.13-23.47.34:179][ 14]LogSavePackage: Save=161.70ms
+[2018.05.13-23.47.34:179][ 14]LogSavePackage: Moving '../../../../../Unreal/ProjectUnreal/Saved/Game6CA79A114D09EE2CE4A19CBB12D0E38E.tmp' to '../../../../../Unreal/ProjectUnreal/Content/Levels/Game.umap'
+[2018.05.13-23.47.34:182][ 14]LogSavePackage: Display: Finished SavePackage ../../../../../Unreal/ProjectUnreal/Content/Levels/Game.umap
+[2018.05.13-23.47.36:251][135]SourceControl: fatal: D:/Software/UE_4.19/Engine/Content: 'D:/Software/UE_4.19/Engine/Content' is outside repository
+[2018.05.13-23.47.51:255][135]LogSlate: Window 'Submit Files' being destroyed
+[2018.05.13-23.47.52:152][135]LogSourceControl: commit successful: [master 017fd44] TEST :)
+[2018.05.13-23.47.52:229][135]SourceControl: [master 017fd44] TEST :)
+[2018.05.13-23.47.52:229][135]SourceControl:  1 file changed, 0 insertions(+), 0 deletions(-)
+[2018.05.13-23.47.52:244][135]SourceControl: Commited [master 017fd44] TEST :).
+[2018.05.13-23.48.01:887][706]LogUObjectGlobals: Destroyed PersistentFrame Addr=0x0000019718b058d0, Size=16
+[2018.05.13-23.48.02:055][706]Cmd: OBJ SAVEPACKAGE PACKAGE="/Game/NewMaterial" FILE="../../../../../Unreal/ProjectUnreal/Content/NewMaterial.uasset" SILENT=true
+[2018.05.13-23.48.02:074][706]LogSavePackage: Save=15.81ms
+[2018.05.13-23.48.02:074][706]LogSavePackage: Moving '../../../../../Unreal/ProjectUnreal/Saved/NewMaterial7D7F981349BAC3D8C6B65596A618FAEA.tmp' to '../../../../../Unreal/ProjectUnreal/Content/NewMaterial.uasset'
+[2018.05.13-23.48.02:076][706]LogSavePackage: Display: Finished SavePackage ../../../../../Unreal/ProjectUnreal/Content/NewMaterial.uasset
+[2018.05.13-23.48.05:560][899]SourceControl: fatal: D:/Software/UE_4.19/Engine/Content: 'D:/Software/UE_4.19/Engine/Content' is outside repository
+[2018.05.13-23.48.12:097][899]LogSlate: Window 'Submit Files' being destroyed
+[2018.05.13-23.48.12:649][899]LogSourceControl: commit successful: [master d991dea] TEST 2
+[2018.05.13-23.48.12:726][899]SourceControl: [master d991dea] TEST 2
+[2018.05.13-23.48.12:726][899]SourceControl:  1 file changed, 0 insertions(+), 0 deletions(-)
+[2018.05.13-23.48.12:726][899]SourceControl:  create mode 100644 Content/NewMaterial.uasset
+[2018.05.13-23.48.12:739][899]SourceControl: Commited [master d991dea] TEST 2.
+[2018.05.13-23.49.05:402][490]SourceControl: fatal: D:/Software/UE_4.19/Engine/Content: 'D:/Software/UE_4.19/Engine/Content' is outside repository
+[2018.05.13-23.49.05:471][490]EditorErrors: Warning: No assets to check in!
+[2018.05.13-23.49.10:626][797]LogEditorViewport: Clicking on Actor (LMB): BP_Sky_Sphere_C (BP_Sky_Sphere)
+[2018.05.13-23.49.59:537][615]LogSlate: FSceneViewport::OnFocusLost() reason 2
+[2018.05.13-23.53.28:043][290]LogSlate: Window 'Source Control Login' being destroyed
+[2018.05.13-23.55.23:593][755]LogSlate: Took 0.118831 seconds to synchronously load lazily loaded font '../../../Engine/Content/Slate/Fonts/Roboto-Italic.ttf' (157K)
