@@ -18,6 +18,4 @@ protected:
 	//Begin PlayerController interface
 	virtual void PlayerTick (float deltaTime) override;
 	virtual void SetupInputComponent () override;
-
-	void PlaceUnit ();
 };
