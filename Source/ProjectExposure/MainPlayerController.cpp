@@ -26,26 +26,10 @@ AMainPlayerController::AMainPlayerController ()
 void AMainPlayerController::PlayerTick (float deltaTime)
 {
 	Super::PlayerTick (deltaTime);
-
-	// keep updating the destination every tick while desired
-	/*if (bMoveToMouseCursor)
-	{
-		MoveToMouseCursor();
-	}*/
-}
-
-void AMainPlayerController::PlaceUnit ()
-{
-	print ("YOO");
 }
 
 void AMainPlayerController::SetupInputComponent ()
 {
 	//Set up gameplay key bindings
 	Super::SetupInputComponent ();
-
-	//InputComponent->BindAction ("MouseClick", IE_Pressed, this, &AMainPlayerController::PlaceUnit);
-
-	/*InputComponent->BindAction("SetDestination", IE_Pressed, this, &AMyProjectPlayerController::OnSetDestinationPressed);
-	InputComponent->BindAction("SetDestination", IE_Released, this, &AMyProjectPlayerController::OnSetDestinationReleased);*/
 }
