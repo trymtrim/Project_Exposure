@@ -59,7 +59,7 @@ void APlaceableUnit::FollowMousePosition ()
 			float objectHeight = _mesh->CalcBounds (GetTransform ()).BoxExtent.Z;
 			
 			FVector position = FVector (hit.Location.X, hit.Location.Y, hit.Location.Z + objectHeight);
-			SetActorLocation (position);
+			SetActorLocation (position);//
 
 			//Change outline color
 			if (hit.GetActor ()->GetRootComponent ()->ComponentHasTag ("Placeable"))

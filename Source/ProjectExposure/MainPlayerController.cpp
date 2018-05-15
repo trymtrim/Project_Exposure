@@ -14,7 +14,7 @@
 AMainPlayerController::AMainPlayerController ()
 {
 	bShowMouseCursor = true;
-
+	//
 	/*bAutoManageActiveCameraTarget = false;
 	PlayerCameraManagerClass = AMainCameraManager::StaticClass ();
 	SetViewTarget (GetPawn ());*/
