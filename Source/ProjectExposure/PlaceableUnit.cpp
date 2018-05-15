@@ -2,6 +2,7 @@
 
 #include "PlaceableUnit.h"
 #include "Engine/World.h"
+//#include "Engine.h" //For print
 
 #define print(text) if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 1.5, FColor::Green,text)
 
@@ -54,21 +55,18 @@ void APlaceableUnit::FollowMousePosition ()
 
 	if (hit.bBlockingHit)
 	{
-		//if (hit.GetActor ()->GetRootComponent ()->ComponentHasTag ("Placeable"))
-		//{
-			float objectHeight = _mesh->CalcBounds (GetTransform ()).BoxExtent.Z;
+		float objectHeight = _mesh->CalcBounds (GetTransform ()).BoxExtent.Z;
 			
-			FVector position = FVector (hit.Location.X, hit.Location.Y, hit.Location.Z + objectHeight);
-			SetActorLocation (position);//
+		FVector position = FVector (hit.Location.X, hit.Location.Y, hit.Location.Z + objectHeight);
+		SetActorLocation (position);
 
-			//Change outline color
-			if (hit.GetActor ()->GetRootComponent ()->ComponentHasTag ("Placeable"))
-				_mesh->SetCustomDepthStencilValue (0);
-			else
-				_mesh->SetCustomDepthStencilValue (1);
+		//Change outline color
+		if (hit.GetActor ()->GetRootComponent ()->ComponentHasTag ("Placeable"))
+			_mesh->SetCustomDepthStencilValue (0);
+		else
+			_mesh->SetCustomDepthStencilValue (1);
 
-			_mesh->MarkRenderStateDirty ();
-		//}
+		_mesh->MarkRenderStateDirty ();
 	}
 
 	/*TArray <UStaticMeshComponent*> StaticComps;

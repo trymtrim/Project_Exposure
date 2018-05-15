@@ -2,8 +2,7 @@
 
 #include "MainGameMode.h"
 #include "MainPlayerController.h"
-#include "PlaceableUnit.h"
-#include "UObject/ConstructorHelpers.h"
+//#include "UObject/ConstructorHelpers.h"
 
 AMainGameMode::AMainGameMode ()
 {

@@ -23,9 +23,9 @@
 /wd4838
 /w44668
 /I "C:\Program Files\Epic Games\UE_4.19\Engine\Source"
-/I D:\Game_Development\Git\ProjectExposure\Source
-/I D:\Game_Development\Git\ProjectExposure\Intermediate\Build\Win64\UE4Editor\Inc\ProjectExposure
-/I D:\Game_Development\Git\ProjectExposure\Source\ProjectExposure
+/I D:\Game_Development\Git\Project_Exposure\Source
+/I D:\Game_Development\Git\Project_Exposure\Intermediate\Build\Win64\UE4Editor\Inc\ProjectExposure
+/I D:\Game_Development\Git\Project_Exposure\Source\ProjectExposure
 /I "C:\Program Files\Epic Games\UE_4.19\Engine\Source\Runtime\Core\Public"
 /I "C:\Program Files\Epic Games\UE_4.19\Engine\Source\Runtime\Core\Public\Internationalization"
 /I "C:\Program Files\Epic Games\UE_4.19\Engine\Source\Runtime\Core\Public\Async"
@@ -363,9 +363,9 @@
 /FI"C:\Program Files\Epic Games\UE_4.19\Engine\Intermediate\Build\Win64\UE4Editor\Development\Engine\SharedPCH.Engine.h"
 /Yu"C:\Program Files\Epic Games\UE_4.19\Engine\Intermediate\Build\Win64\UE4Editor\Development\Engine\SharedPCH.Engine.h"
 /Fp"C:\Program Files\Epic Games\UE_4.19\Engine\Intermediate\Build\Win64\UE4Editor\Development\Engine\SharedPCH.Engine.h.pch"
-"D:\Game_Development\Git\ProjectExposure\Intermediate\Build\Win64\UE4Editor\Inc\ProjectExposure\ProjectExposure.init.gen.cpp"
-/FI"D:\Game_Development\Git\ProjectExposure\Intermediate\Build\Win64\UE4Editor\Development\ProjectExposure\Definitions.ProjectExposure.h"
-/Fo"D:\Game_Development\Git\ProjectExposure\Intermediate\Build\Win64\UE4Editor\Development\ProjectExposure\ProjectExposure.init.gen.cpp.obj"
+"D:\Game_Development\Git\Project_Exposure\Intermediate\Build\Win64\UE4Editor\Inc\ProjectExposure\ProjectExposure.init.gen.cpp"
+/FI"D:\Game_Development\Git\Project_Exposure\Intermediate\Build\Win64\UE4Editor\Development\ProjectExposure\Definitions.ProjectExposure.h"
+/Fo"D:\Game_Development\Git\Project_Exposure\Intermediate\Build\Win64\UE4Editor\Development\ProjectExposure\ProjectExposure.init.gen.cpp.obj"
 /TP
 /GR-
 /W4

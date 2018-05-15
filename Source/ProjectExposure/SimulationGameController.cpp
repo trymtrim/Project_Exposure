@@ -80,7 +80,7 @@ void ASimulationGameController::PlaceUnit ()
 			StartSimulation ();
 		}
 	}
-}//
+}
 
 void ASimulationGameController::StartSimulation ()
 {

@@ -13,9 +13,9 @@ PRAGMA_DISABLE_DEPRECATION_WARNINGS
 #endif
 #define PROJECTEXPOSURE_MainGameMode_generated_h
 
-#define ProjectExposure_Source_ProjectExposure_MainGameMode_h_12_RPC_WRAPPERS
-#define ProjectExposure_Source_ProjectExposure_MainGameMode_h_12_RPC_WRAPPERS_NO_PURE_DECLS
-#define ProjectExposure_Source_ProjectExposure_MainGameMode_h_12_INCLASS_NO_PURE_DECLS \
+#define Project_Exposure_Source_ProjectExposure_MainGameMode_h_12_RPC_WRAPPERS
+#define Project_Exposure_Source_ProjectExposure_MainGameMode_h_12_RPC_WRAPPERS_NO_PURE_DECLS
+#define Project_Exposure_Source_ProjectExposure_MainGameMode_h_12_INCLASS_NO_PURE_DECLS \
 private: \
 	static void StaticRegisterNativesAMainGameMode(); \
 	friend PROJECTEXPOSURE_API class UClass* Z_Construct_UClass_AMainGameMode(); \
@@ -25,7 +25,7 @@ public: \
 	enum {IsIntrinsic=COMPILED_IN_INTRINSIC};
 
 
-#define ProjectExposure_Source_ProjectExposure_MainGameMode_h_12_INCLASS \
+#define Project_Exposure_Source_ProjectExposure_MainGameMode_h_12_INCLASS \
 private: \
 	static void StaticRegisterNativesAMainGameMode(); \
 	friend PROJECTEXPOSURE_API class UClass* Z_Construct_UClass_AMainGameMode(); \
@@ -35,7 +35,7 @@ public: \
 	enum {IsIntrinsic=COMPILED_IN_INTRINSIC};
 
 
-#define ProjectExposure_Source_ProjectExposure_MainGameMode_h_12_STANDARD_CONSTRUCTORS \
+#define Project_Exposure_Source_ProjectExposure_MainGameMode_h_12_STANDARD_CONSTRUCTORS \
 	/** Standard constructor, called after all reflected properties have been initialized */ \
 	NO_API AMainGameMode(const FObjectInitializer& ObjectInitializer); \
 	DEFINE_DEFAULT_OBJECT_INITIALIZER_CONSTRUCTOR_CALL(AMainGameMode) \
@@ -48,7 +48,7 @@ private: \
 public:
 
 
-#define ProjectExposure_Source_ProjectExposure_MainGameMode_h_12_ENHANCED_CONSTRUCTORS \
+#define Project_Exposure_Source_ProjectExposure_MainGameMode_h_12_ENHANCED_CONSTRUCTORS \
 private: \
 	/** Private move- and copy-constructors, should never be used */ \
 	NO_API AMainGameMode(AMainGameMode&&); \
@@ -59,32 +59,32 @@ DEFINE_VTABLE_PTR_HELPER_CTOR_CALLER(AMainGameMode); \
 	DEFINE_DEFAULT_CONSTRUCTOR_CALL(AMainGameMode)
 
 
-#define ProjectExposure_Source_ProjectExposure_MainGameMode_h_12_PRIVATE_PROPERTY_OFFSET
-#define ProjectExposure_Source_ProjectExposure_MainGameMode_h_9_PROLOG
-#define ProjectExposure_Source_ProjectExposure_MainGameMode_h_12_GENERATED_BODY_LEGACY \
+#define Project_Exposure_Source_ProjectExposure_MainGameMode_h_12_PRIVATE_PROPERTY_OFFSET
+#define Project_Exposure_Source_ProjectExposure_MainGameMode_h_9_PROLOG
+#define Project_Exposure_Source_ProjectExposure_MainGameMode_h_12_GENERATED_BODY_LEGACY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	ProjectExposure_Source_ProjectExposure_MainGameMode_h_12_PRIVATE_PROPERTY_OFFSET \
-	ProjectExposure_Source_ProjectExposure_MainGameMode_h_12_RPC_WRAPPERS \
-	ProjectExposure_Source_ProjectExposure_MainGameMode_h_12_INCLASS \
-	ProjectExposure_Source_ProjectExposure_MainGameMode_h_12_STANDARD_CONSTRUCTORS \
+	Project_Exposure_Source_ProjectExposure_MainGameMode_h_12_PRIVATE_PROPERTY_OFFSET \
+	Project_Exposure_Source_ProjectExposure_MainGameMode_h_12_RPC_WRAPPERS \
+	Project_Exposure_Source_ProjectExposure_MainGameMode_h_12_INCLASS \
+	Project_Exposure_Source_ProjectExposure_MainGameMode_h_12_STANDARD_CONSTRUCTORS \
 public: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 
 
-#define ProjectExposure_Source_ProjectExposure_MainGameMode_h_12_GENERATED_BODY \
+#define Project_Exposure_Source_ProjectExposure_MainGameMode_h_12_GENERATED_BODY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	ProjectExposure_Source_ProjectExposure_MainGameMode_h_12_PRIVATE_PROPERTY_OFFSET \
-	ProjectExposure_Source_ProjectExposure_MainGameMode_h_12_RPC_WRAPPERS_NO_PURE_DECLS \
-	ProjectExposure_Source_ProjectExposure_MainGameMode_h_12_INCLASS_NO_PURE_DECLS \
-	ProjectExposure_Source_ProjectExposure_MainGameMode_h_12_ENHANCED_CONSTRUCTORS \
+	Project_Exposure_Source_ProjectExposure_MainGameMode_h_12_PRIVATE_PROPERTY_OFFSET \
+	Project_Exposure_Source_ProjectExposure_MainGameMode_h_12_RPC_WRAPPERS_NO_PURE_DECLS \
+	Project_Exposure_Source_ProjectExposure_MainGameMode_h_12_INCLASS_NO_PURE_DECLS \
+	Project_Exposure_Source_ProjectExposure_MainGameMode_h_12_ENHANCED_CONSTRUCTORS \
 private: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 
 
 #undef CURRENT_FILE_ID
-#define CURRENT_FILE_ID ProjectExposure_Source_ProjectExposure_MainGameMode_h
+#define CURRENT_FILE_ID Project_Exposure_Source_ProjectExposure_MainGameMode_h
 
 
 PRAGMA_ENABLE_DEPRECATION_WARNINGS

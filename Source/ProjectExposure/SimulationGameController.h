@@ -25,7 +25,7 @@ public:
 	//For blueprints
 	UFUNCTION (BlueprintCallable, Category = "ButtonPress")
 	void SpawnUnit (int index);
-	//
+
 	UPROPERTY (BlueprintReadWrite)
 	bool showUI = true;
 	UPROPERTY (BlueprintReadWrite)

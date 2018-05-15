@@ -13,7 +13,7 @@ PRAGMA_DISABLE_DEPRECATION_WARNINGS
 #endif
 #define PROJECTEXPOSURE_SimulationGameController_generated_h
 
-#define ProjectExposure_Source_ProjectExposure_SimulationGameController_h_13_RPC_WRAPPERS \
+#define Project_Exposure_Source_ProjectExposure_SimulationGameController_h_13_RPC_WRAPPERS \
  \
 	DECLARE_FUNCTION(execSpawnUnit) \
 	{ \
@@ -25,7 +25,7 @@ PRAGMA_DISABLE_DEPRECATION_WARNINGS
 	}
 
 
-#define ProjectExposure_Source_ProjectExposure_SimulationGameController_h_13_RPC_WRAPPERS_NO_PURE_DECLS \
+#define Project_Exposure_Source_ProjectExposure_SimulationGameController_h_13_RPC_WRAPPERS_NO_PURE_DECLS \
  \
 	DECLARE_FUNCTION(execSpawnUnit) \
 	{ \
@@ -37,7 +37,7 @@ PRAGMA_DISABLE_DEPRECATION_WARNINGS
 	}
 
 
-#define ProjectExposure_Source_ProjectExposure_SimulationGameController_h_13_INCLASS_NO_PURE_DECLS \
+#define Project_Exposure_Source_ProjectExposure_SimulationGameController_h_13_INCLASS_NO_PURE_DECLS \
 private: \
 	static void StaticRegisterNativesASimulationGameController(); \
 	friend PROJECTEXPOSURE_API class UClass* Z_Construct_UClass_ASimulationGameController(); \
@@ -47,7 +47,7 @@ public: \
 	enum {IsIntrinsic=COMPILED_IN_INTRINSIC};
 
 
-#define ProjectExposure_Source_ProjectExposure_SimulationGameController_h_13_INCLASS \
+#define Project_Exposure_Source_ProjectExposure_SimulationGameController_h_13_INCLASS \
 private: \
 	static void StaticRegisterNativesASimulationGameController(); \
 	friend PROJECTEXPOSURE_API class UClass* Z_Construct_UClass_ASimulationGameController(); \
@@ -57,7 +57,7 @@ public: \
 	enum {IsIntrinsic=COMPILED_IN_INTRINSIC};
 
 
-#define ProjectExposure_Source_ProjectExposure_SimulationGameController_h_13_STANDARD_CONSTRUCTORS \
+#define Project_Exposure_Source_ProjectExposure_SimulationGameController_h_13_STANDARD_CONSTRUCTORS \
 	/** Standard constructor, called after all reflected properties have been initialized */ \
 	NO_API ASimulationGameController(const FObjectInitializer& ObjectInitializer); \
 	DEFINE_DEFAULT_OBJECT_INITIALIZER_CONSTRUCTOR_CALL(ASimulationGameController) \
@@ -70,7 +70,7 @@ private: \
 public:
 
 
-#define ProjectExposure_Source_ProjectExposure_SimulationGameController_h_13_ENHANCED_CONSTRUCTORS \
+#define Project_Exposure_Source_ProjectExposure_SimulationGameController_h_13_ENHANCED_CONSTRUCTORS \
 private: \
 	/** Private move- and copy-constructors, should never be used */ \
 	NO_API ASimulationGameController(ASimulationGameController&&); \
@@ -81,37 +81,39 @@ DEFINE_VTABLE_PTR_HELPER_CTOR_CALLER(ASimulationGameController); \
 	DEFINE_DEFAULT_CONSTRUCTOR_CALL(ASimulationGameController)
 
 
-#define ProjectExposure_Source_ProjectExposure_SimulationGameController_h_13_PRIVATE_PROPERTY_OFFSET \
+#define Project_Exposure_Source_ProjectExposure_SimulationGameController_h_13_PRIVATE_PROPERTY_OFFSET \
 	FORCEINLINE static uint32 __PPO___nuclearReactorPrefab() { return STRUCT_OFFSET(ASimulationGameController, _nuclearReactorPrefab); } \
 	FORCEINLINE static uint32 __PPO___windmillPrefab() { return STRUCT_OFFSET(ASimulationGameController, _windmillPrefab); } \
-	FORCEINLINE static uint32 __PPO___oilRigPrefab() { return STRUCT_OFFSET(ASimulationGameController, _oilRigPrefab); }
+	FORCEINLINE static uint32 __PPO___oilRigPrefab() { return STRUCT_OFFSET(ASimulationGameController, _oilRigPrefab); } \
+	FORCEINLINE static uint32 __PPO__normalMaterial() { return STRUCT_OFFSET(ASimulationGameController, normalMaterial); } \
+	FORCEINLINE static uint32 __PPO__collideMaterial() { return STRUCT_OFFSET(ASimulationGameController, collideMaterial); }
 
 
-#define ProjectExposure_Source_ProjectExposure_SimulationGameController_h_10_PROLOG
-#define ProjectExposure_Source_ProjectExposure_SimulationGameController_h_13_GENERATED_BODY_LEGACY \
+#define Project_Exposure_Source_ProjectExposure_SimulationGameController_h_10_PROLOG
+#define Project_Exposure_Source_ProjectExposure_SimulationGameController_h_13_GENERATED_BODY_LEGACY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	ProjectExposure_Source_ProjectExposure_SimulationGameController_h_13_PRIVATE_PROPERTY_OFFSET \
-	ProjectExposure_Source_ProjectExposure_SimulationGameController_h_13_RPC_WRAPPERS \
-	ProjectExposure_Source_ProjectExposure_SimulationGameController_h_13_INCLASS \
-	ProjectExposure_Source_ProjectExposure_SimulationGameController_h_13_STANDARD_CONSTRUCTORS \
+	Project_Exposure_Source_ProjectExposure_SimulationGameController_h_13_PRIVATE_PROPERTY_OFFSET \
+	Project_Exposure_Source_ProjectExposure_SimulationGameController_h_13_RPC_WRAPPERS \
+	Project_Exposure_Source_ProjectExposure_SimulationGameController_h_13_INCLASS \
+	Project_Exposure_Source_ProjectExposure_SimulationGameController_h_13_STANDARD_CONSTRUCTORS \
 public: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 
 
-#define ProjectExposure_Source_ProjectExposure_SimulationGameController_h_13_GENERATED_BODY \
+#define Project_Exposure_Source_ProjectExposure_SimulationGameController_h_13_GENERATED_BODY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	ProjectExposure_Source_ProjectExposure_SimulationGameController_h_13_PRIVATE_PROPERTY_OFFSET \
-	ProjectExposure_Source_ProjectExposure_SimulationGameController_h_13_RPC_WRAPPERS_NO_PURE_DECLS \
-	ProjectExposure_Source_ProjectExposure_SimulationGameController_h_13_INCLASS_NO_PURE_DECLS \
-	ProjectExposure_Source_ProjectExposure_SimulationGameController_h_13_ENHANCED_CONSTRUCTORS \
+	Project_Exposure_Source_ProjectExposure_SimulationGameController_h_13_PRIVATE_PROPERTY_OFFSET \
+	Project_Exposure_Source_ProjectExposure_SimulationGameController_h_13_RPC_WRAPPERS_NO_PURE_DECLS \
+	Project_Exposure_Source_ProjectExposure_SimulationGameController_h_13_INCLASS_NO_PURE_DECLS \
+	Project_Exposure_Source_ProjectExposure_SimulationGameController_h_13_ENHANCED_CONSTRUCTORS \
 private: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 
 
 #undef CURRENT_FILE_ID
-#define CURRENT_FILE_ID ProjectExposure_Source_ProjectExposure_SimulationGameController_h
+#define CURRENT_FILE_ID Project_Exposure_Source_ProjectExposure_SimulationGameController_h
 
 
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
