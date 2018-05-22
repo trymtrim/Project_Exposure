@@ -20,7 +20,6 @@ public:
 	virtual void Tick (float deltaTime) override;
 
 	bool PlaceUnit ();
-	void SetMaterials (UMaterialInterface* normalMaterial, UMaterialInterface* collideMaterial);
 
 protected:
 	//Called when the game starts or when spawned
@@ -37,8 +36,4 @@ private:
 
 	UFUNCTION ()
 	void BeginOverlap (UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult &SweepResult);
-
-	//Materials
-	UMaterialInterface* _normalMaterial;
-	UMaterialInterface* _collideMaterial;
 };

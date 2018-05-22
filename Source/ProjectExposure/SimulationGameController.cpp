@@ -22,12 +22,52 @@ ASimulationGameController::ASimulationGameController ()
 void ASimulationGameController::BeginPlay ()
 {
 	Super::BeginPlay ();
+
+	//Setup camera
+	_defaultPosition = GetActorLocation ();
+	_defaultRotation = FVector (0.0f, -60.0f, 180.0f);
+
+	_cameraMovement = new CameraMovement (this);
+
+	//Setup pawns
+	_drillPawn->SetGameController (this);
 }
 
 //Called every frame
 void ASimulationGameController::Tick (float DeltaTime)
 {
 	Super::Tick (DeltaTime);
+
+	if (FVector::Distance (GetActorLocation (), _cameraMovement->GetTargetPosition ()) > 5.0f)
+		_cameraMovement->Update (DeltaTime);
+	else if (_miniGameActive == 0 && FVector::Distance (GetActorLocation (), _defaultPosition) > 50)
+	{
+		print ("YO");
+
+		//Initialize random minigame
+		int randomNumber = FMath::RandRange (1, 2);
+
+		if (randomNumber == 1)
+			_miniGameActive = 1;
+		else
+			_miniGameActive = 1;
+
+		switch (_miniGameActive)
+		{
+		case 1:
+			GetWorld ()->GetFirstPlayerController ()->Possess (_minePawn);
+			//_minePawn->
+			break;
+		case 2:
+			
+			break;
+		case 3:
+			GetWorld ()->GetFirstPlayerController ()->Possess (_drillPawn);
+			_drillPawn->StartGame ();
+			//_drillPawn->SetActorLocation (GetActorLocation ());
+			break;
+		}
+	}
 }
 
 void ASimulationGameController::SpawnUnit (int index)
@@ -63,7 +103,6 @@ void ASimulationGameController::SpawnUnit (int index)
 
 		//Spawn the unit
 		_controlledUnit = world->SpawnActor <APlaceableUnit> (controlledUnit, spawnPosition, rotator, spawnParams);
-		_controlledUnit->SetMaterials (normalMaterial, collideMaterial);
 	}
 }
 
@@ -87,9 +126,6 @@ void ASimulationGameController::StartSimulation ()
 	//Disable UI, the rest is handled by the UI widget blueprint
 	showUI = false;
 	showSimulationUI = true;
-	
-	//Temp
-	print ("Let the simulation begin!");
 }
 
 void ASimulationGameController::StopSimulation ()
@@ -105,9 +141,8 @@ void ASimulationGameController::StopSimulation ()
 
 void ASimulationGameController::EnterMiniGame ()
 {
-	//Temp
-	print ("Let the minigame begin!");
-	_miniGameActive = true;
+	_cameraMovement->MoveTo (_drillPosition, _drillRotation);
+	//_cameraMovement->MoveTo (_minePosition, _mineRotation);
 
 	//After minigame is finished, exit it
 	//ExitMiniGame ();
@@ -115,21 +150,22 @@ void ASimulationGameController::EnterMiniGame ()
 
 void ASimulationGameController::ExitMiniGame ()
 {
-	//Temp
-	print ("Exiting minigame...");
-	_miniGameActive = false;
+	GetWorld ()->GetFirstPlayerController ()->Possess (this);
 
-	//After exiting minigame, start new turn
+	print ("Exiting minigame...");
+	_miniGameActive = 0;
+
+	_cameraMovement->MoveTo (_defaultPosition, _defaultRotation);
+
+	//After exiting minigame, start a new turn
 	StartNewTurn ();
 }
 
 void ASimulationGameController::StartNewTurn ()
 {
 	_currentTurn++;
-	CHAR* yo = "W";
-	IntToChar (_currentTurn, yo);
 	currentTurnText = "Turn " + FString::FromInt (_currentTurn);
-	
+
 	//Enable UI, the rest is handled by the UI widget blueprint
 	showUI = true;
 }
@@ -138,7 +174,7 @@ void ASimulationGameController::OnSpacePress ()
 {
 	if (showSimulationUI)
 		StopSimulation ();
-	else if (_miniGameActive)
+	else if (_miniGameActive != 0)
 		ExitMiniGame ();
 }
 

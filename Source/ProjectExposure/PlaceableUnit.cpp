@@ -2,7 +2,6 @@
 
 #include "PlaceableUnit.h"
 #include "Engine/World.h"
-//#include "Engine.h" //For print
 
 #define print(text) if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 1.5, FColor::Green,text)
 
@@ -57,15 +56,15 @@ void APlaceableUnit::FollowMousePosition ()
 	{
 		float objectHeight = _mesh->CalcBounds (GetTransform ()).BoxExtent.Z;
 			
-		FVector position = FVector (hit.Location.X, hit.Location.Y, hit.Location.Z + objectHeight);
+		FVector position = FVector (hit.Location.X, hit.Location.Y, hit.Location.Z + (objectHeight / 2));
 		SetActorLocation (position);
 
 		//Change outline color
 		if (hit.GetActor ()->GetRootComponent ()->ComponentHasTag ("Placeable"))
-			_mesh->SetCustomDepthStencilValue (0);
-		else
 			_mesh->SetCustomDepthStencilValue (1);
-
+		else
+			_mesh->SetCustomDepthStencilValue (0);
+		
 		_mesh->MarkRenderStateDirty ();
 	}
 
@@ -78,8 +77,8 @@ void APlaceableUnit::FollowMousePosition ()
 
 bool APlaceableUnit::PlaceUnit ()
 {
-	//if (_canPlace)
-	//	return false;
+	if (_mesh->CustomDepthStencilValue == 1)
+		return false;
 
 	_isPlaced = true;
 
@@ -88,10 +87,4 @@ bool APlaceableUnit::PlaceUnit ()
 	_mesh->MarkRenderStateDirty ();
 
 	return true;
-}
-
-void APlaceableUnit::SetMaterials (UMaterialInterface* normalMaterial, UMaterialInterface* collideMaterial)
-{
-	_normalMaterial = normalMaterial;
-	_collideMaterial = collideMaterial;
 }
