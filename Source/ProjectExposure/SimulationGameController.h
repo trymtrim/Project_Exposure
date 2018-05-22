@@ -5,6 +5,9 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
 #include "PlaceableUnit.h"
+#include "CameraMovement.h"
+#include "MinigameCartController.h"
+#include "MinigameDrill/MinigameDrillController.h"
 #include "SimulationGameController.generated.h"
 
 UCLASS()
@@ -22,6 +25,8 @@ public:
 	//Called to bind functionality to input
 	virtual void SetupPlayerInputComponent (class UInputComponent* PlayerInputComponent) override;
 
+	void ExitMiniGame ();
+
 	//For blueprints
 	UFUNCTION (BlueprintCallable, Category = "ButtonPress")
 	void SpawnUnit (int index);
@@ -38,8 +43,17 @@ protected:
 	virtual void BeginPlay () override;
 
 private:
-	//Places the unit that is currently being controlled
 	void PlaceUnit ();
+	void StartSimulation ();
+	void StopSimulation ();
+	void EnterMiniGame ();
+	void StartNewTurn ();
+	
+	//Default camera position and rotation
+	FVector _defaultPosition;
+	FVector _defaultRotation;
+
+	CameraMovement* _cameraMovement;
 
 	//Currently controlled unit
 	APlaceableUnit* _controlledUnit = nullptr;
@@ -47,18 +61,11 @@ private:
 	//Simulation setup
 	int _maxTurns = 9;
 	int _currentTurn = 1;
-	
-	void StartSimulation ();
-	void StopSimulation ();
-	void EnterMiniGame ();
-	void ExitMiniGame ();
-	void StartNewTurn ();
 
 	//Inputs
 	void OnSpacePress ();
 
-	//Temp
-	bool _miniGameActive = false;
+	int _miniGameActive = 0; //0 = nothing, 1 = nuclear, 2 = windmill, 3 = oilrig
 
 	//Prefabs
 	UPROPERTY (EditAnywhere)
@@ -68,11 +75,28 @@ private:
 	UPROPERTY (EditAnywhere)
 	TSubclassOf <AActor> _oilRigPrefab;
 
-	//Materials
+	//Minigame pawns, position and rotation
+	//Mine game
 	UPROPERTY (EditAnywhere)
-	UMaterialInterface* normalMaterial;
+	AMinigameCartController* _minePawn;
 	UPROPERTY (EditAnywhere)
-	UMaterialInterface* collideMaterial;
-	
-	//class UTextRenderComponent* CountdownText;
+	FVector _minePosition;
+	UPROPERTY (EditAnywhere)
+	FVector _mineRotation;
+
+	//Drill game
+	UPROPERTY (EditAnywhere)
+	AMinigameDrillController* _drillPawn;
+	UPROPERTY (EditAnywhere)
+	FVector _drillPosition;
+	UPROPERTY (EditAnywhere)
+	FVector _drillRotation;
+
+	//Windmill game
+	//
+	//
+	UPROPERTY (EditAnywhere)
+	FVector _windmillPosition;
+	UPROPERTY (EditAnywhere)
+	FVector _windmillRotation;
 };

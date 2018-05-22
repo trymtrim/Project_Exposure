@@ -1,27 +1,65 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+//Fill out your copyright notice in the Description page of Project Settings.
 
 #include "DrillObstacle.h"
+#include "Drill.h"
+#include "Components/StaticMeshComponent.h"
+#include "MinigameDrillController.h"
 
+#define print(text) if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 1.5, FColor::Green,text)
 
-// Sets default values
-ADrillObstacle::ADrillObstacle()
+//Sets default values
+ADrillObstacle::ADrillObstacle ()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+ 	//Set this actor to call Tick () every frame.
 	PrimaryActorTick.bCanEverTick = true;
-
 }
 
-// Called when the game starts or when spawned
-void ADrillObstacle::BeginPlay()
+//Called when the game starts or when spawned
+void ADrillObstacle::BeginPlay ()
 {
-	Super::BeginPlay();
-	
+	Super::BeginPlay ();
 }
 
-// Called every frame
-void ADrillObstacle::Tick(float DeltaTime)
+//Called every frame
+void ADrillObstacle::Tick (float DeltaTime)
 {
-	Super::Tick(DeltaTime);
+	Super::Tick (DeltaTime);
 
+	SetActorLocation (GetActorLocation () + (FVector (0.0f, 0.0f, 100.0f) * DeltaTime));
+
+	FVector position = GetActorLocation ();
+
+	if (position.Z > _collideHeight)
+	{
+		if (_gameController->GetCurrentDrillType () == _type)
+			Destroy ();
+		else
+			_gameController->GetHitByObstacle ();
+	}
+	if (position.Z > 2000.0f)
+		Destroy ();
 }
 
+void ADrillObstacle::Initialize (ADrill* drill, AMinigameDrillController* gameController)
+{
+	_gameController = gameController;
+
+	//Set type based on tag
+	TArray <UStaticMeshComponent*> staticComps;
+	GetComponents <UStaticMeshComponent> (staticComps);
+
+	FString type = staticComps [0]->ComponentTags [0].ToString ();
+
+	if (type == "1")
+		_type = 1;
+	else if (type == "2")
+		_type = 2;
+	else if (type == "3")
+		_type = 3;
+
+	//Set collide height
+	TArray <UStaticMeshComponent*> drillStaticComps;
+	drill->GetComponents <UStaticMeshComponent> (drillStaticComps);
+
+	_collideHeight = drill->GetActorLocation ().Z - (drillStaticComps [0]->CalcBounds (drill->GetTransform ()).BoxExtent.Z) - (staticComps [0]->CalcBounds (GetTransform ()).BoxExtent.Z);
+}
