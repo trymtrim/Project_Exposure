@@ -6,6 +6,12 @@
 #include "GameFramework/Actor.h"
 #include "FallingUnit.generated.h"
 
+UENUM(BlueprintType)
+enum class UnitType : uint8 {
+	URANIUM,
+	DEBRIS
+};
+
 UCLASS()
 class PROJECTEXPOSURE_API AFallingUnit : public AActor
 {
@@ -23,6 +29,29 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	//Collision, for more info look into FallinUnit Blueprint
+	UFUNCTION(BlueprintCallable, Category = "CustomCollisionHandlers")
+	void OnHit(AActor* SelfActor, AActor* OtherActor, FVector NormalImpulse, const FHitResult& Hit);
+
+	//Called from the MinigameController to set vars
+	void init(float pSpeed, float pDeathThreshold);
+
+	//Called from the Minecart to determine type
+	UnitType getType();
+
+	//Meshes for different UnitTypes
+	UPROPERTY(EditAnywhere)
+	UStaticMesh* uraniumMesh;
 	
-	
+	UPROPERTY(EditAnywhere)
+	UStaticMesh* debrisMesh;
+private:
+	UPROPERTY(VisibleAnywhere)
+	UnitType _currentType;
+
+	UPROPERTY()
+	float _speed;
+
+	UPROPERTY()
+	float _deathThreshhold;
 };

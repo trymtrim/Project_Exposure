@@ -1,7 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "FallingUnit.h"
+#include "Components/StaticMeshComponent.h"
 
+#define print(text) if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 1.5, FColor::Green,text)
 
 // Sets default values
 AFallingUnit::AFallingUnit()
@@ -16,6 +18,41 @@ void AFallingUnit::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	//Rand number to decide which type we are
+	int rand = FMath::FRand() * 100.0f;
+
+	TArray<UStaticMeshComponent*> Components;
+	GetComponents<UStaticMeshComponent>(Components);
+
+	//Set type and mesh accordingly
+	if (rand <= 20.0f) {
+		_currentType = UnitType::DEBRIS;
+		for (int32 i = 0; i<Components.Num(); i++) {
+			UStaticMeshComponent* StaticMeshComponent = Components[i];
+			StaticMeshComponent->SetStaticMesh(debrisMesh);
+		}
+	} else {
+		_currentType = UnitType::URANIUM;
+		for (int32 i = 0; i<Components.Num(); i++) {
+			UStaticMeshComponent* StaticMeshComponent = Components[i];
+			StaticMeshComponent->SetStaticMesh(uraniumMesh);
+		}
+	}
+	
+}
+
+void AFallingUnit::init(float pSpeed, float pDeathThreshold) {
+	_speed = pSpeed;
+	_deathThreshhold = pDeathThreshold;
+}
+
+UnitType AFallingUnit::getType() {
+	return _currentType;
+}
+
+//For more info look into FallinUnit Blueprint
+void AFallingUnit::OnHit(AActor* SelfActor, AActor* OtherActor, FVector NormalImpulse, const FHitResult& Hit) {
+	Destroy();
 }
 
 // Called every frame
@@ -23,5 +60,9 @@ void AFallingUnit::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	FVector NewLocation = GetActorLocation() + (FVector(0.0f, 0.0f, -_speed * 100.0f) * DeltaTime);
+	SetActorLocation(NewLocation);
+
+	if (NewLocation.Z < _deathThreshhold) Destroy();
 }
 

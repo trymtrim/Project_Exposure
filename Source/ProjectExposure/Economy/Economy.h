@@ -12,4 +12,12 @@ class PROJECTEXPOSURE_API Economy
 public:
 	Economy();
 	~Economy();
+
+private:
+
+	UPROPERTY()
+	uint8 _pollution;
+
+	UPROPERTY()
+	uint8 _energy;
 };
