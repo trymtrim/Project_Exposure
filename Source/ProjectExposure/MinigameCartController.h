@@ -34,6 +34,7 @@ public:
 	//Methods the Minecart can call
 	void addPoints();
 	void decreaseLives();
+	void setup();
 	
 	//Prefabs and references
 	UPROPERTY(EditAnywhere)
@@ -47,7 +48,6 @@ public:
 
 private:
 
-	void setup();
 	void handleInput(float axisValue);
 
 	void spawnFallingUnit();
@@ -83,6 +83,10 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	uint8 _lives;
 	
+	FTimerHandle _durationTimer;
+
+	FTimerHandle _spawnTimer;
+
 	//Rotation Stuff
 	UPROPERTY()
 	bool _faceLeft;

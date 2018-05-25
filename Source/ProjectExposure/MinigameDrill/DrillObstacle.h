@@ -6,7 +6,6 @@
 #include "GameFramework/Actor.h"
 #include "DrillObstacle.generated.h"
 
-class ADrill;
 class AMinigameDrillController;
 
 UCLASS()
@@ -21,7 +20,7 @@ public:
 	//Called every frame
 	virtual void Tick (float DeltaTime) override;
 
-	void Initialize (ADrill* drill, AMinigameDrillController* gameController);
+	void Initialize (AActor* drill, AMinigameDrillController* gameController);
 
 protected:
 	//Called when the game starts or when spawned
@@ -33,4 +32,6 @@ private:
 	AMinigameDrillController* _gameController;
 
 	float _collideHeight;
+
+	bool _hasCollided = false;
 };

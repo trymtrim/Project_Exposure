@@ -18,7 +18,6 @@ class PROJECTEXPOSURE_API ASimulationGameController : public APawn
 public:
 	ASimulationGameController ();
 
-public:	
 	//Called every frame
 	virtual void Tick (float DeltaTime) override;
 
@@ -48,6 +47,16 @@ private:
 	void StopSimulation ();
 	void EnterMiniGame ();
 	void StartNewTurn ();
+	void FadeIn (float delayTime, float fadeTime);
+	void FadeOut (float delayTime, float fadeTime);
+	void UpdateFading (float deltaTime);
+
+	float fadeInTimer;
+	float fadeOutTimer;
+	float fadeInDelay;
+	float fadeOutDelay;
+	bool fadingIn = false;
+	bool fadingOut = false;
 	
 	//Default camera position and rotation
 	FVector _defaultPosition;
@@ -66,6 +75,10 @@ private:
 	void OnSpacePress ();
 
 	int _miniGameActive = 0; //0 = nothing, 1 = nuclear, 2 = windmill, 3 = oilrig
+	bool _miniGameIsActive = false;
+
+	//Temp
+	int _firstPlayed = 0;
 
 	//Prefabs
 	UPROPERTY (EditAnywhere)

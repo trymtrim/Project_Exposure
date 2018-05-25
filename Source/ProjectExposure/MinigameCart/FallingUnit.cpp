@@ -2,6 +2,7 @@
 
 #include "FallingUnit.h"
 #include "Components/StaticMeshComponent.h"
+#include "TimerManager.h"
 
 #define print(text) if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 1.5, FColor::Green,text)
 
@@ -39,6 +40,7 @@ void AFallingUnit::BeginPlay()
 		}
 	}
 	
+	GetWorldTimerManager().SetTimer(_deathTimer, this, &AFallingUnit::handleDeath, 30.0f, false);
 }
 
 void AFallingUnit::init(float pSpeed, float pDeathThreshold) {
@@ -52,6 +54,12 @@ UnitType AFallingUnit::getType() {
 
 //For more info look into FallinUnit Blueprint
 void AFallingUnit::OnHit(AActor* SelfActor, AActor* OtherActor, FVector NormalImpulse, const FHitResult& Hit) {
+	GetWorldTimerManager().ClearTimer(_deathTimer);
+	Destroy();
+}
+
+void AFallingUnit::handleDeath() {
+	GetWorldTimerManager().ClearTimer(_deathTimer);
 	Destroy();
 }
 

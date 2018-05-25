@@ -1,7 +1,6 @@
 //Fill out your copyright notice in the Description page of Project Settings.
 
 #include "DrillObstacle.h"
-#include "Drill.h"
 #include "Components/StaticMeshComponent.h"
 #include "MinigameDrillController.h"
 
@@ -25,22 +24,26 @@ void ADrillObstacle::Tick (float DeltaTime)
 {
 	Super::Tick (DeltaTime);
 
-	SetActorLocation (GetActorLocation () + (FVector (0.0f, 0.0f, 100.0f) * DeltaTime));
+	SetActorLocation (GetActorLocation () + (FVector (0.0f, 0.0f, 400.0f) * DeltaTime));
 
 	FVector position = GetActorLocation ();
 
-	if (position.Z > _collideHeight)
+	if (position.Z > _collideHeight && !_hasCollided)
 	{
 		if (_gameController->GetCurrentDrillType () == _type)
 			Destroy ();
 		else
+		{
 			_gameController->GetHitByObstacle ();
+			_hasCollided = true;
+		}
 	}
-	if (position.Z > 2000.0f)
+
+	if (position.Z > -100.0f)
 		Destroy ();
 }
 
-void ADrillObstacle::Initialize (ADrill* drill, AMinigameDrillController* gameController)
+void ADrillObstacle::Initialize (AActor* drill, AMinigameDrillController* gameController)
 {
 	_gameController = gameController;
 

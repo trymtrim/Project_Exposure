@@ -2,6 +2,7 @@
 
 #include "SimulationGameController.h"
 #include "Engine/World.h"
+#include "CustomGameViewportClient.h"
 
 #define print(text) if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 1.5, FColor::Green,text)
 
@@ -10,12 +11,6 @@ ASimulationGameController::ASimulationGameController ()
 {
  	//Set this pawn to call Tick () every frame.
 	PrimaryActorTick.bCanEverTick = true;
-
-	/*CountdownText = CreateDefaultSubobject <UTextRenderComponent> (TEXT ("CountdownNumber"));
-    CountdownText->SetHorizontalAlignment (EHTA_Center);
-    CountdownText->SetWorldSize (150.0f);
-	CountdownText->SetText ("YOOO");*/
-	//CountdownText->SetText (FString::FromInt(FMath::Max(CountdownTime, 0)));
 }
 
 //Called when the game starts or when spawned
@@ -25,7 +20,7 @@ void ASimulationGameController::BeginPlay ()
 
 	//Setup camera
 	_defaultPosition = GetActorLocation ();
-	_defaultRotation = FVector (0.0f, -60.0f, 180.0f);
+	_defaultRotation = FVector (0.0f, 324.0f, 135.0f);
 
 	_cameraMovement = new CameraMovement (this);
 
@@ -40,22 +35,13 @@ void ASimulationGameController::Tick (float DeltaTime)
 
 	if (FVector::Distance (GetActorLocation (), _cameraMovement->GetTargetPosition ()) > 5.0f)
 		_cameraMovement->Update (DeltaTime);
-	else if (_miniGameActive == 0 && FVector::Distance (GetActorLocation (), _defaultPosition) > 50)
+	else if (!_miniGameIsActive && FVector::Distance (GetActorLocation (), _defaultPosition) > 50)
 	{
-		print ("YO");
-
-		//Initialize random minigame
-		int randomNumber = FMath::RandRange (1, 2);
-
-		if (randomNumber == 1)
-			_miniGameActive = 1;
-		else
-			_miniGameActive = 1;
-
 		switch (_miniGameActive)
 		{
 		case 1:
 			GetWorld ()->GetFirstPlayerController ()->Possess (_minePawn);
+			_minePawn->setup ();
 			//_minePawn->
 			break;
 		case 2:
@@ -67,7 +53,12 @@ void ASimulationGameController::Tick (float DeltaTime)
 			//_drillPawn->SetActorLocation (GetActorLocation ());
 			break;
 		}
+
+		_miniGameIsActive = true;
 	}
+
+	if (fadingIn || fadingOut)
+		UpdateFading (DeltaTime);
 }
 
 void ASimulationGameController::SpawnUnit (int index)
@@ -141,23 +132,53 @@ void ASimulationGameController::StopSimulation ()
 
 void ASimulationGameController::EnterMiniGame ()
 {
-	_cameraMovement->MoveTo (_drillPosition, _drillRotation);
-	//_cameraMovement->MoveTo (_minePosition, _mineRotation);
+	//Initialize random minigame
+	int randomNumber = FMath::RandRange (1, 2);
 
-	//After minigame is finished, exit it
-	//ExitMiniGame ();
+	//Temp
+	if (_firstPlayed != 0)
+	{
+		if (_firstPlayed == 1)
+			_miniGameActive = 3;
+		else
+			_miniGameActive = 1;
+	}
+	else
+	{
+		if (randomNumber == 1)
+			_miniGameActive = 1;
+		else
+			_miniGameActive = 3;
+	}
+
+	switch (_miniGameActive)
+	{
+	case 1:
+		_cameraMovement->MoveTo (_minePosition, _mineRotation);
+		break;
+	case 2:
+			
+		break;
+	case 3:
+		_cameraMovement->MoveTo (_drillPosition, _drillRotation);
+		FadeIn (0.75f, 0.5f);
+		FadeOut (3.5f, 1.0f);
+		break;
+	}
+
+	_firstPlayed = _miniGameActive;
 }
 
 void ASimulationGameController::ExitMiniGame ()
 {
 	GetWorld ()->GetFirstPlayerController ()->Possess (this);
 
-	print ("Exiting minigame...");
-	_miniGameActive = 0;
+	_miniGameIsActive = false;
 
 	_cameraMovement->MoveTo (_defaultPosition, _defaultRotation);
 
 	//After exiting minigame, start a new turn
+	//Maybe run this a little later
 	StartNewTurn ();
 }
 
@@ -170,12 +191,59 @@ void ASimulationGameController::StartNewTurn ()
 	showUI = true;
 }
 
+void ASimulationGameController::FadeIn (float delayTime, float fadeTime)
+{
+	fadeInTimer = delayTime;
+	fadeInDelay = fadeTime;
+	fadingIn = true;
+}
+
+void ASimulationGameController::FadeOut (float delayTime, float fadeTime)
+{
+	fadeOutTimer = delayTime;
+	fadeOutDelay = fadeTime;
+	fadingOut = true;
+}
+
+void ASimulationGameController::UpdateFading (float deltaTime)
+{
+	if (fadingIn)
+	{
+		fadeInTimer -= deltaTime;
+
+		if (fadeInTimer < 0.0f)
+		{
+			UCustomGameViewportClient* GameViewportClient = Cast <UCustomGameViewportClient> (GetWorld ()->GetGameViewport ());
+
+			if (GameViewportClient)
+			{
+				GameViewportClient->Fade (fadeInDelay, true);
+				fadingIn = false;
+			}
+		}
+	}
+
+	if (fadingOut)
+	{
+		fadeOutTimer -= deltaTime;
+
+		if (fadeOutTimer < 0.0f)
+		{
+			UCustomGameViewportClient* GameViewportClient = Cast <UCustomGameViewportClient> (GetWorld ()->GetGameViewport ());
+
+			if (GameViewportClient)
+			{
+				GameViewportClient->Fade (fadeOutDelay, false);
+				fadingOut = false;
+			}
+		}
+	}
+}
+
 void ASimulationGameController::OnSpacePress ()
 {
 	if (showSimulationUI)
 		StopSimulation ();
-	else if (_miniGameActive != 0)
-		ExitMiniGame ();
 }
 
 //Called to bind functionality to input

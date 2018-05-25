@@ -22,30 +22,30 @@ AMinigameCartController::AMinigameCartController()
 void AMinigameCartController::BeginPlay()
 {
 	Super::BeginPlay();
-	setup();
+	SetActorTickEnabled (false);
 }
 
 //Setup the minigame, especially the timers
 void AMinigameCartController::setup() {
 
+	SetActorTickEnabled (true);
+
 	UWorld* world = GetWorld();
 	if (world) {
-		FVector Location(0, 0, 0);
+		FVector Location = GetActorLocation() + FVector(-500, 0, -375);
 		FRotator Rotation(0.0f, 0.0f, 0.0f);
 		FActorSpawnParameters SpawnInfo;
 		SpawnInfo.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 		_spawnedWagon = world->SpawnActor<AMinecart>(wagonPrefab, Location, Rotation, SpawnInfo);
 		_spawnedWagon->setController(this);
-		print("Spawned Wagon");
+		//print("Spawned Wagon");
 	}
 
 	_lives = _initialLives;
 
-	FTimerHandle durationTimer;
-	GetWorldTimerManager().SetTimer(durationTimer, this, &AMinigameCartController::exitMinigame, _minigameDuration, false);
+	GetWorldTimerManager().SetTimer(_durationTimer, this, &AMinigameCartController::exitMinigame, _minigameDuration, false);
 
-	FTimerHandle spawnTimer;
-	GetWorldTimerManager().SetTimer(spawnTimer, this, &AMinigameCartController::spawnFallingUnit, 5.0f, true, 2.0f);
+	GetWorldTimerManager().SetTimer(_spawnTimer, this, &AMinigameCartController::spawnFallingUnit, 5.0f, true, 2.0f);
 }
 
 void AMinigameCartController::addPoints() {
@@ -62,14 +62,15 @@ void AMinigameCartController::decreaseLives() {
 
 //Called when minigames is finished by any means, handles cleaning up the minigame
 void AMinigameCartController::exitMinigame() {
-	
-	for (TActorIterator<AFallingUnit> Itr (GetWorld()); Itr; ++Itr) {
-		Itr->Destroy();
-	}
+
+	GetWorldTimerManager().ClearTimer(_durationTimer);
+	GetWorldTimerManager().ClearTimer(_spawnTimer);
 
 	_spawnedWagon->Destroy();
 	
 	simulationController->ExitMiniGame();
+
+	SetActorTickEnabled (false);
 }
 
 // Called every frame
@@ -79,9 +80,11 @@ void AMinigameCartController::Tick(float DeltaTime)
 	
 	//Moving
 	if (!_velocity.IsZero() && IsValid(_spawnedWagon)) {
-		FVector NewLocation = _spawnedWagon->GetActorLocation() + (_velocity * _speed * DeltaTime);
+		FVector wagonLocation = _spawnedWagon->GetActorLocation();
+		FVector NewLocation = wagonLocation + (_velocity * _speed * DeltaTime);
 
-		if (NewLocation.Y < _maximumMovement.X || NewLocation.Y > _maximumMovement.Y) {
+		FVector controllerLocation = GetActorLocation();
+		if (NewLocation.Y <  controllerLocation.Y + _maximumMovement.X || NewLocation.Y > controllerLocation.Y + _maximumMovement.Y) {
 			//TODO: handle out of bounds
 		}
 		else _spawnedWagon->SetActorLocation(NewLocation);
@@ -109,7 +112,7 @@ void AMinigameCartController::Tick(float DeltaTime)
 void AMinigameCartController::spawnFallingUnit() {
 	UWorld* world = GetWorld();
 	if (world) {
-		FVector Location(0, FMath::RandRange(_maximumMovement.X, _maximumMovement.Y), 1000.0f);
+		FVector Location = GetActorLocation() + FVector( -500.0f, FMath::RandRange(_maximumMovement.X, _maximumMovement.Y), 1000.0f);
 		//Random Rotation for extra flair
 		FRotator Rotation(0.0f, 0.0f, FMath::FRandRange(0.0f, 360.0f));
 		FActorSpawnParameters SpawnInfo;
