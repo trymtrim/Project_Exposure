@@ -8,6 +8,7 @@
 #include "CameraMovement.h"
 #include "MinigameCartController.h"
 #include "MinigameDrill/MinigameDrillController.h"
+#include "Simulation/Simulation.h"
 #include "SimulationGameController.generated.h"
 
 UCLASS()
@@ -30,12 +31,12 @@ public:
 	UFUNCTION (BlueprintCallable, Category = "ButtonPress")
 	void SpawnUnit (int index);
 
-	UPROPERTY (BlueprintReadWrite)
+	UPROPERTY (BlueprintReadOnly)
 	bool showUI = true;
-	UPROPERTY (BlueprintReadWrite)
+	UPROPERTY (BlueprintReadOnly)
 	bool showSimulationUI = false;
 
-	UPROPERTY (BlueprintReadWrite)
+	UPROPERTY (BlueprintReadOnly)
 	FString currentTurnText = "Turn 1";
 
 protected:
@@ -71,14 +72,16 @@ private:
 	int _maxTurns = 9;
 	int _currentTurn = 1;
 
-	//Inputs
-	void OnSpacePress ();
-
+	//Currently active minigame
 	int _miniGameActive = 0; //0 = nothing, 1 = nuclear, 2 = windmill, 3 = oilrig
 	bool _miniGameIsActive = false;
 
-	//Temp
-	int _firstPlayed = 0;
+	//Inputs
+	void OnSpacePress ();
+
+	//Actual simulation controller
+	UPROPERTY (EditAnywhere)
+	ASimulation* _simulation;
 
 	//Prefabs
 	UPROPERTY (EditAnywhere)
@@ -112,4 +115,7 @@ private:
 	FVector _windmillPosition;
 	UPROPERTY (EditAnywhere)
 	FVector _windmillRotation;
+
+	//Temp
+	int _firstPlayed = 0;
 };

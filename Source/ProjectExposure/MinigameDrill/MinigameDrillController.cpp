@@ -114,7 +114,7 @@ void AMinigameDrillController::SpawnObstacle ()
 	spawnedObstacle->Initialize (_drill, this);
 
 	//Set time before next spawn
-	_spawnInterval = FMath::RandRange (1, 3);
+	_spawnInterval = FMath::RandRange (10, 30) / 10.0f;
 }
 
 void AMinigameDrillController::ChangeDrill (int index)

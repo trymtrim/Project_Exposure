@@ -20,6 +20,7 @@ public:
 	virtual void Tick (float deltaTime) override;
 
 	bool PlaceUnit ();
+	int GetTypeIndex ();
 
 protected:
 	//Called when the game starts or when spawned

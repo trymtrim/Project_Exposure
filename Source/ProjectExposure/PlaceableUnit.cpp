@@ -87,3 +87,15 @@ bool APlaceableUnit::PlaceUnit ()
 
 	return true;
 }
+
+int APlaceableUnit::GetTypeIndex ()
+{
+	if (GetRootComponent ()->ComponentHasTag ("Nuclear"))
+		return 1;
+	else if (GetRootComponent ()->ComponentHasTag ("Windmill"))
+		return 2;
+	else if (GetRootComponent ()->ComponentHasTag ("Oil"))
+		return 3;
+
+	return 0;
+}

@@ -104,6 +104,8 @@ void ASimulationGameController::PlaceUnit ()
 	{
 		if (_controlledUnit->PlaceUnit ())
 		{
+			_simulation->OnPlaceUnit (_controlledUnit->GetTypeIndex ());
+
 			_controlledUnit = nullptr;
 
 			//When the unit is placed, start simulation
@@ -114,9 +116,12 @@ void ASimulationGameController::PlaceUnit ()
 
 void ASimulationGameController::StartSimulation ()
 {
+	//Reminder! Make a new UI blueprint for the resource bars
+
 	//Disable UI, the rest is handled by the UI widget blueprint
-	showUI = false;
-	showSimulationUI = true;
+	//UN-COMMENT THIS TO ENABLE MINIGAMES
+	/*showUI = false;
+	showSimulationUI = true;*/
 }
 
 void ASimulationGameController::StopSimulation ()
@@ -189,6 +194,8 @@ void ASimulationGameController::StartNewTurn ()
 
 	//Enable UI, the rest is handled by the UI widget blueprint
 	showUI = true;
+
+	_simulation->OnNewTurn (_currentTurn);
 }
 
 void ASimulationGameController::FadeIn (float delayTime, float fadeTime)
