@@ -99,18 +99,14 @@ void ASimulationGameController::SpawnUnit (int index)
 
 void ASimulationGameController::PlaceUnit ()
 {
-	//If the player currently controls a unit, place it
-	if (_controlledUnit)
+	if (_controlledUnit->PlaceUnit ())
 	{
-		if (_controlledUnit->PlaceUnit ())
-		{
-			_simulation->OnPlaceUnit (_controlledUnit->GetTypeIndex ());
+		_simulation->OnPlaceUnit (_controlledUnit->GetTypeIndex ());
 
-			_controlledUnit = nullptr;
+		_controlledUnit = nullptr;
 
-			//When the unit is placed, start simulation
-			StartSimulation ();
-		}
+		//When the unit is placed, start simulation
+		StartSimulation ();
 	}
 }
 
@@ -120,8 +116,8 @@ void ASimulationGameController::StartSimulation ()
 
 	//Disable UI, the rest is handled by the UI widget blueprint
 	//UN-COMMENT THIS TO ENABLE MINIGAMES
-	/*showUI = false;
-	showSimulationUI = true;*/
+	showUI = false;
+	showSimulationUI = true;
 }
 
 void ASimulationGameController::StopSimulation ()
@@ -185,6 +181,8 @@ void ASimulationGameController::ExitMiniGame ()
 	//After exiting minigame, start a new turn
 	//Maybe run this a little later
 	StartNewTurn ();
+
+	_miniGameActive = 0;
 }
 
 void ASimulationGameController::StartNewTurn ()
@@ -247,10 +245,25 @@ void ASimulationGameController::UpdateFading (float deltaTime)
 	}
 }
 
+void ASimulationGameController::CheckAFK ()
+{
+
+}
+
 void ASimulationGameController::OnSpacePress ()
 {
 	if (showSimulationUI)
 		StopSimulation ();
+}
+
+void ASimulationGameController::OnMouseClick ()
+{
+	//If the player currently controls a unit, place it
+	if (_controlledUnit)
+		PlaceUnit ();
+	//If game hasn't started, start it
+	else if (!gameStarted)
+		gameStarted = true;
 }
 
 //Called to bind functionality to input
@@ -258,6 +271,6 @@ void ASimulationGameController::SetupPlayerInputComponent (UInputComponent* Play
 {
 	Super::SetupPlayerInputComponent (PlayerInputComponent);
 
-	PlayerInputComponent->BindAction ("MouseClick", IE_Pressed, this, &ASimulationGameController::PlaceUnit);
+	PlayerInputComponent->BindAction ("MouseClick", IE_Pressed, this, &ASimulationGameController::OnMouseClick);
 	PlayerInputComponent->BindAction ("Space", IE_Pressed, this, &ASimulationGameController::OnSpacePress);
 }

@@ -35,6 +35,8 @@ public:
 	bool showUI = true;
 	UPROPERTY (BlueprintReadOnly)
 	bool showSimulationUI = false;
+	UPROPERTY (BlueprintReadOnly)
+	bool gameStarted = false;
 
 	UPROPERTY (BlueprintReadOnly)
 	FString currentTurnText = "Turn 1";
@@ -51,6 +53,7 @@ private:
 	void FadeIn (float delayTime, float fadeTime);
 	void FadeOut (float delayTime, float fadeTime);
 	void UpdateFading (float deltaTime);
+	void CheckAFK ();
 
 	float fadeInTimer;
 	float fadeOutTimer;
@@ -59,6 +62,10 @@ private:
 	bool fadingIn = false;
 	bool fadingOut = false;
 	
+	//Inputs
+	void OnSpacePress ();
+	void OnMouseClick ();
+
 	//Default camera position and rotation
 	FVector _defaultPosition;
 	FVector _defaultRotation;
@@ -75,9 +82,6 @@ private:
 	//Currently active minigame
 	int _miniGameActive = 0; //0 = nothing, 1 = nuclear, 2 = windmill, 3 = oilrig
 	bool _miniGameIsActive = false;
-
-	//Inputs
-	void OnSpacePress ();
 
 	//Actual simulation controller
 	UPROPERTY (EditAnywhere)
