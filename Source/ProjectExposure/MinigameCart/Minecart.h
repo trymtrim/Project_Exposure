@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "Minecart.generated.h"
 
+class AMinigameCartController;
+
 UCLASS()
 class PROJECTEXPOSURE_API AMinecart : public AActor
 {
@@ -23,6 +25,14 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	//Collisions
+	UFUNCTION(BlueprintCallable, Category="CustomCollisionHandlers")
+	void OnHit(AActor* SelfActor, AActor* OtherActor, FVector NormalImpulse, const FHitResult& Hit);
+
+	//So that we have a reference to the MinigameController
+	void setController(AMinigameCartController* pController);
+private:
 	
-	
+	UPROPERTY()
+	AMinigameCartController* _controller;
 };

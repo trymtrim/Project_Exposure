@@ -2,7 +2,6 @@
 
 #include "MinigameDrillController.h"
 #include "SimulationGameController.h"
-#include "Drill.h"
 #include "DrillObstacle.h"
 
 #define print(text) if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 1.5, FColor::Green,text)
@@ -30,7 +29,7 @@ void AMinigameDrillController::Tick (float DeltaTime)
 	//Will only run while game is running
 	UpdateGameState (DeltaTime);
 	UpdateObstacles (DeltaTime);
-	MovePlane ();
+	MovePlane (DeltaTime);
 }
 
 void AMinigameDrillController::SetGameController (ASimulationGameController* gameController)
@@ -42,34 +41,38 @@ void AMinigameDrillController::StartGame ()
 {
 	SetActorTickEnabled (true);
 
+	//Enable UI
+	showDrillUI = true;
+
 	_gameTimer = 0.0f;
 	_health = 3;
 	_currentDrillType = 1;
 
 	FActorSpawnParameters spawnParams;
 
-	FVector spawnPosition = FVector (3550.0f, -6150.0f, 700.0f);
-	FRotator rotator = FRotator::MakeFromEuler (FVector (0.0f, 0.0f, 0.0f));
+	FVector spawnPosition = FVector (3650.0f, -3050.0f, _height + 420.0f);
+	FRotator rotator = FRotator::MakeFromEuler (FVector (270.0f, 0.0f, 0.0f));
 	
 	//Spawn drill
-	_drill = GetWorld ()->SpawnActor <ADrill> (_drillPrefab, spawnPosition, rotator, spawnParams);
+	_drill = GetWorld ()->SpawnActor <AActor> (_drillPrefab, spawnPosition + FVector (0.0f, 0.0f, 400.0f), rotator, spawnParams);
 
-	FRotator planeRotator = FRotator::MakeFromEuler (FVector (270.0f, 0.0f, 0.0f));
-	FVector firstPlaneSpawnPosition = spawnPosition - FVector (0.0f, 0.0f, 500.0f);
+	FRotator planeRotator = FRotator::MakeFromEuler (FVector (0.0f, 0.0f, 270.0f));
+	FVector firstPlaneSpawnPosition = spawnPosition + FVector (0.0f, 0.0f, _height + 500.0f);
 
 	//Spawn planes
 	_planeOne = GetWorld ()->SpawnActor <AActor> (_planePrefab, firstPlaneSpawnPosition, planeRotator, spawnParams);
-	_planeOne->SetActorScale3D (FVector (10.0f, 10.0f, 1.0f));
 
-	FVector secondPlaneSpawnPosition = spawnPosition - FVector (0.0f, 0.0f, -500.0f);
+	FVector secondPlaneSpawnPosition = _planeOne->GetActorLocation () - FVector (0.0f, 0.0f, 5000.0f);
 
 	_planeTwo = GetWorld ()->SpawnActor <AActor> (_planePrefab, secondPlaneSpawnPosition, planeRotator, spawnParams);
-	_planeTwo->SetActorScale3D (FVector (10.0f, 10.0f, 1.0f));
 }
 
 void AMinigameDrillController::EndGame ()
 {
 	SetActorTickEnabled (false);
+
+	//Disable UI
+	showDrillUI = false;
 
 	_drill->Destroy ();
 	_planeOne->Destroy ();
@@ -82,7 +85,7 @@ void AMinigameDrillController::UpdateGameState (float deltaTime)
 {
 	_gameTimer += deltaTime;
 
-	if (_gameTimer >= 6.0f)
+	if (_gameTimer >= 60.0f)
 		EndGame ();
 }
 
@@ -101,7 +104,7 @@ void AMinigameDrillController::SpawnObstacle ()
 {
 	FActorSpawnParameters spawnParams;
 		
-	FVector spawnPosition = FVector (_drill->GetActorLocation ().X, _drill->GetActorLocation ().Y, 0.0f);
+	FVector spawnPosition = FVector (_drill->GetActorLocation ().X, _drill->GetActorLocation ().Y, _drill->GetActorLocation ().Z - 2000.0f);
 	FRotator rotator = FVector (0.0f, 0.0f, 0.0f).Rotation ();
 
 	//Spawn random obstacle from array of obstacles
@@ -109,22 +112,29 @@ void AMinigameDrillController::SpawnObstacle ()
 	ADrillObstacle* spawnedObstacle = GetWorld ()->SpawnActor <ADrillObstacle> (obstacle, spawnPosition, rotator, spawnParams);
 
 	spawnedObstacle->Initialize (_drill, this);
+
+	//Set time before next spawn
+	_spawnInterval = FMath::RandRange (10, 30) / 10.0f;
 }
 
 void AMinigameDrillController::ChangeDrill (int index)
 {
 	_currentDrillType = index;
+
+	TArray <UStaticMeshComponent*> staticComps;
+	_drill->GetComponents <UStaticMeshComponent> (staticComps);
+	staticComps [0]->SetStaticMesh (_drillMeshes [index - 1]);
 }
 
-void AMinigameDrillController::MovePlane ()
+void AMinigameDrillController::MovePlane (float deltaTime)
 {
-	_planeOne->SetActorLocation (_planeOne->GetActorLocation () + FVector (0.0f, 0.0f, 5.0f));
-	_planeTwo->SetActorLocation (_planeTwo->GetActorLocation () + FVector (0.0f, 0.0f, 5.0f));
+	_planeOne->SetActorLocation (_planeOne->GetActorLocation () + FVector (0.0f, 0.0f, 400.0f) * deltaTime);
+	_planeTwo->SetActorLocation (_planeTwo->GetActorLocation () + FVector (0.0f, 0.0f, 400.0f) * deltaTime);
 
-	if (_planeOne->GetActorLocation ().Z > 1500.0f)
-		_planeOne->SetActorLocation (_planeTwo->GetActorLocation () - FVector (0.0f, 0.0f, 1000.0f));
-	if (_planeTwo->GetActorLocation ().Z > 1500.0f)
-		_planeTwo->SetActorLocation (_planeOne->GetActorLocation () - FVector (0.0f, 0.0f, 1000.0f));
+	if (_planeOne->GetActorLocation ().Z > 2000.0f)
+		_planeOne->SetActorLocation (_planeTwo->GetActorLocation () - FVector (0.0f, 0.0f, 5000.0f));
+	else if (_planeTwo->GetActorLocation ().Z > 2000.0f)
+		_planeTwo->SetActorLocation (_planeOne->GetActorLocation () - FVector (0.0f, 0.0f, 5000.0f));
 }
 
 void AMinigameDrillController::GetHitByObstacle ()
@@ -132,9 +142,7 @@ void AMinigameDrillController::GetHitByObstacle ()
 	_health--;
 
 	if (_health == 0)
-	{
 		EndGame ();
-	}
 }
 
 int AMinigameDrillController::GetCurrentDrillType ()

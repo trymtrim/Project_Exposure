@@ -3,6 +3,10 @@
 #include "MinigameCartController.h"
 #include "Camera/CameraComponent.h"
 #include "Components/InputComponent.h"
+#include "TimerManager.h"
+#include "EngineUtils.h"
+#include "SimulationGameController.h"
+#include "MinigameCart/FallingUnit.h"
 
 #define print(text) if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 1.5, FColor::Green,text)
 
@@ -18,51 +22,120 @@ AMinigameCartController::AMinigameCartController()
 void AMinigameCartController::BeginPlay()
 {
 	Super::BeginPlay();
-	setup();
+	SetActorTickEnabled (false);
 }
 
+//Setup the minigame, especially the timers
 void AMinigameCartController::setup() {
 
-	//AutoPossessPlayer = EAutoReceiveInput::Player0;
-
-	// Create a dummy root component we can attach things to.
-	//RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
-
-	// Create a camera and a visible object
-	/*UCameraComponent* OurCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("OurCamera"));
-
-	// Attach our camera and visible object to our root component. Offset and rotate the camera.
-	OurCamera->SetupAttachment(RootComponent);
-	OurCamera->SetRelativeLocation(FVector(-250.0f, 0.0f, 250.0f));
-	OurCamera->SetRelativeRotation(FRotator(-45.0f, 0.0f, 0.0f));*/
-	SetActorLocation (FVector(-250.0f, 0.0f, 250.0f));
-	SetActorRotation (FRotator(-45.0f, 0.0f, 0.0f));
+	SetActorTickEnabled (true);
 
 	UWorld* world = GetWorld();
 	if (world) {
-		FVector Location(0, 0, 0);
+		FVector Location = GetActorLocation() + FVector(-500, 0, -375);
 		FRotator Rotation(0.0f, 0.0f, 0.0f);
 		FActorSpawnParameters SpawnInfo;
 		SpawnInfo.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 		_spawnedWagon = world->SpawnActor<AMinecart>(wagonPrefab, Location, Rotation, SpawnInfo);
-		print("Spawned Wagon");
+		_spawnedWagon->setController(this);
+		//print("Spawned Wagon");
 	}
+
+	_lives = _initialLives;
+
+	GetWorldTimerManager().SetTimer(_durationTimer, this, &AMinigameCartController::exitMinigame, _minigameDuration, false);
+
+	GetWorldTimerManager().SetTimer(_spawnTimer, this, &AMinigameCartController::spawnFallingUnit, 5.0f, true, 2.0f);
+}
+
+void AMinigameCartController::addPoints() {
+	_points++;
+}
+
+void AMinigameCartController::decreaseLives() {
+	_lives--;
+
+	if (_lives == 0) {
+		exitMinigame();
+	}
+}
+
+//Called when minigames is finished by any means, handles cleaning up the minigame
+void AMinigameCartController::exitMinigame() {
+
+	GetWorldTimerManager().ClearTimer(_durationTimer);
+	GetWorldTimerManager().ClearTimer(_spawnTimer);
+
+	_spawnedWagon->Destroy();
+	
+	simulationController->ExitMiniGame();
+
+	SetActorTickEnabled (false);
 }
 
 // Called every frame
 void AMinigameCartController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	
+	//Moving
+	if (!_velocity.IsZero() && IsValid(_spawnedWagon)) {
+		FVector wagonLocation = _spawnedWagon->GetActorLocation();
+		FVector NewLocation = wagonLocation + (_velocity * _speed * DeltaTime);
 
-	/*if (!_velocity.IsZero() && IsValid(_spawnedWagon)) {
-		FVector NewLocation = _spawnedWagon->GetActorLocation() + (_velocity * DeltaTime);
-		_spawnedWagon->SetActorLocation(NewLocation);
-	}*/
+		FVector controllerLocation = GetActorLocation();
+		if (NewLocation.Y <  controllerLocation.Y + _maximumMovement.X || NewLocation.Y > controllerLocation.Y + _maximumMovement.Y) {
+			//TODO: handle out of bounds
+		}
+		else _spawnedWagon->SetActorLocation(NewLocation);
+	}
 
+	//Rotating
+	if (!_reachedRotation) {
+		FTransform wT = _spawnedWagon->GetActorTransform();
+		FRotator wagonRotation = wT.GetRotation().Rotator();
+
+		FRotator newRotation;
+		if (_faceLeft) {
+			newRotation = FMath::RInterpTo(wagonRotation, _leftRotator, DeltaTime, 7.5f);
+		}
+		else {
+			newRotation = FMath::RInterpTo(wagonRotation, _rightRotator, DeltaTime, 7.5f);
+		}
+
+		wT.SetRotation(newRotation.Quaternion());
+		_spawnedWagon->SetActorTransform(wT);
+	}
 }
 
+//Spawn a Falling Unit within the bounds the player can move in
+void AMinigameCartController::spawnFallingUnit() {
+	UWorld* world = GetWorld();
+	if (world) {
+		FVector Location = GetActorLocation() + FVector( -500.0f, FMath::RandRange(_maximumMovement.X, _maximumMovement.Y), 1000.0f);
+		//Random Rotation for extra flair
+		FRotator Rotation(0.0f, 0.0f, FMath::FRandRange(0.0f, 360.0f));
+		FActorSpawnParameters SpawnInfo;
+		SpawnInfo.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+		AFallingUnit* unit = world->SpawnActor<AFallingUnit>(fallingUnitPrefab, Location, Rotation, SpawnInfo);
+		//Passing info to the fallingUnit
+		unit->init(_fallingUnitSpeed, _fallingUnitDeathThreshhold);
+	}
+}
+
+//Handle the input we get from the pawn
 void AMinigameCartController::handleInput(float axisValue) {
-	_velocity.X = FMath::Clamp(axisValue, -1.0f, 1.0f) * 100.0f;
+	_velocity.Y = FMath::Clamp(axisValue, -1.0f, 1.0f) * 100.0f;
+
+	//Interpret the input to a rotation 
+	if (_velocity.Y < 0.0f) {
+		_faceLeft = true;
+		_reachedRotation = false;
+	}
+	else if (_velocity.Y > 0.0f) {
+		_faceLeft = false;
+		_reachedRotation = false;
+	}
 }
 
 // Called to bind functionality to input

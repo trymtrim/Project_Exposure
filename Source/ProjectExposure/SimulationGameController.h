@@ -8,6 +8,7 @@
 #include "CameraMovement.h"
 #include "MinigameCartController.h"
 #include "MinigameDrill/MinigameDrillController.h"
+#include "Simulation/Simulation.h"
 #include "SimulationGameController.generated.h"
 
 UCLASS()
@@ -18,7 +19,6 @@ class PROJECTEXPOSURE_API ASimulationGameController : public APawn
 public:
 	ASimulationGameController ();
 
-public:	
 	//Called every frame
 	virtual void Tick (float DeltaTime) override;
 
@@ -31,12 +31,14 @@ public:
 	UFUNCTION (BlueprintCallable, Category = "ButtonPress")
 	void SpawnUnit (int index);
 
-	UPROPERTY (BlueprintReadWrite)
+	UPROPERTY (BlueprintReadOnly)
 	bool showUI = true;
-	UPROPERTY (BlueprintReadWrite)
+	UPROPERTY (BlueprintReadOnly)
 	bool showSimulationUI = false;
+	UPROPERTY (BlueprintReadOnly)
+	bool gameStarted = false;
 
-	UPROPERTY (BlueprintReadWrite)
+	UPROPERTY (BlueprintReadOnly)
 	FString currentTurnText = "Turn 1";
 
 protected:
@@ -48,7 +50,22 @@ private:
 	void StopSimulation ();
 	void EnterMiniGame ();
 	void StartNewTurn ();
+	void FadeIn (float delayTime, float fadeTime);
+	void FadeOut (float delayTime, float fadeTime);
+	void UpdateFading (float deltaTime);
+	void CheckAFK ();
+
+	float fadeInTimer;
+	float fadeOutTimer;
+	float fadeInDelay;
+	float fadeOutDelay;
+	bool fadingIn = false;
+	bool fadingOut = false;
 	
+	//Inputs
+	void OnSpacePress ();
+	void OnMouseClick ();
+
 	//Default camera position and rotation
 	FVector _defaultPosition;
 	FVector _defaultRotation;
@@ -62,10 +79,13 @@ private:
 	int _maxTurns = 9;
 	int _currentTurn = 1;
 
-	//Inputs
-	void OnSpacePress ();
-
+	//Currently active minigame
 	int _miniGameActive = 0; //0 = nothing, 1 = nuclear, 2 = windmill, 3 = oilrig
+	bool _miniGameIsActive = false;
+
+	//Actual simulation controller
+	UPROPERTY (EditAnywhere)
+	ASimulation* _simulation;
 
 	//Prefabs
 	UPROPERTY (EditAnywhere)
@@ -99,4 +119,7 @@ private:
 	FVector _windmillPosition;
 	UPROPERTY (EditAnywhere)
 	FVector _windmillRotation;
+
+	//Temp
+	int _firstPlayed = 0;
 };

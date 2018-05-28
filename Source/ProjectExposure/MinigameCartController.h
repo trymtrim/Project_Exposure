@@ -9,6 +9,8 @@
 #include "MinigameCart/Minecart.h"
 #include "MinigameCartController.generated.h"
 
+class ASimulationGameController;
+
 UCLASS()
 class PROJECTEXPOSURE_API AMinigameCartController : public APawn
 {
@@ -29,17 +31,69 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	//Methods the Minecart can call
+	void addPoints();
+	void decreaseLives();
+	void setup();
+	
+	//Prefabs and references
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<AActor> wagonPrefab;
 	
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<AActor> fallingUnitPrefab;
+
+	UPROPERTY(EditAnywhere)
+	ASimulationGameController* simulationController;
+
 private:
 
-	void setup();
 	void handleInput(float axisValue);
+
+	void spawnFallingUnit();
+	void exitMinigame();
 
 	UPROPERTY()
 	AMinecart* _spawnedWagon;
 
 	UPROPERTY()
 	FVector _velocity;
+
+	UPROPERTY(EditAnywhere)
+	uint8 _minigameDuration;
+
+	UPROPERTY(EditAnywhere)
+	float _speed;
+
+	UPROPERTY(EditAnywhere)
+	FVector2D _maximumMovement;
+
+	UPROPERTY(EditAnywhere)
+	uint8 _initialLives;
+
+	UPROPERTY(EditAnywhere)
+	float _fallingUnitSpeed;
+
+	UPROPERTY(EditAnywhere)
+	float _fallingUnitDeathThreshhold;
+
+	UPROPERTY(VisibleAnywhere)
+	int _points;
+
+	UPROPERTY(VisibleAnywhere)
+	uint8 _lives;
+	
+	FTimerHandle _durationTimer;
+
+	FTimerHandle _spawnTimer;
+
+	//Rotation Stuff
+	UPROPERTY()
+	bool _faceLeft;
+
+	UPROPERTY()
+	bool _reachedRotation;
+
+	const FRotator _leftRotator = FRotator::MakeFromEuler(FVector(0.0f, 0.0f, 0.0f));
+	const FRotator _rightRotator = FRotator::MakeFromEuler(FVector(0.0f, 0.0f, 180.0f));
 };

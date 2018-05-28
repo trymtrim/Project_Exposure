@@ -31,11 +31,6 @@ void APlaceableUnit::BeginPlay ()
 	_mesh->MarkRenderStateDirty ();
 }
 
-void APlaceableUnit::BeginOverlap (UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult &SweepResult)
-{
-	print ("YO");
-}
-
 //Called every frame
 void APlaceableUnit::Tick (float deltaTime)
 {
@@ -56,23 +51,27 @@ void APlaceableUnit::FollowMousePosition ()
 	{
 		float objectHeight = _mesh->CalcBounds (GetTransform ()).BoxExtent.Z;
 			
-		FVector position = FVector (hit.Location.X, hit.Location.Y, hit.Location.Z + (objectHeight / 2));
+		FVector position = FVector (hit.Location.X, hit.Location.Y, hit.Location.Z);
 		SetActorLocation (position);
 
 		//Change outline color
-		if (hit.GetActor ()->GetRootComponent ()->ComponentHasTag ("Placeable"))
-			_mesh->SetCustomDepthStencilValue (1);
+		if (GetRootComponent ()->ComponentHasTag ("Oil"))
+		{
+			if (hit.GetActor ()->GetRootComponent ()->ComponentHasTag ("Placeable"))
+				_mesh->SetCustomDepthStencilValue (0);
+			else
+				_mesh->SetCustomDepthStencilValue (1);
+		}
 		else
-			_mesh->SetCustomDepthStencilValue (0);
+		{
+			if (hit.GetActor ()->GetRootComponent ()->ComponentHasTag ("Placeable"))
+				_mesh->SetCustomDepthStencilValue (1);
+			else
+				_mesh->SetCustomDepthStencilValue (0);
+		}
 		
 		_mesh->MarkRenderStateDirty ();
 	}
-
-	/*TArray <UStaticMeshComponent*> StaticComps;
-	GetComponents <UStaticMeshComponent> (StaticComps);
-	
-	for (int i = 0; i < StaticComps.Num (); i++)
-		print (StaticComps [i]->GetName ());*/
 }
 
 bool APlaceableUnit::PlaceUnit ()
@@ -87,4 +86,16 @@ bool APlaceableUnit::PlaceUnit ()
 	_mesh->MarkRenderStateDirty ();
 
 	return true;
+}
+
+int APlaceableUnit::GetTypeIndex ()
+{
+	if (GetRootComponent ()->ComponentHasTag ("Nuclear"))
+		return 1;
+	else if (GetRootComponent ()->ComponentHasTag ("Windmill"))
+		return 2;
+	else if (GetRootComponent ()->ComponentHasTag ("Oil"))
+		return 3;
+
+	return 0;
 }

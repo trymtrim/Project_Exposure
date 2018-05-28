@@ -7,7 +7,6 @@
 #include "MinigameDrillController.generated.h"
 
 class ASimulationGameController;
-class ADrill;
 class ADrillObstacle;
 
 UCLASS()
@@ -31,6 +30,10 @@ public:
 
 	int GetCurrentDrillType ();
 
+	//For blueprints
+	UPROPERTY (BlueprintReadWrite)
+	bool showDrillUI = false;
+
 protected:
 	//Called when the game starts or when spawned
 	virtual void BeginPlay () override;
@@ -40,22 +43,25 @@ private:
 	void UpdateGameState (float deltaTime);
 	void UpdateObstacles (float deltaTime);
 	void SpawnObstacle ();
+	void MovePlane (float deltaTime);
+
+	UFUNCTION (BLueprintCallable)
 	void ChangeDrill (int index);
-	void MovePlane ();
 
 	ASimulationGameController* _gameController;
 
-	ADrill* _drill;
+	AActor* _drill;
 	AActor* _planeOne;
 	AActor* _planeTwo;
 
-	float _spawnInterval = 2.0f;
+	float _spawnInterval = 1.0f;
 	float _timer = 0.0f;
 
 	//Game stats
 	int _currentDrillType = 1;
 	int _health = 3;
 	float _gameTimer = 0.0f;
+	float _height = -1800.0f;
 
 	//Prefabs
 	UPROPERTY (EditAnywhere)
@@ -64,4 +70,6 @@ private:
 	TSubclassOf <AActor> _planePrefab;
 	UPROPERTY (EditAnywhere)
 	TArray <TSubclassOf <AActor>> _obstaclePrefabs;
+	UPROPERTY (EditAnywhere)
+	TArray <UStaticMesh*> _drillMeshes;
 };
