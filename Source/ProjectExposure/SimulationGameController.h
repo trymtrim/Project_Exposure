@@ -9,6 +9,7 @@
 #include "MinigameCartController.h"
 #include "MinigameDrill/MinigameDrillController.h"
 #include "Simulation/Simulation.h"
+#include "UIController.h"
 #include "SimulationGameController.generated.h"
 
 UCLASS()
@@ -32,17 +33,13 @@ public:
 	void SpawnUnit (int index);
 
 	UPROPERTY (BlueprintReadOnly)
-	bool showUI = true;
-	UPROPERTY (BlueprintReadOnly)
-	bool showSimulationUI = false;
-	UPROPERTY (BlueprintReadOnly)
 	bool gameStarted = false;
 
 	UPROPERTY (BlueprintReadOnly)
 	FString currentTurnText = "Turn 1";
 
-	UFUNCTION(BlueprintImplementableEvent, Category = "Feedback")
-	void updateCycle();
+	UFUNCTION (BlueprintImplementableEvent, Category = "Feedback")
+	void UpdateCycle ();
 
 protected:
 	virtual void BeginPlay () override;
@@ -65,6 +62,8 @@ private:
 	bool fadingIn = false;
 	bool fadingOut = false;
 	
+	bool _simulationRunning = false;
+
 	//Inputs
 	void OnSpacePress ();
 	void OnMouseClick ();
@@ -89,6 +88,10 @@ private:
 	//Actual simulation controller
 	UPROPERTY (EditAnywhere)
 	ASimulation* _simulation;
+
+	//UI controller
+	UPROPERTY (EditAnywhere)
+	AUIController* _uiController;
 
 	//Prefabs
 	UPROPERTY (EditAnywhere)
@@ -125,4 +128,5 @@ private:
 
 	//Temp
 	int _firstPlayed = 0;
+	UPROPERTY (EditAnywhere) bool _miniGamesOn = true;
 };

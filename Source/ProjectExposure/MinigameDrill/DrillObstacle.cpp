@@ -64,5 +64,5 @@ void ADrillObstacle::Initialize (AActor* drill, AMinigameDrillController* gameCo
 	TArray <UStaticMeshComponent*> drillStaticComps;
 	drill->GetComponents <UStaticMeshComponent> (drillStaticComps);
 
-	_collideHeight = drill->GetActorLocation ().Z - (drillStaticComps [0]->CalcBounds (drill->GetTransform ()).BoxExtent.Z) - (staticComps [0]->CalcBounds (GetTransform ()).BoxExtent.Z);
+	_collideHeight = drill->GetActorLocation ().Z - 100.0f; //(drillStaticComps [0]->CalcBounds (drill->GetTransform ()).BoxExtent.Z) - (staticComps [0]->CalcBounds (GetTransform ()).BoxExtent.Z);
 }
