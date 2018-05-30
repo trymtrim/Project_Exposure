@@ -4,9 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Components/DirectionalLightComponent.h"
 #include "Simulation.generated.h"
 
-UCLASS()
+UCLASS(Blueprintable)
 class PROJECTEXPOSURE_API ASimulation : public AActor
 {
 	GENERATED_BODY ()

@@ -2,6 +2,8 @@
 
 #include "Simulation.h"
 
+#define print(text) if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 1.5, FColor::Green,text)
+
 //Sets default values
 ASimulation::ASimulation ()
 {
@@ -41,9 +43,15 @@ void ASimulation::OnPlaceUnit (int index)
 	}
 }
 
-void ASimulation::OnNewTurn (int currentTurn)
-{
+void ASimulation::OnNewTurn (int currentTurn) {
+	//Every nth turn - right now every 3rd
+	if (currentTurn % 3 == 0) {
+		maxEnergy += 2;
+		maxPollution += 1;
 
+		FString debugMessage = "Old Energy: " + FString::FromInt(maxEnergy - 2) + " New Energy: " + FString::FromInt(maxEnergy) + "Old Pollution: " + FString::FromInt(maxPollution - 1) + " New Pollution: " + FString::FromInt(maxPollution);
+		print(debugMessage);
+	}
 }
 
 void ASimulation::InitializeResources ()

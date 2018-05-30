@@ -41,6 +41,9 @@ public:
 	UPROPERTY (BlueprintReadOnly)
 	FString currentTurnText = "Turn 1";
 
+	UFUNCTION(BlueprintImplementableEvent, Category = "Feedback")
+	void updateCycle();
+
 protected:
 	virtual void BeginPlay () override;
 

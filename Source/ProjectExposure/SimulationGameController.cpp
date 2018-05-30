@@ -59,6 +59,9 @@ void ASimulationGameController::Tick (float DeltaTime)
 
 	if (fadingIn || fadingOut)
 		UpdateFading (DeltaTime);
+
+	//As long as we are in the simulation run the day/night cycle
+	if (showSimulationUI) updateCycle();
 }
 
 void ASimulationGameController::SpawnUnit (int index)
