@@ -45,6 +45,9 @@ public:
 	
 	UPROPERTY(EditAnywhere)
 	UStaticMesh* debrisMesh;
+
+	UPROPERTY(EditAnywhere)
+	FVector debrisScale;
 private:
 	void handleDeath();
 

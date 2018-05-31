@@ -31,6 +31,7 @@ void AFallingUnit::BeginPlay()
 		for (int32 i = 0; i<Components.Num(); i++) {
 			UStaticMeshComponent* StaticMeshComponent = Components[i];
 			StaticMeshComponent->SetStaticMesh(debrisMesh);
+			StaticMeshComponent->SetRelativeScale3D(debrisScale);
 		}
 	} else {
 		_currentType = UnitType::URANIUM;
