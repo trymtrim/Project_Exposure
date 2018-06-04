@@ -35,6 +35,8 @@ public:
 	UPROPERTY (EditAnywhere)
 	TSubclassOf <UUserWidget> drillMiniGame;
 	UPROPERTY (EditAnywhere)
+	TSubclassOf <UUserWidget> cartMiniGame;
+	UPROPERTY (EditAnywhere)
 	TSubclassOf <UUserWidget> simulationTest;
 
 	//Variables to hold the widgets After Creating it.
@@ -43,6 +45,7 @@ public:
 	UPROPERTY (BlueprintReadOnly, Category = "UI") UUserWidget* resourcesRef;
 	UUserWidget* menuRef;
 	UPROPERTY (BlueprintReadOnly, Category = "UI") UUserWidget* drillMiniGameRef;
+	UPROPERTY (BlueprintReadOnly, Category = "UI") UUserWidget* cartMiniGameRef;
 	UUserWidget* simulationTestRef;
 
 protected:

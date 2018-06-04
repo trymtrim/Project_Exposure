@@ -45,7 +45,7 @@ void AMinigameCartController::setup() {
 
 	GetWorldTimerManager().SetTimer(_durationTimer, this, &AMinigameCartController::exitMinigame, _minigameDuration, false);
 
-	GetWorldTimerManager().SetTimer(_spawnTimer, this, &AMinigameCartController::spawnFallingUnit, 5.0f, true, 2.0f);
+	GetWorldTimerManager().SetTimer(_spawnTimer, this, &AMinigameCartController::spawnFallingUnit, 2.0f, true, 2.0f);
 }
 
 void AMinigameCartController::addPoints() {

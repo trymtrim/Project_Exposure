@@ -24,7 +24,7 @@ void ADrillObstacle::Tick (float DeltaTime)
 {
 	Super::Tick (DeltaTime);
 
-	SetActorLocation (GetActorLocation () + (FVector (0.0f, 0.0f, 400.0f) * DeltaTime));
+	SetActorLocation (GetActorLocation () + (FVector (0.0f, 0.0f, 600.0f) * DeltaTime));
 
 	FVector position = GetActorLocation ();
 
@@ -64,5 +64,5 @@ void ADrillObstacle::Initialize (AActor* drill, AMinigameDrillController* gameCo
 	TArray <UStaticMeshComponent*> drillStaticComps;
 	drill->GetComponents <UStaticMeshComponent> (drillStaticComps);
 
-	_collideHeight = drill->GetActorLocation ().Z - 100.0f; //(drillStaticComps [0]->CalcBounds (drill->GetTransform ()).BoxExtent.Z) - (staticComps [0]->CalcBounds (GetTransform ()).BoxExtent.Z);
+	_collideHeight = drill->GetActorLocation ().Z - 200.0f; //(drillStaticComps [0]->CalcBounds (drill->GetTransform ()).BoxExtent.Z) - (staticComps [0]->CalcBounds (GetTransform ()).BoxExtent.Z);
 }

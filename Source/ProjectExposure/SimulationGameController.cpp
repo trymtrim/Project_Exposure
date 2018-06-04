@@ -29,8 +29,6 @@ void ASimulationGameController::BeginPlay ()
 
 	//Enable menu UI
 	_uiController->Enable (_uiController->menuRef, 1);
-	//Enable currentTurn UI
-	_uiController->Enable (_uiController->currentTurnRef, 1);
 }
 
 //Called every frame
@@ -124,8 +122,6 @@ void ASimulationGameController::PlaceUnit ()
 
 void ASimulationGameController::StartSimulation ()
 {
-	//UN-COMMENT THIS TO ENABLE MINIGAMES
-
 	//Disable simulation UI
 	_uiController->Disable (_uiController->simulationRef);
 	//Enable simulationTest UI
@@ -147,10 +143,10 @@ void ASimulationGameController::StopSimulation ()
 	}
 
 	//If it's time for a new minigame, enter that, otherwise start new turn
-	if (_currentTurn == 1 || _currentTurn == 4 || _currentTurn == 7)
+	//if (_currentTurn == 1 || _currentTurn == 4 || _currentTurn == 7)
 		EnterMiniGame ();
-	else
-		StartNewTurn ();
+	//else
+		//StartNewTurn ();
 
 	_simulationRunning = false;
 }
@@ -163,7 +159,7 @@ void ASimulationGameController::EnterMiniGame ()
 		_cameraMovement->MoveTo (_minePosition, _mineRotation);
 		break;
 	case 2:
-			ExitMiniGame ();
+		ExitMiniGame ();
 		break;
 	case 3:
 		_cameraMovement->MoveTo (_drillPosition, _drillRotation);
@@ -276,6 +272,9 @@ void ASimulationGameController::OnMouseClick ()
 
 		//Enable resources UI
 		_uiController->Enable (_uiController->resourcesRef, 0);
+
+		//Enable currentTurn UI
+		_uiController->Enable (_uiController->currentTurnRef, 1);
 
 		//Disable menu UI
 		_uiController->Disable (_uiController->menuRef);
