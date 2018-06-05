@@ -48,9 +48,14 @@ void AMinigameDrillController::StartGame ()
 	//Enable UI
 	showDrillUI = true;
 
-	_gameTimer = 0.0f;
-	_health = 3;
+	SetLives (3);
+	SetScore (0);
+
+	_endTimer = 0.0f;
 	_currentDrillType = 1;
+	_spawnCount = 0;
+
+	_gameFinished = false;
 	
 	//Spawn drill
 	FVector pos = spawnPosition + FVector (0.0f, 0.0f, 450.0f);
@@ -89,17 +94,20 @@ void AMinigameDrillController::EndGame ()
 
 void AMinigameDrillController::UpdateGameState (float deltaTime)
 {
-	_gameTimer += deltaTime;
+	if (_gameFinished)
+	{
+		_endTimer += deltaTime;
 
-	if (_gameTimer >= 30.0f)
-		EndGame ();
+		if (_endTimer >= 5.0f)
+			EndGame ();
+	}
 }
 
 void AMinigameDrillController::UpdateObstacles (float deltaTime)
 {
 	_timer += deltaTime;
 
-	if (_timer >= _spawnInterval)
+	if (!_gameFinished && _timer >= _spawnInterval)
 	{
 		SpawnObstacle ();
 		_timer = 0.0f;
@@ -121,6 +129,11 @@ void AMinigameDrillController::SpawnObstacle ()
 
 	//Set time before next spawn
 	_spawnInterval = FMath::RandRange (5, 25) / 10.0f;
+
+	_spawnCount++;
+
+	if (_spawnCount == 30)
+		_gameFinished = true;
 }
 
 void AMinigameDrillController::ChangeDrill (int index)
@@ -146,12 +159,34 @@ void AMinigameDrillController::MovePlane (float deltaTime)
 		_planeTwo->SetActorLocation (_planeOne->GetActorLocation () - FVector (0.0f, 0.0f, 5000.0f));
 }
 
+void AMinigameDrillController::SetLives (int lives)
+{
+	_lives = lives;
+	livesText = "Lives: " + FString::FromInt (_lives);
+
+	Update ();
+}
+
+void AMinigameDrillController::SetScore (int score)
+{
+	_score = score;
+
+	scoreText = "Score: " + FString::FromInt (_score);
+
+	Update ();
+}
+
 void AMinigameDrillController::GetHitByObstacle ()
 {
-	_health--;
+	SetLives (_lives - 1);
 
-	if (_health == 0)
+	if (_lives == 0)
 		EndGame ();
+}
+
+void AMinigameDrillController::OvercomeObstacle ()
+{
+	SetScore (_score + 100);
 }
 
 int AMinigameDrillController::GetCurrentDrillType ()

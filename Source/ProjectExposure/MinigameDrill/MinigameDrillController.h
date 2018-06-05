@@ -28,12 +28,20 @@ public:
 	void SetGameController (ASimulationGameController* gameController);
 	void StartGame ();
 	void GetHitByObstacle ();
+	void OvercomeObstacle ();
 
 	int GetCurrentDrillType ();
 
 	//For blueprints
-	UPROPERTY (BlueprintReadWrite)
+	UPROPERTY (BlueprintReadOnly)
 	bool showDrillUI = false;
+	UPROPERTY (BlueprintReadOnly)
+	FString livesText = "Lives: 3";
+	UPROPERTY (BlueprintReadOnly)
+	FString scoreText = "Score: 0";
+
+	UFUNCTION (BlueprintImplementableEvent, Category = "Update")
+	void Update ();
 
 protected:
 	//Called when the game starts or when spawned
@@ -45,6 +53,8 @@ private:
 	void UpdateObstacles (float deltaTime);
 	void SpawnObstacle ();
 	void MovePlane (float deltaTime);
+	void SetLives (int lives);
+	void SetScore (int score);
 
 	UFUNCTION (BLueprintCallable)
 	void ChangeDrill (int index);
@@ -59,10 +69,13 @@ private:
 	float _timer = 0.0f;
 
 	//Game stats
+	int _lives = 3;
+	int _score = 0;
 	int _currentDrillType = 1;
-	int _health = 3;
-	float _gameTimer = 0.0f;
+	int _spawnCount = 0;
+	float _endTimer = 0.0f;
 	float _height = -1800.0f;
+	bool _gameFinished = false;
 
 	//Spawn info
 	FActorSpawnParameters spawnParams;

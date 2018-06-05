@@ -44,7 +44,6 @@ void APlaceableUnit::FollowMousePosition ()
 {
 	//Trace to see what is under the mouse cursor
 	FHitResult hit;
-	
 	_playerController->GetHitResultUnderCursor (ECC_Visibility, true, hit);
 
 	if (hit.bBlockingHit)

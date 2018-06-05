@@ -9,7 +9,7 @@
 //Sets default values
 ASimulationGameController::ASimulationGameController ()
 {
- 	//Set this pawn to call Tick () every frame.
+ 	//Set this pawn to call Tick () every frame
 	PrimaryActorTick.bCanEverTick = true;
 }
 
@@ -62,9 +62,12 @@ void ASimulationGameController::Tick (float DeltaTime)
 	if (fadingIn || fadingOut)
 		UpdateFading (DeltaTime);
 
-		//As long as we are in the simulation run the day/night cycle
+	//As long as we are in the simulation run the day/night cycle
 	if (_simulationRunning)
 		UpdateCycle ();
+
+	if (_movingToMine)
+		UpdateMovingToMine ();
 }
 
 void ASimulationGameController::SpawnUnit (int index)
@@ -100,11 +103,17 @@ void ASimulationGameController::SpawnUnit (int index)
 
 		//Spawn the unit
 		_controlledUnit = world->SpawnActor <APlaceableUnit> (controlledUnit, spawnPosition, rotator, spawnParams);
+
+		//Disable simulation UI
+		_uiController->Disable (_uiController->simulationRef);
 	}
 }
 
 void ASimulationGameController::PlaceUnit ()
 {
+	if (!_controlledUnit)
+		return;
+
 	if (_controlledUnit->PlaceUnit ())
 	{
 		int miniGameType = _controlledUnit->GetTypeIndex ();
@@ -117,13 +126,22 @@ void ASimulationGameController::PlaceUnit ()
 
 		//When the unit is placed, start simulation
 		StartSimulation ();
+
+		_placing = false;
+	}
+	else
+	{
+		//Enable simulation UI
+		_uiController->Enable (_uiController->simulationRef, 0);
+
+		//Remove currently controlled unit
+		_controlledUnit->Destroy ();
+		_controlledUnit = nullptr;
 	}
 }
 
 void ASimulationGameController::StartSimulation ()
 {
-	//Disable simulation UI
-	_uiController->Disable (_uiController->simulationRef);
 	//Enable simulationTest UI
 	_uiController->Enable (_uiController->simulationTestRef, 0);
 
@@ -144,6 +162,7 @@ void ASimulationGameController::StopSimulation ()
 
 	//If it's time for a new minigame, enter that, otherwise start new turn
 	//if (_currentTurn == 1 || _currentTurn == 4 || _currentTurn == 7)
+	//MAKE THIS SHIT OPTIONAL
 		EnterMiniGame ();
 	//else
 		//StartNewTurn ();
@@ -156,7 +175,10 @@ void ASimulationGameController::EnterMiniGame ()
 	switch (_miniGameActive)
 	{
 	case 1:
-		_cameraMovement->MoveTo (_minePosition, _mineRotation);
+		//_cameraMovement->MoveTo (_minePosition, _mineRotation);
+		_cameraMovement->MoveTo (_mineCameraPositions [0], _mineCameraRotations [0]);
+		//_mine->SetActorLocation (FVector (-19420, 1268, 2030));
+		_movingToMine = true;
 		break;
 	case 2:
 		ExitMiniGame ();
@@ -164,11 +186,14 @@ void ASimulationGameController::EnterMiniGame ()
 	case 3:
 		_cameraMovement->MoveTo (_drillPosition, _drillRotation);
 		FadeIn (0.75f, 0.5f);
-		FadeOut (3.5f, 1.0f);
+		FadeOut (3.5f, 0.0f);
 		break;
 	}
 
-	_firstPlayed = _miniGameActive;
+	//Disable resources UI
+	_uiController->Disable (_uiController->resourcesRef);
+	//Disable currentTurn UI
+	_uiController->Disable (_uiController->currentTurnRef);
 }
 
 void ASimulationGameController::ExitMiniGame ()
@@ -180,10 +205,17 @@ void ASimulationGameController::ExitMiniGame ()
 	_cameraMovement->MoveTo (_defaultPosition, _defaultRotation);
 
 	//After exiting minigame, start a new turn
-	//Maybe run this a little later
 	StartNewTurn ();
 
+	//if (_miniGameActive == 1)
+	//	_mine->SetActorLocation (FVector (-19420, 1268, -2030));
+
 	_miniGameActive = 0;
+
+	//Enable resources UI
+	_uiController->Enable (_uiController->resourcesRef, 0);
+	//Enable currentTurn UI
+	_uiController->Enable (_uiController->currentTurnRef, 0);
 }
 
 void ASimulationGameController::StartNewTurn ()
@@ -195,6 +227,8 @@ void ASimulationGameController::StartNewTurn ()
 	_uiController->Enable (_uiController->simulationRef, 0);
 
 	_simulation->OnNewTurn (_currentTurn);
+
+	_placing = true;
 }
 
 void ASimulationGameController::FadeIn (float delayTime, float fadeTime)
@@ -246,6 +280,23 @@ void ASimulationGameController::UpdateFading (float deltaTime)
 	}
 }
 
+void ASimulationGameController::UpdateMovingToMine ()
+{
+	if (FVector::Distance (GetActorLocation (), _mineCameraPositions [_currentPositionIndex]) < 400)
+	{
+		if (_currentPositionIndex == _mineCameraPositions.Num () - 1)
+		{
+			_cameraMovement->MoveTo (_minePosition, _mineRotation);
+			_movingToMine = false;
+		}
+		else
+		{
+			_currentPositionIndex++;
+			_cameraMovement->MoveTo (_mineCameraPositions [_currentPositionIndex], _mineCameraRotations [_currentPositionIndex]);
+		}
+	}
+}
+
 void ASimulationGameController::CheckAFK ()
 {
 
@@ -259,11 +310,8 @@ void ASimulationGameController::OnSpacePress ()
 
 void ASimulationGameController::OnMouseClick ()
 {
-	//If the player currently controls a unit, place it
-	if (_controlledUnit)
-		PlaceUnit ();
 	//If game hasn't started, start it
-	else if (!gameStarted)
+	if (!gameStarted)
 	{
 		gameStarted = true;
 
@@ -278,7 +326,41 @@ void ASimulationGameController::OnMouseClick ()
 
 		//Disable menu UI
 		_uiController->Disable (_uiController->menuRef);
+
+		//Go to "placing state"
+		_placing = true;
+		return;
 	}
+
+	//Buttons
+	/*if (_placing)
+	{
+		FVector2D mousePosition;
+		GetWorld ()->GetFirstPlayerController ()->GetMousePosition (mousePosition.X, mousePosition.Y);
+
+		FVector2D buttonHalfSize = {75, 75};
+
+		FVector2D buttonOnePosition = {660, 900};
+		FVector2D buttonTwoPosition = {885, 900};
+		FVector2D buttonThreePosition = {1110, 900};
+
+		if (mousePosition.X > buttonOnePosition.X - buttonHalfSize.X && mousePosition.X < buttonOnePosition.X + buttonHalfSize.X &&
+			mousePosition.Y > buttonOnePosition.Y - buttonHalfSize.Y && mousePosition.Y < buttonOnePosition.Y + buttonHalfSize.Y)
+			SpawnUnit (0);
+		else if (mousePosition.X > buttonTwoPosition.X - buttonHalfSize.X && mousePosition.X < buttonTwoPosition.X + buttonHalfSize.X &&
+			mousePosition.Y > buttonTwoPosition.Y - buttonHalfSize.Y && mousePosition.Y < buttonTwoPosition.Y + buttonHalfSize.Y)
+			SpawnUnit (1);
+		else if (mousePosition.X > buttonThreePosition.X - buttonHalfSize.X && mousePosition.X < buttonThreePosition.X + buttonHalfSize.X &&
+			mousePosition.Y > buttonThreePosition.Y - buttonHalfSize.Y && mousePosition.Y < buttonThreePosition.Y + buttonHalfSize.Y)
+			SpawnUnit (2);
+	}*/
+}
+
+void ASimulationGameController::OnMouseRelease ()
+{
+	//If the player currently controls a unit, place it
+	if (_placing && _controlledUnit)
+		PlaceUnit ();
 }
 
 //Called to bind functionality to input
@@ -287,5 +369,6 @@ void ASimulationGameController::SetupPlayerInputComponent (UInputComponent* Play
 	Super::SetupPlayerInputComponent (PlayerInputComponent);
 
 	PlayerInputComponent->BindAction ("MouseClick", IE_Pressed, this, &ASimulationGameController::OnMouseClick);
+	PlayerInputComponent->BindAction ("MouseClick", IE_Released, this, &ASimulationGameController::OnMouseRelease);
 	PlayerInputComponent->BindAction ("Space", IE_Pressed, this, &ASimulationGameController::OnSpacePress);
 }
