@@ -42,7 +42,7 @@ void ADrillObstacle::Tick (float DeltaTime)
 		}
 	}
 
-	if (position.Z > -100.0f)
+	if (position.Z > 4000.0f)
 		Destroy ();
 }
 

@@ -63,8 +63,16 @@ private:
 	bool fadingIn = false;
 	bool fadingOut = false;
 	
+	float _simulationTimer = 0.0f;
 	bool _simulationRunning = false;
 	bool _placing = false;
+	bool _playMiniGame = true;
+
+	bool _mineGamePlayed = false;
+	bool _windGamePlayed = false;
+	bool _oilGamePlayed = false;
+
+	AActor* _messageBox;
 
 	//Variables for camera movement to mine minigame
 	bool _movingToMine = false;
@@ -137,6 +145,12 @@ private:
 
 	UPROPERTY (EditAnywhere)
 	AActor* _mine;
+
+	UPROPERTY (EditAnywhere)
+	float _simulationTime;
+
+	UPROPERTY (EditAnywhere)
+	TSubclassOf <AActor> _optionalMinigameMessage;
 
 	//Temp
 	UPROPERTY (EditAnywhere) bool _miniGamesOn = true;

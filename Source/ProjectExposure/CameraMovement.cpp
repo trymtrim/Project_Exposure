@@ -37,8 +37,6 @@ void CameraMovement::MoveCamera (float deltaTime)
 	float camDistToPoint = FVector::Distance (currentPosition, _targetPosition);
 	float distBetweenPoints = FVector::Distance (_startPosition, _targetPosition);
 
-	//camDistToPoint = FVector::Distance (_startPosition, _targetPosition);;
-
 	float speed = FMath::Lerp (4.0f, 1.0f, camDistToPoint / distBetweenPoints) * deltaTime / 1.5f;
 
 	_cameraActor->SetActorLocation (FMath::Lerp (currentPosition, _targetPosition, speed));

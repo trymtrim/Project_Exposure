@@ -68,6 +68,17 @@ void ASimulationGameController::Tick (float DeltaTime)
 
 	if (_movingToMine)
 		UpdateMovingToMine ();
+
+	if (_simulationRunning)
+	{
+		_simulationTimer += DeltaTime;
+
+		if (_simulationTimer > _simulationTime)
+		{
+			_simulationTimer = 0.0f;
+			StopSimulation ();
+		}
+	}
 }
 
 void ASimulationGameController::SpawnUnit (int index)
@@ -96,8 +107,6 @@ void ASimulationGameController::SpawnUnit (int index)
 		}
 		
 		FActorSpawnParameters spawnParams;
-		//spawnParams.Owner = this;
-		
 		FVector spawnPosition = GetActorLocation ();
 		FRotator rotator = FVector (0.0f, 0.0f, 0.0f).Rotation ();
 
@@ -122,8 +131,17 @@ void ASimulationGameController::PlaceUnit ()
 
 		_miniGameActive = miniGameType;
 
-		_controlledUnit = nullptr;
+		//Spawn the optional minigame message
+		FActorSpawnParameters spawnParams;
+		FVector spawnPosition = _controlledUnit->GetActorLocation () + FVector (0, 0, 500);
+		FRotator rotator = FVector (0.0f, 0.0f, 0.0f).Rotation ();
 
+		//If the current mini game has been played before, give the player the option to play it again
+		if (_miniGameActive == 1 && _mineGamePlayed || _miniGameActive == 2 && _windGamePlayed || _miniGameActive == 3 && _oilGamePlayed)
+			_messageBox = GetWorld ()->SpawnActor <AActor> (_optionalMinigameMessage, spawnPosition + FVector (0, 0, 500), rotator, spawnParams);
+
+		_controlledUnit = nullptr;
+		
 		//When the unit is placed, start simulation
 		StartSimulation ();
 
@@ -153,19 +171,13 @@ void ASimulationGameController::StopSimulation ()
 	//Disable simulationTest UI
 	_uiController->Disable (_uiController->simulationTestRef);
 
-	if (!_miniGamesOn)
-	{
-		StartNewTurn ();
-		_simulationRunning = false;
-		return;
-	}
-
-	//If it's time for a new minigame, enter that, otherwise start new turn
-	//if (_currentTurn == 1 || _currentTurn == 4 || _currentTurn == 7)
-	//MAKE THIS SHIT OPTIONAL
+	if (_playMiniGame && _miniGamesOn)
 		EnterMiniGame ();
-	//else
-		//StartNewTurn ();
+	else
+		StartNewTurn ();
+
+	if (_messageBox)
+		_messageBox->Destroy ();
 
 	_simulationRunning = false;
 }
@@ -179,14 +191,18 @@ void ASimulationGameController::EnterMiniGame ()
 		_cameraMovement->MoveTo (_mineCameraPositions [0], _mineCameraRotations [0]);
 		//_mine->SetActorLocation (FVector (-19420, 1268, 2030));
 		_movingToMine = true;
+		_mineGamePlayed = true;
 		break;
 	case 2:
 		ExitMiniGame ();
+
+		_windGamePlayed = true;
 		break;
 	case 3:
 		_cameraMovement->MoveTo (_drillPosition, _drillRotation);
 		FadeIn (0.75f, 0.5f);
 		FadeOut (3.5f, 0.0f);
+		_oilGamePlayed = true;
 		break;
 	}
 
@@ -194,6 +210,8 @@ void ASimulationGameController::EnterMiniGame ()
 	_uiController->Disable (_uiController->resourcesRef);
 	//Disable currentTurn UI
 	_uiController->Disable (_uiController->currentTurnRef);
+
+	_playMiniGame = false;
 }
 
 void ASimulationGameController::ExitMiniGame ()
@@ -332,28 +350,23 @@ void ASimulationGameController::OnMouseClick ()
 		return;
 	}
 
-	//Buttons
-	/*if (_placing)
+	if (_simulationRunning)
 	{
-		FVector2D mousePosition;
-		GetWorld ()->GetFirstPlayerController ()->GetMousePosition (mousePosition.X, mousePosition.Y);
+		//Trace to see what is under the mouse cursor
+		FHitResult hit;
+		GetWorld ()->GetFirstPlayerController ()->GetHitResultUnderCursor (ECC_Visibility, true, hit);
 
-		FVector2D buttonHalfSize = {75, 75};
+		if (hit.bBlockingHit)
+		{
+			if (hit.GetActor ()->GetRootComponent ()->ComponentHasTag ("message"))
+			{
+				_playMiniGame = true;
+				hit.GetActor ()->Destroy ();
 
-		FVector2D buttonOnePosition = {660, 900};
-		FVector2D buttonTwoPosition = {885, 900};
-		FVector2D buttonThreePosition = {1110, 900};
-
-		if (mousePosition.X > buttonOnePosition.X - buttonHalfSize.X && mousePosition.X < buttonOnePosition.X + buttonHalfSize.X &&
-			mousePosition.Y > buttonOnePosition.Y - buttonHalfSize.Y && mousePosition.Y < buttonOnePosition.Y + buttonHalfSize.Y)
-			SpawnUnit (0);
-		else if (mousePosition.X > buttonTwoPosition.X - buttonHalfSize.X && mousePosition.X < buttonTwoPosition.X + buttonHalfSize.X &&
-			mousePosition.Y > buttonTwoPosition.Y - buttonHalfSize.Y && mousePosition.Y < buttonTwoPosition.Y + buttonHalfSize.Y)
-			SpawnUnit (1);
-		else if (mousePosition.X > buttonThreePosition.X - buttonHalfSize.X && mousePosition.X < buttonThreePosition.X + buttonHalfSize.X &&
-			mousePosition.Y > buttonThreePosition.Y - buttonHalfSize.Y && mousePosition.Y < buttonThreePosition.Y + buttonHalfSize.Y)
-			SpawnUnit (2);
-	}*/
+				print ("YOOO");
+			}
+		}
+	}
 }
 
 void ASimulationGameController::OnMouseRelease ()

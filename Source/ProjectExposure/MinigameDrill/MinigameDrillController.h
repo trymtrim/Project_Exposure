@@ -62,6 +62,7 @@ private:
 	ASimulationGameController* _gameController;
 
 	AActor* _drill;
+	AActor* _hole;
 	AActor* _planeOne;
 	AActor* _planeTwo;
 
@@ -74,7 +75,7 @@ private:
 	int _currentDrillType = 1;
 	int _spawnCount = 0;
 	float _endTimer = 0.0f;
-	float _height = -1800.0f;
+	float _height = 2200.0f;
 	bool _gameFinished = false;
 
 	//Spawn info
@@ -89,6 +90,8 @@ private:
 	//Prefabs
 	UPROPERTY (EditAnywhere)
 	TSubclassOf <AActor> _planePrefab;
+	UPROPERTY (EditAnywhere)
+	TSubclassOf <AActor> _holePrefab;
 	UPROPERTY (EditAnywhere)
 	TArray <TSubclassOf <AActor>> _drillPrefabs;
 	UPROPERTY (EditAnywhere)
