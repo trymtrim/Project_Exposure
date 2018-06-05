@@ -26,6 +26,9 @@ void ASimulationGameController::BeginPlay ()
 
 	//Setup pawns
 	_drillPawn->SetGameController (this);
+
+	//Enable menu UI
+	_uiController->Enable (_uiController->menuRef, 1);
 }
 
 //Called every frame
@@ -42,7 +45,6 @@ void ASimulationGameController::Tick (float DeltaTime)
 		case 1:
 			GetWorld ()->GetFirstPlayerController ()->Possess (_minePawn);
 			_minePawn->setup ();
-			//_minePawn->
 			break;
 		case 2:
 			
@@ -59,6 +61,10 @@ void ASimulationGameController::Tick (float DeltaTime)
 
 	if (fadingIn || fadingOut)
 		UpdateFading (DeltaTime);
+
+		//As long as we are in the simulation run the day/night cycle
+	if (_simulationRunning)
+		UpdateCycle ();
 }
 
 void ASimulationGameController::SpawnUnit (int index)
@@ -101,7 +107,11 @@ void ASimulationGameController::PlaceUnit ()
 {
 	if (_controlledUnit->PlaceUnit ())
 	{
-		_simulation->OnPlaceUnit (_controlledUnit->GetTypeIndex ());
+		int miniGameType = _controlledUnit->GetTypeIndex ();
+
+		_simulation->OnPlaceUnit (miniGameType);
+
+		_miniGameActive = miniGameType;
 
 		_controlledUnit = nullptr;
 
@@ -112,53 +122,44 @@ void ASimulationGameController::PlaceUnit ()
 
 void ASimulationGameController::StartSimulation ()
 {
-	//Reminder! Make a new UI blueprint for the resource bars
+	//Disable simulation UI
+	_uiController->Disable (_uiController->simulationRef);
+	//Enable simulationTest UI
+	_uiController->Enable (_uiController->simulationTestRef, 0);
 
-	//Disable UI, the rest is handled by the UI widget blueprint
-	//UN-COMMENT THIS TO ENABLE MINIGAMES
-	showUI = false;
-	showSimulationUI = true;
+	_simulationRunning = true;
 }
 
 void ASimulationGameController::StopSimulation ()
 {
-	showSimulationUI = false;
+	//Disable simulationTest UI
+	_uiController->Disable (_uiController->simulationTestRef);
+
+	if (!_miniGamesOn)
+	{
+		StartNewTurn ();
+		_simulationRunning = false;
+		return;
+	}
 
 	//If it's time for a new minigame, enter that, otherwise start new turn
-	if (_currentTurn == 1 || _currentTurn == 4 || _currentTurn == 7)
+	//if (_currentTurn == 1 || _currentTurn == 4 || _currentTurn == 7)
 		EnterMiniGame ();
-	else
-		StartNewTurn ();
+	//else
+		//StartNewTurn ();
+
+	_simulationRunning = false;
 }
 
 void ASimulationGameController::EnterMiniGame ()
 {
-	//Initialize random minigame
-	int randomNumber = FMath::RandRange (1, 2);
-
-	//Temp
-	if (_firstPlayed != 0)
-	{
-		if (_firstPlayed == 1)
-			_miniGameActive = 3;
-		else
-			_miniGameActive = 1;
-	}
-	else
-	{
-		if (randomNumber == 1)
-			_miniGameActive = 1;
-		else
-			_miniGameActive = 3;
-	}
-
 	switch (_miniGameActive)
 	{
 	case 1:
 		_cameraMovement->MoveTo (_minePosition, _mineRotation);
 		break;
 	case 2:
-			
+		ExitMiniGame ();
 		break;
 	case 3:
 		_cameraMovement->MoveTo (_drillPosition, _drillRotation);
@@ -190,8 +191,8 @@ void ASimulationGameController::StartNewTurn ()
 	_currentTurn++;
 	currentTurnText = "Turn " + FString::FromInt (_currentTurn);
 
-	//Enable UI, the rest is handled by the UI widget blueprint
-	showUI = true;
+	//Enable simulation UI
+	_uiController->Enable (_uiController->simulationRef, 0);
 
 	_simulation->OnNewTurn (_currentTurn);
 }
@@ -252,7 +253,7 @@ void ASimulationGameController::CheckAFK ()
 
 void ASimulationGameController::OnSpacePress ()
 {
-	if (showSimulationUI)
+	if (_simulationRunning)
 		StopSimulation ();
 }
 
@@ -263,7 +264,21 @@ void ASimulationGameController::OnMouseClick ()
 		PlaceUnit ();
 	//If game hasn't started, start it
 	else if (!gameStarted)
+	{
 		gameStarted = true;
+
+		//Enable simulation UI
+		_uiController->Enable (_uiController->simulationRef, 0);
+
+		//Enable resources UI
+		_uiController->Enable (_uiController->resourcesRef, 0);
+
+		//Enable currentTurn UI
+		_uiController->Enable (_uiController->currentTurnRef, 1);
+
+		//Disable menu UI
+		_uiController->Disable (_uiController->menuRef);
+	}
 }
 
 //Called to bind functionality to input

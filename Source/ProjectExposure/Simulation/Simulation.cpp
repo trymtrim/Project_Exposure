@@ -1,6 +1,9 @@
 //Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Simulation.h"
+#include "TimerManager.h"
+
+#define print(text) if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 1.5, FColor::Green,text)
 
 //Sets default values
 ASimulation::ASimulation ()
@@ -13,7 +16,8 @@ ASimulation::ASimulation ()
 void ASimulation::BeginPlay ()
 {
 	Super::BeginPlay ();
-
+	
+	toggleParticles(false);
 	InitializeResources ();
 }
 
@@ -39,11 +43,29 @@ void ASimulation::OnPlaceUnit (int index)
 		AddResources (3, 3);
 		break;
 	}
+	
+	toggleParticles(true);
+	//FTimerHandle _durationTimer;
+	//().SetTimer(_durationTimer, this, &ASimulation::toggleParticles, 5.0f, false);
 }
 
-void ASimulation::OnNewTurn (int currentTurn)
-{
+void ASimulation::toggleParticles(bool pToggle) {
+	print("Previous:");
+	print(FString::FromInt(_cityPositiveFeedback->bIsActive));
+	_cityPositiveFeedback->SetActive(pToggle);
+	print("After");
+	print(FString::FromInt(_cityPositiveFeedback->bIsActive));
+}
 
+void ASimulation::OnNewTurn (int currentTurn) {
+	//Every nth turn - right now every 3rd
+	if (currentTurn % 3 == 0) {
+		maxEnergy += 2;
+		maxPollution += 1;
+
+		FString debugMessage = "Old Energy: " + FString::FromInt(maxEnergy - 2) + " New Energy: " + FString::FromInt(maxEnergy) + "Old Pollution: " + FString::FromInt(maxPollution - 1) + " New Pollution: " + FString::FromInt(maxPollution);
+		print(debugMessage);
+	}
 }
 
 void ASimulation::InitializeResources ()

@@ -4,9 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Components/DirectionalLightComponent.h"
+#include "Runtime/Engine/Classes/Particles/ParticleSystemComponent.h"
 #include "Simulation.generated.h"
 
-UCLASS()
+UCLASS(Blueprintable)
 class PROJECTEXPOSURE_API ASimulation : public AActor
 {
 	GENERATED_BODY ()
@@ -33,6 +35,9 @@ public:
 	UPROPERTY (BlueprintReadOnly)
 	float currentPollution;
 
+	UPROPERTY(EditAnywhere)
+	UParticleSystemComponent* _cityPositiveFeedback;
+
 protected:
 	//Called when the game starts or when spawned
 	virtual void BeginPlay () override;
@@ -46,4 +51,8 @@ private:
 	float _targetEnergy;
 	float _targetPollution;
 	bool _lerping;
+
+	bool _particlesActive = false;
+
+	void toggleParticles(bool pToggle);
 };

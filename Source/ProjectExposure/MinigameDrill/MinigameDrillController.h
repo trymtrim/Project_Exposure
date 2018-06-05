@@ -8,6 +8,7 @@
 
 class ASimulationGameController;
 class ADrillObstacle;
+class AUIController;
 
 UCLASS()
 class PROJECTEXPOSURE_API AMinigameDrillController : public APawn
@@ -63,13 +64,20 @@ private:
 	float _gameTimer = 0.0f;
 	float _height = -1800.0f;
 
-	//Prefabs
+	//Spawn info
+	FActorSpawnParameters spawnParams;
+	FVector spawnPosition;
+	FRotator rotator;
+
+	//UI controller
 	UPROPERTY (EditAnywhere)
-	TSubclassOf <AActor> _drillPrefab;
+	AUIController* _uiController;
+
+	//Prefabs
 	UPROPERTY (EditAnywhere)
 	TSubclassOf <AActor> _planePrefab;
 	UPROPERTY (EditAnywhere)
-	TArray <TSubclassOf <AActor>> _obstaclePrefabs;
+	TArray <TSubclassOf <AActor>> _drillPrefabs;
 	UPROPERTY (EditAnywhere)
-	TArray <UStaticMesh*> _drillMeshes;
+	TArray <TSubclassOf <AActor>> _obstaclePrefabs;
 };
