@@ -53,6 +53,7 @@ private:
 	void FadeIn (float delayTime, float fadeTime);
 	void FadeOut (float delayTime, float fadeTime);
 	void UpdateFading (float deltaTime);
+	void UpdateMovingToMine ();
 	void CheckAFK ();
 
 	float fadeInTimer;
@@ -62,11 +63,27 @@ private:
 	bool fadingIn = false;
 	bool fadingOut = false;
 	
+	float _simulationTimer = 0.0f;
 	bool _simulationRunning = false;
+	bool _placing = false;
+	bool _playMiniGame = true;
+
+	bool _mineGamePlayed = false;
+	bool _windGamePlayed = false;
+	bool _oilGamePlayed = false;
+
+	AActor* _messageBox;
+
+	//Variables for camera movement to mine minigame
+	bool _movingToMine = false;
+	int _currentPositionIndex = 0;
+	TArray <FVector> _mineCameraPositions {FVector (-1514, 5644, 483)};
+	TArray <FVector> _mineCameraRotations {FVector (0, 0, 161)};
 
 	//Inputs
 	void OnSpacePress ();
 	void OnMouseClick ();
+	void OnMouseRelease ();
 
 	//Default camera position and rotation
 	FVector _defaultPosition;
@@ -126,7 +143,15 @@ private:
 	UPROPERTY (EditAnywhere)
 	FVector _windmillRotation;
 
+	UPROPERTY (EditAnywhere)
+	AActor* _mine;
+
+	UPROPERTY (EditAnywhere)
+	float _simulationTime;
+
+	UPROPERTY (EditAnywhere)
+	TSubclassOf <AActor> _optionalMinigameMessage;
+
 	//Temp
-	int _firstPlayed = 0;
 	UPROPERTY (EditAnywhere) bool _miniGamesOn = true;
 };

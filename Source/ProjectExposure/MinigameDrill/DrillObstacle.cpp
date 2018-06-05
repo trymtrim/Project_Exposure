@@ -31,7 +31,10 @@ void ADrillObstacle::Tick (float DeltaTime)
 	if (position.Z > _collideHeight && !_hasCollided)
 	{
 		if (_gameController->GetCurrentDrillType () == _type)
+		{
+			_gameController->OvercomeObstacle ();
 			Destroy ();
+		}
 		else
 		{
 			_gameController->GetHitByObstacle ();
@@ -39,7 +42,7 @@ void ADrillObstacle::Tick (float DeltaTime)
 		}
 	}
 
-	if (position.Z > -100.0f)
+	if (position.Z > 4000.0f)
 		Destroy ();
 }
 
