@@ -29,6 +29,9 @@ void ASimulationGameController::BeginPlay ()
 
 	//Enable menu UI
 	_uiController->Enable (_uiController->menuRef, 1);
+
+	//Enable simulationTest UI
+	_uiController->Enable (_uiController->simulationTestRef, 0);
 }
 
 //Called every frame
@@ -67,7 +70,9 @@ void ASimulationGameController::Tick (float DeltaTime)
 		UpdateCycle ();
 
 	if (_movingToMine)
-		UpdateMovingToMine ();
+		UpdateMovingToMine (true);
+	else if (_movingFromMine)
+		UpdateMovingToMine (false);
 
 	if (_simulationRunning)
 	{
@@ -161,7 +166,7 @@ void ASimulationGameController::PlaceUnit ()
 void ASimulationGameController::StartSimulation ()
 {
 	//Enable simulationTest UI
-	_uiController->Enable (_uiController->simulationTestRef, 0);
+	//_uiController->Enable (_uiController->simulationTestRef, 0);
 
 	_simulationRunning = true;
 }
@@ -169,10 +174,13 @@ void ASimulationGameController::StartSimulation ()
 void ASimulationGameController::StopSimulation ()
 {
 	//Disable simulationTest UI
-	_uiController->Disable (_uiController->simulationTestRef);
+	//_uiController->Disable (_uiController->simulationTestRef);
 
-	if (_playMiniGame && _miniGamesOn)
-		EnterMiniGame ();
+	if (_miniGameActive == 1 && !_mineGamePlayed || _miniGameActive == 2 && !_windGamePlayed || _miniGameActive == 3 && !_oilGamePlayed)
+	{
+		if (_miniGamesOn)
+			EnterMiniGame ();
+	}
 	else
 		StartNewTurn ();
 
@@ -210,8 +218,6 @@ void ASimulationGameController::EnterMiniGame ()
 	_uiController->Disable (_uiController->resourcesRef);
 	//Disable currentTurn UI
 	_uiController->Disable (_uiController->currentTurnRef);
-
-	_playMiniGame = false;
 }
 
 void ASimulationGameController::ExitMiniGame ()
@@ -220,10 +226,16 @@ void ASimulationGameController::ExitMiniGame ()
 
 	_miniGameIsActive = false;
 
-	_cameraMovement->MoveTo (_defaultPosition, _defaultRotation);
-
 	//After exiting minigame, start a new turn
 	StartNewTurn ();
+
+	if (_miniGameActive == 1)
+	{
+		_cameraMovement->MoveTo (_mineCameraPositions [_mineCameraPositions.Num () - 1], _mineCameraRotations [_mineCameraRotations.Num () - 1]);
+		_movingFromMine = true;
+	}
+	else
+		_cameraMovement->MoveTo (_defaultPosition, _defaultRotation);
 
 	//if (_miniGameActive == 1)
 	//	_mine->SetActorLocation (FVector (-19420, 1268, -2030));
@@ -298,19 +310,38 @@ void ASimulationGameController::UpdateFading (float deltaTime)
 	}
 }
 
-void ASimulationGameController::UpdateMovingToMine ()
+void ASimulationGameController::UpdateMovingToMine (bool toMine)
 {
-	if (FVector::Distance (GetActorLocation (), _mineCameraPositions [_currentPositionIndex]) < 400)
+	if (toMine)
 	{
-		if (_currentPositionIndex == _mineCameraPositions.Num () - 1)
+		if (FVector::Distance (GetActorLocation (), _mineCameraPositions [_currentPositionIndex]) < 400)
 		{
-			_cameraMovement->MoveTo (_minePosition, _mineRotation);
-			_movingToMine = false;
+			if (_currentPositionIndex == _mineCameraPositions.Num () - 1)
+			{
+				_cameraMovement->MoveTo (_minePosition, _mineRotation);
+				_movingToMine = false;
+			}
+			else
+			{
+				_currentPositionIndex++;
+				_cameraMovement->MoveTo (_mineCameraPositions [_currentPositionIndex], _mineCameraRotations [_currentPositionIndex]);
+			}
 		}
-		else
+	}
+	else
+	{
+		if (FVector::Distance (GetActorLocation (), _mineCameraPositions [_currentPositionIndex]) < 400)
 		{
-			_currentPositionIndex++;
-			_cameraMovement->MoveTo (_mineCameraPositions [_currentPositionIndex], _mineCameraRotations [_currentPositionIndex]);
+			if (_currentPositionIndex == 0)
+			{
+				_cameraMovement->MoveTo (_defaultPosition, _defaultRotation);
+				_movingFromMine = false;
+			}
+			else
+			{
+				_currentPositionIndex--;
+				_cameraMovement->MoveTo (_mineCameraPositions [_currentPositionIndex], _mineCameraRotations [_currentPositionIndex]);
+			}
 		}
 	}
 }
@@ -359,12 +390,7 @@ void ASimulationGameController::OnMouseClick ()
 		if (hit.bBlockingHit)
 		{
 			if (hit.GetActor ()->GetRootComponent ()->ComponentHasTag ("message"))
-			{
-				_playMiniGame = true;
 				hit.GetActor ()->Destroy ();
-
-				print ("YOOO");
-			}
 		}
 	}
 }

@@ -53,7 +53,7 @@ private:
 	void FadeIn (float delayTime, float fadeTime);
 	void FadeOut (float delayTime, float fadeTime);
 	void UpdateFading (float deltaTime);
-	void UpdateMovingToMine ();
+	void UpdateMovingToMine (bool toMine);
 	void CheckAFK ();
 
 	float fadeInTimer;
@@ -66,7 +66,6 @@ private:
 	float _simulationTimer = 0.0f;
 	bool _simulationRunning = false;
 	bool _placing = false;
-	bool _playMiniGame = true;
 
 	bool _mineGamePlayed = false;
 	bool _windGamePlayed = false;
@@ -76,6 +75,7 @@ private:
 
 	//Variables for camera movement to mine minigame
 	bool _movingToMine = false;
+	bool _movingFromMine = false;
 	int _currentPositionIndex = 0;
 	TArray <FVector> _mineCameraPositions {FVector (-1514, 5644, 483)};
 	TArray <FVector> _mineCameraRotations {FVector (0, 0, 161)};

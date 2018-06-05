@@ -41,6 +41,10 @@ void AMinigameCartController::setup() {
 	SetActorTickEnabled (true);
 
 	_lives = _initialLives;
+	_points = 0;
+	scoreUI = "Score: 0";
+	livesUI = "Life(s): 3";
+	updateUI ();
 	_uraniumLeftToSpawn = _uraniumToSpawn;
 	_debrisLeftToSpawn = _debrisToSpawn;
 	_nextSpawnDelay = FMath::RandRange(_spawnIntervalls.X, _spawnIntervalls.Y);
@@ -50,11 +54,14 @@ void AMinigameCartController::setup() {
 
 void AMinigameCartController::addPoints() {
 	_points++;
+	scoreUI = "Score: " + FString::FromInt(_points);
+	updateUI ();
 }
 
 void AMinigameCartController::decreaseLives() {
 	_lives--;
-
+	livesUI = "Life(s): " + FString::FromInt(_lives);
+	updateUI ();
 	if (_lives == 0) {
 		exitMinigame();
 	}

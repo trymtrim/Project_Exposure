@@ -77,6 +77,9 @@ void AMinigameDrillController::StartGame ()
 
 	//Enable drillMiniGame UI
 	_uiController->Enable (_uiController->drillMiniGameRef, 0);
+
+	//For blueprint
+	Start ();
 }
 
 void AMinigameDrillController::EndGame ()
@@ -93,6 +96,8 @@ void AMinigameDrillController::EndGame ()
 
 	//Disable drillMiniGame UI
 	_uiController->Disable (_uiController->drillMiniGameRef);
+
+	Stop ();
 
 	_gameController->ExitMiniGame ();
 }
@@ -185,8 +190,8 @@ void AMinigameDrillController::GetHitByObstacle ()
 {
 	SetLives (_lives - 1);
 
-	//if (_lives == 0)
-	//	EndGame ();
+	if (_lives == 0)
+		EndGame ();
 }
 
 void AMinigameDrillController::OvercomeObstacle ()

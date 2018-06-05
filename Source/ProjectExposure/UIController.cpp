@@ -29,6 +29,7 @@ void AUIController::InitializeWidgets ()
 	menuRef = CreateWidget <UUserWidget> (GetWorld ()->GetFirstPlayerController (), menu);
 	drillMiniGameRef = CreateWidget <UUserWidget> (GetWorld ()->GetFirstPlayerController (), drillMiniGame);
 	simulationTestRef = CreateWidget <UUserWidget> (GetWorld ()->GetFirstPlayerController (), simulationTest);
+	cartMiniGameRef = CreateWidget <UUserWidget> (GetWorld ()->GetFirstPlayerController (), cartMiniGame);
 }
 
 void AUIController::Enable (UUserWidget* uiReference, int order)

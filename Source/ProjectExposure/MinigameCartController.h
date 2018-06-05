@@ -102,7 +102,7 @@ private:
 	float _fallingUnitDeathThreshhold;
 
 	UPROPERTY(VisibleAnywhere)
-	int _points;
+	int _points = 0;
 
 	UPROPERTY(VisibleAnywhere)
 	uint8 _lives;

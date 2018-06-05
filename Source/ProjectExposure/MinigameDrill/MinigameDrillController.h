@@ -42,6 +42,10 @@ public:
 
 	UFUNCTION (BlueprintImplementableEvent, Category = "Update")
 	void Update ();
+	UFUNCTION (BlueprintImplementableEvent, Category = "Start")
+	void Start ();
+	UFUNCTION (BlueprintImplementableEvent, Category = "Stop")
+	void Stop ();
 
 protected:
 	//Called when the game starts or when spawned
