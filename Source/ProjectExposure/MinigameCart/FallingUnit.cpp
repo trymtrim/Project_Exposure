@@ -18,35 +18,30 @@ AFallingUnit::AFallingUnit()
 void AFallingUnit::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	//Rand number to decide which type we are
-	int rand = FMath::FRand() * 100.0f;
+	GetWorldTimerManager().SetTimer(_deathTimer, this, &AFallingUnit::handleDeath, 30.0f, false);
+}
+
+void AFallingUnit::init(UnitType pType, float pSpeed, float pDeathThreshold) {
+	_currentType = pType;
+	_speed = pSpeed;
+	_deathThreshhold = pDeathThreshold;
 
 	TArray<UStaticMeshComponent*> Components;
 	GetComponents<UStaticMeshComponent>(Components);
 
 	//Set type and mesh accordingly
-	if (rand <= 20.0f) {
-		_currentType = UnitType::DEBRIS;
+	if (_currentType == UnitType::DEBRIS) {
 		for (int32 i = 0; i<Components.Num(); i++) {
 			UStaticMeshComponent* StaticMeshComponent = Components[i];
 			StaticMeshComponent->SetStaticMesh(debrisMesh);
 			StaticMeshComponent->SetRelativeScale3D(debrisScale);
 		}
 	} else {
-		_currentType = UnitType::URANIUM;
 		for (int32 i = 0; i<Components.Num(); i++) {
 			UStaticMeshComponent* StaticMeshComponent = Components[i];
 			StaticMeshComponent->SetStaticMesh(uraniumMesh);
 		}
 	}
-	
-	GetWorldTimerManager().SetTimer(_deathTimer, this, &AFallingUnit::handleDeath, 30.0f, false);
-}
-
-void AFallingUnit::init(float pSpeed, float pDeathThreshold) {
-	_speed = pSpeed;
-	_deathThreshhold = pDeathThreshold;
 }
 
 UnitType AFallingUnit::getType() {

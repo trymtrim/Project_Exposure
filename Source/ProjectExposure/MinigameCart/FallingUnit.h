@@ -34,7 +34,7 @@ public:
 	void OnHit(AActor* SelfActor, AActor* OtherActor, FVector NormalImpulse, const FHitResult& Hit);
 
 	//Called from the MinigameController to set vars
-	void init(float pSpeed, float pDeathThreshold);
+	void init(UnitType pType, float pSpeed, float pDeathThreshold);
 
 	//Called from the Minecart to determine type
 	UnitType getType();

@@ -7,6 +7,7 @@
 #include "GameFramework/Actor.h"
 #include "Engine/World.h"
 #include "MinigameCart/Minecart.h"
+#include "UIController.h"
 #include "MinigameCartController.generated.h"
 
 class ASimulationGameController;
@@ -35,7 +36,16 @@ public:
 	void addPoints();
 	void decreaseLives();
 	void setup();
-	
+
+	UFUNCTION(BlueprintImplementableEvent, Category="UI")
+	void updateUI();
+
+	UPROPERTY(BlueprintReadOnly)
+	FString livesUI = "Life(s): 3";
+
+	UPROPERTY(BlueprintReadOnly)
+	FString scoreUI = "Score: 0";
+
 	//Prefabs and references
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<AActor> wagonPrefab;
@@ -48,22 +58,36 @@ public:
 
 private:
 
-	void handleInput(float axisValue);
+	void handleAxisInput(float axisValue);
+	void handleTouchInputStart();
+	void handleTouchInputEnd();
+	void movement(float DeltaTime);
 
-	void spawnFallingUnit();
+	void spawnFallingUnit(float DeltaTime);
 	void exitMinigame();
 
-	UPROPERTY()
 	AMinecart* _spawnedWagon;
-
-	UPROPERTY()
 	FVector _velocity;
 
-	UPROPERTY(EditAnywhere)
-	uint8 _minigameDuration;
+	UPROPERTY(EditAnywhere, meta = (ClampMin = "1.0", ClampMax = "1000.0", UIMin = "1.0", UIMax = "1000.0"))
+	uint32 _uraniumToSpawn;
+	UPROPERTY(VisibleAnywhere)
+	uint32 _uraniumLeftToSpawn;
+
+	UPROPERTY(EditAnywhere, meta = (ClampMin = "1.0", ClampMax = "1000.0", UIMin = "1.0", UIMax = "1000.0"))
+	uint32 _debrisToSpawn;
+	UPROPERTY(VisibleAnywhere)
+	uint32 _debrisLeftToSpawn;
+
+	UPROPERTY(EditAnywhere, meta = (ClampMin = "0.01", ClampMax = "3.0", UIMin = "0.01", UIMax = "3.0"))
+	FVector2D _spawnIntervalls;
+	float _nextSpawnDelay;
 
 	UPROPERTY(EditAnywhere)
 	float _speed;
+	
+	UPROPERTY()
+	bool _isMoving = false;
 
 	UPROPERTY(EditAnywhere)
 	FVector2D _maximumMovement;
@@ -82,18 +106,15 @@ private:
 
 	UPROPERTY(VisibleAnywhere)
 	uint8 _lives;
-	
-	FTimerHandle _durationTimer;
-
-	FTimerHandle _spawnTimer;
 
 	//Rotation Stuff
-	UPROPERTY()
 	bool _faceLeft;
-
-	UPROPERTY()
 	bool _reachedRotation;
 
 	const FRotator _leftRotator = FRotator::MakeFromEuler(FVector(0.0f, 0.0f, 0.0f));
 	const FRotator _rightRotator = FRotator::MakeFromEuler(FVector(0.0f, 0.0f, 180.0f));
+	const FRotator _initTruckRotator = FRotator::MakeFromEuler(FVector(0.0f, 0.0f, 180.0f));
+
+	UPROPERTY(EditAnywhere)
+	AUIController* _uiController;
 };
