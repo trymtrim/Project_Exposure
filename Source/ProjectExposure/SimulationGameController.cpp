@@ -355,6 +355,8 @@ void ASimulationGameController::OnSpacePress ()
 {
 	if (_simulationRunning)
 		StopSimulation ();
+
+	ResetGame ();
 }
 
 void ASimulationGameController::OnMouseClick ()
