@@ -65,6 +65,10 @@ private:
 
 	void spawnFallingUnit(float DeltaTime);
 	void exitMinigame();
+	void startMinigame();
+	void goBackToSimulation();
+
+	void onMouseClick();
 
 	AMinecart* _spawnedWagon;
 	FVector _velocity;
@@ -110,6 +114,9 @@ private:
 	//Rotation Stuff
 	bool _faceLeft;
 	bool _reachedRotation;
+	
+	bool _gameStarted = false;
+	bool _gameFinished = false;
 
 	const FRotator _leftRotator = FRotator::MakeFromEuler(FVector(0.0f, 0.0f, 0.0f));
 	const FRotator _rightRotator = FRotator::MakeFromEuler(FVector(0.0f, 0.0f, 180.0f));

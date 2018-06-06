@@ -40,16 +40,26 @@ void AMinigameCartController::setup() {
 
 	SetActorTickEnabled (true);
 
+	_uiController->Enable (12, 0);
+
+	_gameFinished = false;
+}
+
+void AMinigameCartController::startMinigame () {
+	_uiController->Disable (12);
+
 	_lives = _initialLives;
 	_points = 0;
 	scoreUI = "Score: 0";
 	livesUI = "Life(s): 3";
-	updateUI ();
 	_uraniumLeftToSpawn = _uraniumToSpawn;
 	_debrisLeftToSpawn = _debrisToSpawn;
 	_nextSpawnDelay = FMath::RandRange(_spawnIntervalls.X, _spawnIntervalls.Y);
 	//_maximumMovement = FVector2D(-400.0f, 400.0f);
-	_uiController->Enable (_uiController->cartMiniGameRef, 0);
+	_uiController->Enable (6, 0);
+	updateUI ();
+
+	_gameStarted = true;
 }
 
 void AMinigameCartController::addPoints() {
@@ -69,12 +79,30 @@ void AMinigameCartController::decreaseLives() {
 
 //Called when minigames is finished by any means, handles cleaning up the minigame
 void AMinigameCartController::exitMinigame() {
+
+	if (_lives <= 0)
+		_uiController->Enable (10, 0); //Lose
+	else
+		_uiController->Enable (11, 0); //Win
+
+	_gameStarted = false;
+	_gameFinished = true;
+
+	_uiController->Disable(6);
+
+	SetActorTickEnabled (false);
+}
+
+void AMinigameCartController::goBackToSimulation() {
 	FVector Location = GetActorLocation() + FVector(-500, 0, -375);
 	_spawnedWagon->SetActorLocationAndRotation(Location, _initTruckRotator);
 
 	simulationController->ExitMiniGame();
-	_uiController->Disable(_uiController->cartMiniGameRef);
-	SetActorTickEnabled (false);
+
+	if (_lives <= 0)
+		_uiController->Disable (10); //Lose
+	else
+		_uiController->Disable (11); //Win
 }
 
 // Called every frame
@@ -82,8 +110,11 @@ void AMinigameCartController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	movement(DeltaTime);
-	spawnFallingUnit(DeltaTime);
+	if (_gameStarted)
+	{
+		movement(DeltaTime);
+		spawnFallingUnit(DeltaTime);
+	}
 }
 
 //Spawn a Falling Unit within the bounds the player can move in
@@ -228,13 +259,23 @@ void AMinigameCartController::handleTouchInputEnd() {
 	_velocity.Y = 0.0f;
 }
 
+void AMinigameCartController::onMouseClick ()
+{
+	if (_gameStarted)
+		handleTouchInputStart ();
+	else if (_gameFinished)
+		goBackToSimulation();
+	else
+		startMinigame ();
+}
+
 // Called to bind functionality to input
 void AMinigameCartController::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 	//PlayerInputComponent->BindAxis("HorizontalAxis", this, &AMinigameCartController::handleAxisInput);
-	PlayerInputComponent->BindAction ("MouseClick", IE_Pressed, this, &AMinigameCartController::handleTouchInputStart);
+	PlayerInputComponent->BindAction ("MouseClick", IE_Pressed, this, &AMinigameCartController::onMouseClick);
 	PlayerInputComponent->BindAction("MouseClick", IE_Released, this, &AMinigameCartController::handleTouchInputEnd);
 }
 

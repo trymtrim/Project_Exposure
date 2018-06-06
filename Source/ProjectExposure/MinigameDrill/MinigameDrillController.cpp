@@ -31,9 +31,25 @@ void AMinigameDrillController::Tick (float DeltaTime)
 	Super::Tick (DeltaTime);
 
 	//Will only run while game is running
-	UpdateGameState (DeltaTime);
-	UpdateObstacles (DeltaTime);
-	MovePlane (DeltaTime);
+	if (_gameStarted)
+	{
+		UpdateGameState (DeltaTime);
+		UpdateObstacles (DeltaTime);
+		MovePlane (DeltaTime);
+	}
+
+	if (_disableUI)
+	{
+		_disableUITimer += DeltaTime;
+
+		if (_disableUITimer >= 0.8f)
+		{
+			_disableUITimer = 0.0f;
+			_disableUI = false;
+
+			StartGamePlay ();
+		}
+	}
 }
 
 void AMinigameDrillController::SetGameController (ASimulationGameController* gameController)
@@ -45,9 +61,6 @@ void AMinigameDrillController::StartGame ()
 {
 	SetActorTickEnabled (true);
 
-	//Enable UI
-	showDrillUI = true;
-
 	SetLives (3);
 	SetScore (0);
 
@@ -58,11 +71,11 @@ void AMinigameDrillController::StartGame ()
 	_gameFinished = false;
 	
 	//Spawn drill
-	FVector pos = spawnPosition + FVector (0.0f, 0.0f, 450.0f);
+	FVector pos = spawnPosition + FVector (0.0f, 0.0f, 492.0f);
 	_drill = GetWorld ()->SpawnActor <AActor> (_drillPrefabs [0], pos, rotator, spawnParams);
 
 	//Spawn hole
-	FVector holePos = spawnPosition + FVector (0.0f, 0.0f, 500.0f);
+	FVector holePos = spawnPosition + FVector (0.0f, 0.0f, 532.0f);
 	_hole = GetWorld ()->SpawnActor <AActor> (_holePrefab, holePos, rotator, spawnParams);
 
 	FRotator planeRotator = FRotator::MakeFromEuler (FVector (0.0f, 0.0f, 270.0f));
@@ -75,29 +88,79 @@ void AMinigameDrillController::StartGame ()
 
 	_planeTwo = GetWorld ()->SpawnActor <AActor> (_planePrefab, secondPlaneSpawnPosition, planeRotator, spawnParams);
 
-	//Enable drillMiniGame UI
-	_uiController->Enable (_uiController->drillMiniGameRef, 0);
+	//Enable animation2 UI
+	_uiController->Enable (13, 0);
 
 	//For blueprint
 	Start ();
+
+	_endPanelShown = false;
+}
+
+void AMinigameDrillController::StartGamePlay ()
+{
+	_gameStarted = true;
+
+	//Enable drillMiniGame UI
+	_uiController->Enable (4, 0);
+}
+
+void AMinigameDrillController::StartDisableUI ()
+{
+	_disableUI = true;
+
+	//Disable animation2 UI
+	_uiController->Disable (13);
+
+	//Enable animation UI
+	_uiController->Enable (9, 2);
 }
 
 void AMinigameDrillController::EndGame ()
 {
 	SetActorTickEnabled (false);
 
-	//Disable UI
-	showDrillUI = false;
+	if (_lives == 0)
+	{
+		//Enable lose panel UI
+		_uiController->Enable (7, 2);
+	}
+	else
+	{
+		//Enable win panel UI
+		_uiController->Enable (8, 2);
+	}
 
+	//Disable drillMiniGame UI
+	_uiController->Disable (4);
+
+	_endPanelShown = true;
+
+	_gameStarted = false;
+}
+
+void AMinigameDrillController::GoBackToSimulation ()
+{
 	_drill->Destroy ();
 	_hole->Destroy ();
 	_planeOne->Destroy ();
 	_planeTwo->Destroy ();
 
-	//Disable drillMiniGame UI
-	_uiController->Disable (_uiController->drillMiniGameRef);
-
 	Stop ();
+
+	if (_lives <= 0)
+	{
+		//Disable lose panel UI
+		_uiController->Disable (7);
+	}
+	else
+	{
+		//Disable win panel UI
+		_uiController->Disable (8);
+	}
+
+	//Disable animation UI
+	_uiController->Disable (9);
 
 	_gameController->ExitMiniGame ();
 }
@@ -204,8 +267,19 @@ int AMinigameDrillController::GetCurrentDrillType ()
 	return _currentDrillType;
 }
 
+void AMinigameDrillController::OnMouseClick ()
+{
+	if (_endPanelShown)
+		GoBackToSimulation ();
+	else if (!_gameStarted)
+		StartDisableUI ();
+}
+
 //Called to bind functionality to input
 void AMinigameDrillController::SetupPlayerInputComponent (UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent (PlayerInputComponent);
+
+	PlayerInputComponent->BindAction ("MouseClick", IE_Pressed, this, &AMinigameDrillController::OnMouseClick);
+	PlayerInputComponent->BindAction ("R", IE_Pressed, this, &AMinigameDrillController::OnMouseClick);
 }

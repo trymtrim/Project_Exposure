@@ -34,8 +34,6 @@ public:
 
 	//For blueprints
 	UPROPERTY (BlueprintReadOnly)
-	bool showDrillUI = false;
-	UPROPERTY (BlueprintReadOnly)
 	FString livesText = "Lives: 3";
 	UPROPERTY (BlueprintReadOnly)
 	FString scoreText = "Score: 0";
@@ -52,13 +50,17 @@ protected:
 	virtual void BeginPlay () override;
 
 private:
+	void StartGamePlay ();
+	void StartDisableUI ();
 	void EndGame ();
+	void GoBackToSimulation ();
 	void UpdateGameState (float deltaTime);
 	void UpdateObstacles (float deltaTime);
 	void SpawnObstacle ();
 	void MovePlane (float deltaTime);
 	void SetLives (int lives);
 	void SetScore (int score);
+	void OnMouseClick ();
 
 	UFUNCTION (BLueprintCallable)
 	void ChangeDrill (int index);
@@ -73,6 +75,11 @@ private:
 	float _spawnInterval = 1.0f;
 	float _timer = 0.0f;
 
+	float _disableUITimer = 0.0f;
+	bool _disableUI = false;
+
+	bool _gameStarted = false;
+
 	//Game stats
 	int _lives = 3;
 	int _score = 0;
@@ -81,6 +88,7 @@ private:
 	float _endTimer = 0.0f;
 	float _height = 2200.0f;
 	bool _gameFinished = false;
+	bool _endPanelShown = false;
 
 	//Spawn info
 	FActorSpawnParameters spawnParams;

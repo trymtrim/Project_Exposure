@@ -24,19 +24,24 @@ void ASimulationGameController::BeginPlay ()
 
 	_cameraMovement = new CameraMovement (this);
 
-	//Setup pawns
+	//Setup pawn
 	_drillPawn->SetGameController (this);
-
-	//Enable menu UI
-	_uiController->Enable (_uiController->menuRef, 1);
-
-	//Enable simulationTest UI
-	_uiController->Enable (_uiController->simulationTestRef, 0);
 }
 
 //Called every frame
 void ASimulationGameController::Tick (float DeltaTime)
 {
+	if (!uiEnabled)
+	{
+		//Enable menu UI
+		_uiController->Enable (3, 1);
+
+		//Enable simulationTest UI
+		_uiController->Enable (5, 0);
+
+		uiEnabled = true;
+	}
+
 	Super::Tick (DeltaTime);
 
 	if (FVector::Distance (GetActorLocation (), _cameraMovement->GetTargetPosition ()) > 5.0f)
@@ -119,7 +124,7 @@ void ASimulationGameController::SpawnUnit (int index)
 		_controlledUnit = world->SpawnActor <APlaceableUnit> (controlledUnit, spawnPosition, rotator, spawnParams);
 
 		//Disable simulation UI
-		_uiController->Disable (_uiController->simulationRef);
+		_uiController->Disable (1);
 	}
 }
 
@@ -155,8 +160,7 @@ void ASimulationGameController::PlaceUnit ()
 	else
 	{
 		//Enable simulation UI
-		_uiController->Enable (_uiController->simulationRef, 0);
-
+		_uiController->Enable (1, 0);
 		//Remove currently controlled unit
 		_controlledUnit->Destroy ();
 		_controlledUnit = nullptr;
@@ -176,7 +180,7 @@ void ASimulationGameController::StopSimulation ()
 	//Disable simulationTest UI
 	//_uiController->Disable (_uiController->simulationTestRef);
 
-	if (_miniGameActive == 1 && !_mineGamePlayed || _miniGameActive == 2 && !_windGamePlayed || _miniGameActive == 3 && !_oilGamePlayed)
+	if (_miniGameActive == 1 && !_mineGamePlayed || _miniGameActive == 2 && !_windGamePlayed || _miniGameActive == 3 && !_oilGamePlayed || _messageClicked)
 	{
 		if (_miniGamesOn)
 			EnterMiniGame ();
@@ -188,6 +192,7 @@ void ASimulationGameController::StopSimulation ()
 		_messageBox->Destroy ();
 
 	_simulationRunning = false;
+	_messageClicked = false;
 }
 
 void ASimulationGameController::EnterMiniGame ()
@@ -215,9 +220,9 @@ void ASimulationGameController::EnterMiniGame ()
 	}
 
 	//Disable resources UI
-	_uiController->Disable (_uiController->resourcesRef);
+	_uiController->Disable (2);
 	//Disable currentTurn UI
-	_uiController->Disable (_uiController->currentTurnRef);
+	_uiController->Disable (0);
 }
 
 void ASimulationGameController::ExitMiniGame ()
@@ -243,9 +248,9 @@ void ASimulationGameController::ExitMiniGame ()
 	_miniGameActive = 0;
 
 	//Enable resources UI
-	_uiController->Enable (_uiController->resourcesRef, 0);
+	_uiController->Enable (2, 0);
 	//Enable currentTurn UI
-	_uiController->Enable (_uiController->currentTurnRef, 0);
+	_uiController->Enable (0, 0);
 }
 
 void ASimulationGameController::StartNewTurn ()
@@ -254,7 +259,7 @@ void ASimulationGameController::StartNewTurn ()
 	currentTurnText = "Turn " + FString::FromInt (_currentTurn);
 
 	//Enable simulation UI
-	_uiController->Enable (_uiController->simulationRef, 0);
+	_uiController->Enable (1, 0);
 
 	_simulation->OnNewTurn (_currentTurn);
 
@@ -355,8 +360,6 @@ void ASimulationGameController::OnSpacePress ()
 {
 	if (_simulationRunning)
 		StopSimulation ();
-
-	ResetGame ();
 }
 
 void ASimulationGameController::OnMouseClick ()
@@ -367,16 +370,16 @@ void ASimulationGameController::OnMouseClick ()
 		gameStarted = true;
 
 		//Enable simulation UI
-		_uiController->Enable (_uiController->simulationRef, 0);
+		_uiController->Enable (1, 0);
 
 		//Enable resources UI
-		_uiController->Enable (_uiController->resourcesRef, 0);
+		_uiController->Enable (2, 0);
 
 		//Enable currentTurn UI
-		_uiController->Enable (_uiController->currentTurnRef, 1);
+		_uiController->Enable (0, 1);
 
 		//Disable menu UI
-		_uiController->Disable (_uiController->menuRef);
+		_uiController->Disable (3);
 
 		//Go to "placing state"
 		_placing = true;
@@ -392,7 +395,10 @@ void ASimulationGameController::OnMouseClick ()
 		if (hit.bBlockingHit)
 		{
 			if (hit.GetActor ()->GetRootComponent ()->ComponentHasTag ("message"))
+			{
 				hit.GetActor ()->Destroy ();
+				_messageClicked = true;
+			}
 		}
 	}
 }
@@ -412,4 +418,5 @@ void ASimulationGameController::SetupPlayerInputComponent (UInputComponent* Play
 	PlayerInputComponent->BindAction ("MouseClick", IE_Pressed, this, &ASimulationGameController::OnMouseClick);
 	PlayerInputComponent->BindAction ("MouseClick", IE_Released, this, &ASimulationGameController::OnMouseRelease);
 	PlayerInputComponent->BindAction ("Space", IE_Pressed, this, &ASimulationGameController::OnSpacePress);
+	PlayerInputComponent->BindAction ("R", IE_Pressed, this, &ASimulationGameController::ResetGame);
 }

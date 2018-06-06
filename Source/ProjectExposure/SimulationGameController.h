@@ -41,6 +41,7 @@ public:
 	UFUNCTION (BlueprintImplementableEvent, Category = "Feedback")
 	void UpdateCycle ();
 
+	//Debug
 	UFUNCTION (BlueprintImplementableEvent, Category = "Reset")
 	void ResetGame ();
 
@@ -75,6 +76,11 @@ private:
 	bool _oilGamePlayed = false;
 
 	AActor* _messageBox;
+
+	bool _messageClicked = false;
+
+	//UI
+	bool uiEnabled = false;
 
 	//Variables for camera movement to mine minigame
 	bool _movingToMine = false;
