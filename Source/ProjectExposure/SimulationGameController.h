@@ -41,6 +41,9 @@ public:
 	UFUNCTION (BlueprintImplementableEvent, Category = "Feedback")
 	void UpdateCycle ();
 
+	UFUNCTION (BlueprintImplementableEvent, Category = "Reset")
+	void ResetGame ();
+
 protected:
 	virtual void BeginPlay () override;
 
