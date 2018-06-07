@@ -33,5 +33,5 @@ private:
 
 	bool _isPlaced = false;
 
-	UStaticMeshComponent* _mesh;
+	UPROPERTY () UStaticMeshComponent* _mesh;
 };

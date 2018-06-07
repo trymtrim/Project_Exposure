@@ -28,6 +28,8 @@ public:
 	drillWinPanelRef = 8		drillAnimationRef = 9
 	cartLosePanelRef = 10		cartWinPanelRef = 11
 	cartAnimationRef = 12		drillAnimation2Ref = 13
+	videoRef = 14				videoPauseRef = 15
+	blackStartRef = 16
 	*/
 	void Enable (int index, int order);
 	/*
@@ -38,6 +40,8 @@ public:
 	drillWinPanelRef = 8		drillAnimationRef = 9
 	cartLosePanelRef = 10		cartWinPanelRef = 11
 	cartAnimationRef = 12		drillAnimation2Ref = 13
+	videoRef = 14				videoPauseRef = 15
+	blackStartRef = 16
 	*/
 	void Disable (int index);
 
@@ -69,23 +73,34 @@ public:
 	UPROPERTY (EditAnywhere)
 	TSubclassOf <UUserWidget> drillAnimation2;
 	UPROPERTY (EditAnywhere)
+	TSubclassOf <UUserWidget> video;
+	UPROPERTY (EditAnywhere)
+	TSubclassOf <UUserWidget> videoPause;
+	UPROPERTY (EditAnywhere)
+	TSubclassOf <UUserWidget> blackStart;
+	UPROPERTY (EditAnywhere)
 	TSubclassOf <UUserWidget> simulationTest;
 
 	//Variables to hold the widgets After Creating it.
 	UPROPERTY (BlueprintReadOnly, Category = "UI") UUserWidget* currentTurnRef;
 	UPROPERTY (BlueprintReadOnly, Category = "UI") UUserWidget* simulationRef;
 	UPROPERTY (BlueprintReadOnly, Category = "UI") UUserWidget* resourcesRef;
-	UUserWidget* menuRef;
+	UPROPERTY () UUserWidget* menuRef;
 	UPROPERTY (BlueprintReadOnly, Category = "UI") UUserWidget* drillMiniGameRef;
 	UPROPERTY (BlueprintReadOnly, Category = "UI") UUserWidget* cartMiniGameRef;
 	UPROPERTY (BlueprintReadOnly, Category = "UI") UUserWidget* drillLosePanelRef;
 	UPROPERTY (BlueprintReadOnly, Category = "UI") UUserWidget* drillWinPanelRef;
-	UUserWidget* drillAnimationRef;
+	UPROPERTY () UUserWidget* drillAnimationRef;
 	UPROPERTY (BlueprintReadOnly, Category = "UI") UUserWidget* cartLosePanelRef;
 	UPROPERTY (BlueprintReadOnly, Category = "UI") UUserWidget* cartWinPanelRef;
-	UUserWidget* cartAnimationRef;
-	UUserWidget* drillAnimation2Ref;
-	UUserWidget* simulationTestRef;
+	UPROPERTY () UUserWidget* cartAnimationRef;
+	UPROPERTY () UUserWidget* drillAnimation2Ref;
+	UPROPERTY (BlueprintReadOnly, Category = "UI") UUserWidget* videoRef;
+	UPROPERTY () UUserWidget* videoPauseRef;
+	UPROPERTY () UUserWidget* blackStartRef;
+	UPROPERTY () UUserWidget* simulationTestRef;
+
+	TArray <UUserWidget*> userInterfaces;
 
 protected:
 	//Called when the game starts or when spawned

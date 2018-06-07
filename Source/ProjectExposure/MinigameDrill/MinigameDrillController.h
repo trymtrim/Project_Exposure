@@ -67,10 +67,10 @@ private:
 
 	ASimulationGameController* _gameController;
 
-	AActor* _drill;
-	AActor* _hole;
-	AActor* _planeOne;
-	AActor* _planeTwo;
+	UPROPERTY () AActor* _drill;
+	UPROPERTY () AActor* _hole;
+	UPROPERTY () AActor* _planeOne;
+	UPROPERTY () AActor* _planeTwo;
 
 	float _spawnInterval = 1.0f;
 	float _timer = 0.0f;

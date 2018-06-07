@@ -70,7 +70,7 @@ private:
 
 	void onMouseClick();
 
-	AMinecart* _spawnedWagon;
+	UPROPERTY () AMinecart* _spawnedWagon;
 	FVector _velocity;
 
 	UPROPERTY(EditAnywhere, meta = (ClampMin = "1.0", ClampMax = "1000.0", UIMin = "1.0", UIMax = "1000.0"))

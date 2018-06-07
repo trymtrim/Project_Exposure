@@ -43,7 +43,9 @@ public:
 
 	//Debug
 	UFUNCTION (BlueprintImplementableEvent, Category = "Reset")
-	void ResetGame ();
+	void ResetLevel ();
+	UFUNCTION (BlueprintImplementableEvent, Category = "ReloadGame")
+	void ReloadGame ();
 
 protected:
 	virtual void BeginPlay () override;
@@ -71,16 +73,19 @@ private:
 	bool _simulationRunning = false;
 	bool _placing = false;
 
+	float _startPanelTimer = 0.0f;
+	bool _startPanelEnabled = true;
+
 	bool _mineGamePlayed = false;
 	bool _windGamePlayed = false;
 	bool _oilGamePlayed = false;
 
-	AActor* _messageBox;
+	UPROPERTY () AActor* _messageBox;
 
 	bool _messageClicked = false;
 
 	//UI
-	bool uiEnabled = false;
+	bool _uiEnabled = false;
 
 	//Variables for camera movement to mine minigame
 	bool _movingToMine = false;

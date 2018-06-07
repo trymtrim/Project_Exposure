@@ -26,12 +26,26 @@ void ASimulationGameController::BeginPlay ()
 
 	//Setup pawn
 	_drillPawn->SetGameController (this);
+
+	FadeOut (0.5f, 1.5f);
 }
 
 //Called every frame
 void ASimulationGameController::Tick (float DeltaTime)
 {
-	if (!uiEnabled)
+	//Disable the black start panel after set amount of seconds
+	if (_startPanelEnabled)
+	{
+		_startPanelTimer += DeltaTime;
+
+		if (_startPanelTimer >= 0.5f)
+		{
+			_uiController->Disable (16);
+			_startPanelEnabled = false;
+		}
+	}
+
+	if (!_uiEnabled)
 	{
 		//Enable menu UI
 		_uiController->Enable (3, 1);
@@ -39,7 +53,7 @@ void ASimulationGameController::Tick (float DeltaTime)
 		//Enable simulationTest UI
 		_uiController->Enable (5, 0);
 
-		uiEnabled = true;
+		_uiEnabled = true;
 	}
 
 	Super::Tick (DeltaTime);
@@ -214,7 +228,7 @@ void ASimulationGameController::EnterMiniGame ()
 	case 3:
 		_cameraMovement->MoveTo (_drillPosition, _drillRotation);
 		FadeIn (0.75f, 0.5f);
-		FadeOut (3.5f, 0.0f);
+		FadeOut (3.5f, 0.5f);
 		_oilGamePlayed = true;
 		break;
 	}
@@ -383,6 +397,7 @@ void ASimulationGameController::OnMouseClick ()
 
 		//Go to "placing state"
 		_placing = true;
+
 		return;
 	}
 
@@ -415,8 +430,11 @@ void ASimulationGameController::SetupPlayerInputComponent (UInputComponent* Play
 {
 	Super::SetupPlayerInputComponent (PlayerInputComponent);
 
+	//When reseting the game later, remember to delete _cameraMovement!
+	
 	PlayerInputComponent->BindAction ("MouseClick", IE_Pressed, this, &ASimulationGameController::OnMouseClick);
 	PlayerInputComponent->BindAction ("MouseClick", IE_Released, this, &ASimulationGameController::OnMouseRelease);
 	PlayerInputComponent->BindAction ("Space", IE_Pressed, this, &ASimulationGameController::OnSpacePress);
-	PlayerInputComponent->BindAction ("R", IE_Pressed, this, &ASimulationGameController::ResetGame);
+	PlayerInputComponent->BindAction ("R", IE_Pressed, this, &ASimulationGameController::ResetLevel);
+	PlayerInputComponent->BindAction ("S", IE_Pressed, this, &ASimulationGameController::ReloadGame);
 }

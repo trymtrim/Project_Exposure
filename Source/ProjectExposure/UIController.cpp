@@ -8,7 +8,7 @@
 //Sets default values
 AUIController::AUIController ()
 {
- 	//Set this actor to call Tick () every frame.
+ 	//Set this actor to call Tick () every frame
 	PrimaryActorTick.bCanEverTick = true;
 }
 
@@ -37,107 +37,40 @@ void AUIController::InitializeWidgets ()
 	cartWinPanelRef = CreateWidget <UUserWidget> (GetWorld ()->GetFirstPlayerController (), cartWinPanel); //11
 	cartAnimationRef = CreateWidget <UUserWidget> (GetWorld ()->GetFirstPlayerController (), cartAnimation); //12
 	drillAnimation2Ref = CreateWidget <UUserWidget> (GetWorld ()->GetFirstPlayerController (), drillAnimation2); //13
+	videoRef = CreateWidget <UUserWidget> (GetWorld ()->GetFirstPlayerController (), video); //14
+	videoPauseRef = CreateWidget <UUserWidget> (GetWorld ()->GetFirstPlayerController (), videoPause); //15
+	blackStartRef = CreateWidget <UUserWidget> (GetWorld ()->GetFirstPlayerController (), blackStart); //16
+	
+	userInterfaces.Add (currentTurnRef);
+	userInterfaces.Add (simulationRef);
+	userInterfaces.Add (resourcesRef);
+	userInterfaces.Add (menuRef);
+	userInterfaces.Add (drillMiniGameRef);
+	userInterfaces.Add (simulationTestRef);
+	userInterfaces.Add (cartMiniGameRef);
+	userInterfaces.Add (drillLosePanelRef);
+	userInterfaces.Add (drillWinPanelRef);
+	userInterfaces.Add (drillAnimationRef);
+	userInterfaces.Add (cartLosePanelRef);
+	userInterfaces.Add (cartWinPanelRef);
+	userInterfaces.Add (cartAnimationRef);
+	userInterfaces.Add (drillAnimation2Ref);
+	userInterfaces.Add (videoRef);
+	userInterfaces.Add (videoPauseRef);
+	userInterfaces.Add (blackStartRef);
+
+	if (GetWorld ()->GetMapName ().Mid (GetWorld ()->StreamingLevelsPrefix.Len ()) == "MainLevel_3")
+		Enable (16, 2);
 }
 
 void AUIController::Enable (int index, int order)
 {
-	switch (index)
-	{
-	case 0:
-		currentTurnRef->AddToViewport (order);
-		break;
-	case 1:
-		simulationRef->AddToViewport (order);
-		break;
-	case 2:
-		resourcesRef->AddToViewport (order);
-		break;
-	case 3:
-		menuRef->AddToViewport (order);
-		break;
-	case 4:
-		drillMiniGameRef->AddToViewport (order);
-		break;
-	case 5:
-		simulationTestRef->AddToViewport (order);
-		break;
-	case 6:
-		cartMiniGameRef->AddToViewport (order);
-		break;
-	case 7:
-		drillLosePanelRef->AddToViewport (order);
-		break;
-	case 8:
-		drillWinPanelRef->AddToViewport (order);
-		break;
-	case 9:
-		drillAnimationRef->AddToViewport (order);
-		break;
-	case 10:
-		cartLosePanelRef->AddToViewport (order);
-		break;
-	case 11:
-		cartWinPanelRef->AddToViewport (order);
-		break;
-	case 12:
-		cartAnimationRef->AddToViewport (order);
-		break;
-	case 13:
-		drillAnimation2Ref->AddToViewport (order);
-		break;
-	}
-
-	//Check if the Asset is assigned in the blueprint, then add it to the view port
-	//uiReference->AddToViewport (order);
+	userInterfaces [index]->AddToViewport (order);
 }
 
 void AUIController::Disable (int index)
 {
-	switch (index)
-	{
-	case 0:
-		currentTurnRef->RemoveFromParent ();
-		break;
-	case 1:
-		simulationRef->RemoveFromParent ();
-		break;
-	case 2:
-		resourcesRef->RemoveFromParent ();
-		break;
-	case 3:
-		menuRef->RemoveFromParent ();
-		break;
-	case 4:
-		drillMiniGameRef->RemoveFromParent ();
-		break;
-	case 5:
-		simulationTestRef->RemoveFromParent ();
-		break;
-	case 6:
-		cartMiniGameRef->RemoveFromParent ();
-		break;
-	case 7:
-		drillLosePanelRef->RemoveFromParent ();
-		break;
-	case 8:
-		drillWinPanelRef->RemoveFromParent ();
-		break;
-	case 9:
-		drillAnimationRef->RemoveFromParent ();
-		break;
-	case 10:
-		cartLosePanelRef->RemoveFromParent ();
-		break;
-	case 11:
-		cartWinPanelRef->RemoveFromParent ();
-		break;
-	case 12:
-		cartAnimationRef->RemoveFromParent ();
-		break;
-	case 13:
-		drillAnimation2Ref->RemoveFromParent ();
-		break;
-	}
+	userInterfaces [index]->RemoveFromParent ();
 }
 
 //Called every frame
