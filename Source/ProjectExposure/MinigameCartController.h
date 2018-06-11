@@ -111,6 +111,9 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	uint8 _lives;
 
+	UPROPERTY()
+	FVector2D _lastMousePos;
+
 	//Rotation Stuff
 	bool _faceLeft;
 	bool _reachedRotation;

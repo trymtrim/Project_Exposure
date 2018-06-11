@@ -41,7 +41,7 @@ void AMinigameCartController::setup() {
 	SetActorTickEnabled (true);
 
 	_uiController->Enable (12, 0);
-
+	_lastMousePos = FVector2D::ZeroVector;
 	_gameFinished = false;
 }
 
@@ -189,33 +189,37 @@ void AMinigameCartController::movement(float DeltaTime) {
 		FIntVector viewportBounds;
 		playerController->GetViewportSize(viewportBounds.X, viewportBounds.Y);
 
-		if (mousePos.X > viewportBounds.X / 2) {
-			_velocity.Y = -100.0f;
+		float percentage = mousePos.X / viewportBounds.X * 100;
+			
+		if (mousePos.X > _lastMousePos.X) {
 			_faceLeft = true;
 			_reachedRotation = false;
-		} else if (mousePos.X < viewportBounds.X / 2) {
-			_velocity.Y = 100.0f;
+		} else if (mousePos.X < _lastMousePos.X) {
 			_faceLeft = false;
 			_reachedRotation = false;
 		} else {
 			//Exactly in the middle of viewport
 		}
 
-		//Do the movement
-		if (!_velocity.IsZero() && IsValid(_spawnedWagon)) {
-			FVector NewLocation = _spawnedWagon->GetActorLocation() + (_velocity * _speed * DeltaTime);
+		FVector wagonPosition = _spawnedWagon->GetActorLocation();
+		FVector controllerLocation = GetActorLocation();
+		float desiredLocation = controllerLocation.Y + FMath::Lerp(_maximumMovement.Y, _maximumMovement.X, percentage / 100);
+		FVector minPosition = controllerLocation + FVector(0, _maximumMovement.X, 0);
+		FVector maxPosition = controllerLocation + FVector(0, _maximumMovement.Y, 0);
 
-			FVector controllerLocation = GetActorLocation();
-			//FString debug = "ControllerLocation: " + controllerLocation.ToString() + " NewLocation: " + NewLocation.ToString() + " MaxiumumMovement: " + _maximumMovement.ToString();
-			//print(debug);
-			if (NewLocation.Y < controllerLocation.Y + _maximumMovement.X)  {
+		//Do the movement
+		if (wagonPosition.Y != desiredLocation && IsValid(_spawnedWagon)) {
+			if (wagonPosition.Y < minPosition.Y)  {
 			
-			} else if (NewLocation.Y > controllerLocation.Y + _maximumMovement.Y) {
+			} else if (wagonPosition.Y > maxPosition.Y) {
 				
 			} else {
-				_spawnedWagon->SetActorLocation(NewLocation);
+				FVector	newLocation = FMath::Lerp(wagonPosition ,FVector(wagonPosition.X, desiredLocation, wagonPosition.Z), DeltaTime * _speed);
+				_spawnedWagon->SetActorLocation(newLocation);
 			}
 		}
+
+		_lastMousePos = mousePos;
 	}
 
 	//Rotating

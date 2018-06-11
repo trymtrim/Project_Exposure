@@ -35,8 +35,14 @@ public:
 	UPROPERTY (BlueprintReadOnly)
 	float currentPollution;
 
-	UPROPERTY(EditAnywhere)
-	UParticleSystemComponent* _cityPositiveFeedback;
+	UPROPERTY(BlueprintReadOnly)
+	bool particlesActive = false;
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "Feedback")
+	void ToggleParticlesEvent();
+
+	void StartSimulation();
+	void StopSimulation();
 
 protected:
 	//Called when the game starts or when spawned
@@ -47,12 +53,10 @@ private:
 	void AddResources (int energyValue, int pollutionValue);
 	void UpdateResources (float deltaTime);
 
+	void ToggleParticles();
+
 	//For lerping between values
 	float _targetEnergy;
 	float _targetPollution;
 	bool _lerping;
-
-	bool _particlesActive = false;
-
-	void toggleParticles(bool pToggle);
 };
