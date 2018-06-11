@@ -18,7 +18,6 @@ AFallingUnit::AFallingUnit()
 void AFallingUnit::BeginPlay()
 {
 	Super::BeginPlay();
-	GetWorldTimerManager().SetTimer(_deathTimer, this, &AFallingUnit::handleDeath, 30.0f, false);
 }
 
 void AFallingUnit::init(UnitType pType, float pSpeed, float pDeathThreshold) {
@@ -34,7 +33,6 @@ void AFallingUnit::init(UnitType pType, float pSpeed, float pDeathThreshold) {
 		for (int32 i = 0; i<Components.Num(); i++) {
 			UStaticMeshComponent* StaticMeshComponent = Components[i];
 			StaticMeshComponent->SetStaticMesh(debrisMesh);
-			StaticMeshComponent->SetRelativeScale3D(debrisScale);
 		}
 	} else {
 		for (int32 i = 0; i<Components.Num(); i++) {
@@ -50,12 +48,6 @@ UnitType AFallingUnit::getType() {
 
 //For more info look into FallinUnit Blueprint
 void AFallingUnit::OnHit(AActor* SelfActor, AActor* OtherActor, FVector NormalImpulse, const FHitResult& Hit) {
-	GetWorldTimerManager().ClearTimer(_deathTimer);
-	Destroy();
-}
-
-void AFallingUnit::handleDeath() {
-	GetWorldTimerManager().ClearTimer(_deathTimer);
 	Destroy();
 }
 

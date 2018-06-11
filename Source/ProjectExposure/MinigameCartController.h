@@ -114,6 +114,9 @@ private:
 	UPROPERTY()
 	FVector2D _lastMousePos;
 
+	UPROPERTY(EditAnywhere)
+	FVector _offset = FVector(-500, 0, -375);
+
 	//Rotation Stuff
 	bool _faceLeft;
 	bool _reachedRotation;
