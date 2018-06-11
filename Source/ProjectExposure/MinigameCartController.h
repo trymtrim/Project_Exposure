@@ -39,6 +39,11 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent, Category="UI")
 	void updateUI();
+	UFUNCTION(BlueprintImplementableEvent, Category="UI")
+	void endScreen();
+
+	UPROPERTY (BlueprintReadOnly)
+	FString endScoreUI = "";
 
 	UPROPERTY(BlueprintReadOnly)
 	FString livesUI = "Life(s): 3";

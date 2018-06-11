@@ -24,7 +24,9 @@ void ADrillObstacle::Tick (float DeltaTime)
 {
 	Super::Tick (DeltaTime);
 
-	SetActorLocation (GetActorLocation () + (FVector (0.0f, 0.0f, 600.0f) * DeltaTime));
+	float speed = 800.0f;
+
+	SetActorLocation (GetActorLocation () + (FVector (0.0f, 0.0f, speed) * DeltaTime));
 
 	FVector position = GetActorLocation ();
 

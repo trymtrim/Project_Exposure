@@ -34,9 +34,11 @@ public:
 
 	//For blueprints
 	UPROPERTY (BlueprintReadOnly)
-	FString livesText = "Lives: 3";
+	FString livesText = "3";
 	UPROPERTY (BlueprintReadOnly)
-	FString scoreText = "Score: 0";
+	FString scoreText = "0";
+	UPROPERTY (BlueprintReadOnly)
+	FString endScoreText = "";
 
 	UFUNCTION (BlueprintImplementableEvent, Category = "Update")
 	void Update ();
@@ -44,6 +46,8 @@ public:
 	void Start ();
 	UFUNCTION (BlueprintImplementableEvent, Category = "Stop")
 	void Stop ();
+	UFUNCTION (BlueprintImplementableEvent, Category = "End")
+	void EndScreen ();
 
 protected:
 	//Called when the game starts or when spawned

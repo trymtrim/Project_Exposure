@@ -80,10 +80,14 @@ void AMinigameCartController::decreaseLives() {
 //Called when minigames is finished by any means, handles cleaning up the minigame
 void AMinigameCartController::exitMinigame() {
 
+	endScoreUI = "You got " + FString::FromInt (_points) + " out of " + FString::FromInt (_uraniumToSpawn) + " points";
+
 	if (_lives <= 0)
 		_uiController->Enable (10, 0); //Lose
 	else
 		_uiController->Enable (11, 0); //Win
+
+	endScreen ();
 
 	_gameStarted = false;
 	_gameFinished = true;

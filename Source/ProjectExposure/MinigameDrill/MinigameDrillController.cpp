@@ -75,7 +75,7 @@ void AMinigameDrillController::StartGame ()
 	_drill = GetWorld ()->SpawnActor <AActor> (_drillPrefabs [0], pos, rotator, spawnParams);
 
 	//Spawn hole
-	FVector holePos = spawnPosition + FVector (0.0f, 0.0f, 532.0f);
+	FVector holePos = spawnPosition + FVector (0.0f, 0.0f, 542.0f);
 	_hole = GetWorld ()->SpawnActor <AActor> (_holePrefab, holePos, rotator, spawnParams);
 
 	FRotator planeRotator = FRotator::MakeFromEuler (FVector (0.0f, 0.0f, 270.0f));
@@ -134,8 +134,10 @@ void AMinigameDrillController::EndGame ()
 	//Disable drillMiniGame UI
 	_uiController->Disable (4);
 
-	_endPanelShown = true;
+	endScoreText = "You got " + FString::FromInt (_score) + " out of 3000 points";
+	EndScreen ();
 
+	_endPanelShown = true;
 	_gameStarted = false;
 }
 
@@ -201,8 +203,9 @@ void AMinigameDrillController::SpawnObstacle ()
 	spawnedObstacle->Initialize (_drill, this);
 
 	//Set time before next spawn
-	_spawnInterval = FMath::RandRange (5, 25) / 10.0f;
-
+	_spawnInterval = FMath::RandRange (15, 25) / 10.0f;
+	_spawnInterval -= _spawnCount * 0.05f;
+		//_spawnInterval = FMath::RandRange ((5, 25) / 10.0f) / (_spawnCount / 15.0f);
 	_spawnCount++;
 
 	if (_spawnCount == 30)
@@ -217,14 +220,16 @@ void AMinigameDrillController::ChangeDrill (int index)
 	_drill->Destroy ();
 
 	//Spawn new drill
-	FVector pos = spawnPosition + FVector (0.0f, 0.0f, 450.0f);
+	FVector pos = spawnPosition + FVector (0.0f, 0.0f, 492.0f);
 	_drill = GetWorld ()->SpawnActor <AActor> (_drillPrefabs [index - 1], pos, rotator, spawnParams);
 }
 
 void AMinigameDrillController::MovePlane (float deltaTime)
 {
-	_planeOne->SetActorLocation (_planeOne->GetActorLocation () + FVector (0.0f, 0.0f, 600.0f) * deltaTime);
-	_planeTwo->SetActorLocation (_planeTwo->GetActorLocation () + FVector (0.0f, 0.0f, 600.0f) * deltaTime);
+	float speed = 800.0f;
+
+	_planeOne->SetActorLocation (_planeOne->GetActorLocation () + FVector (0.0f, 0.0f, speed) * deltaTime);
+	_planeTwo->SetActorLocation (_planeTwo->GetActorLocation () + FVector (0.0f, 0.0f, speed) * deltaTime);
 
 	if (_planeOne->GetActorLocation ().Z > 6000.0f)
 		_planeOne->SetActorLocation (_planeTwo->GetActorLocation () - FVector (0.0f, 0.0f, 5000.0f));
@@ -235,7 +240,7 @@ void AMinigameDrillController::MovePlane (float deltaTime)
 void AMinigameDrillController::SetLives (int lives)
 {
 	_lives = lives;
-	livesText = "Lives: " + FString::FromInt (_lives);
+	livesText = FString::FromInt (_lives);
 
 	Update ();
 }
@@ -244,7 +249,7 @@ void AMinigameDrillController::SetScore (int score)
 {
 	_score = score;
 
-	scoreText = "Score: " + FString::FromInt (_score);
+	scoreText = FString::FromInt (_score);
 
 	Update ();
 }
@@ -281,5 +286,4 @@ void AMinigameDrillController::SetupPlayerInputComponent (UInputComponent* Playe
 	Super::SetupPlayerInputComponent (PlayerInputComponent);
 
 	PlayerInputComponent->BindAction ("MouseClick", IE_Pressed, this, &AMinigameDrillController::OnMouseClick);
-	PlayerInputComponent->BindAction ("R", IE_Pressed, this, &AMinigameDrillController::OnMouseClick);
 }

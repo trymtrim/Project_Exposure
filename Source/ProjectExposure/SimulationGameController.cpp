@@ -18,14 +18,23 @@ void ASimulationGameController::BeginPlay ()
 {
 	Super::BeginPlay ();
 
+	//Debug
+	if (!_miniGamesOn)
+	{
+		_mineGamePlayed = true;
+		_oilGamePlayed = true;
+		_windGamePlayed = true;
+	}
+
 	//Setup camera
 	_defaultPosition = GetActorLocation ();
 	_defaultRotation = FVector (0.0f, 324.0f, 135.0f);
 
 	_cameraMovement = new CameraMovement (this);
 
-	//Setup pawn
+	//Setup pawns
 	_drillPawn->SetGameController (this);
+	_windmillPawn->SetGameController (this);
 
 	FadeOut (0.5f, 1.5f);
 }
@@ -69,12 +78,12 @@ void ASimulationGameController::Tick (float DeltaTime)
 			_minePawn->setup ();
 			break;
 		case 2:
-			
+			GetWorld ()->GetFirstPlayerController ()->Possess (_windmillPawn);
+			_windmillPawn->StartGame ();
 			break;
 		case 3:
 			GetWorld ()->GetFirstPlayerController ()->Possess (_drillPawn);
 			_drillPawn->StartGame ();
-			//_drillPawn->SetActorLocation (GetActorLocation ());
 			break;
 		}
 
@@ -187,6 +196,8 @@ void ASimulationGameController::StartSimulation ()
 	//_uiController->Enable (_uiController->simulationTestRef, 0);
 
 	_simulationRunning = true;
+	
+	_simulation->StartSimulation ();
 }
 
 void ASimulationGameController::StopSimulation ()
@@ -195,10 +206,7 @@ void ASimulationGameController::StopSimulation ()
 	//_uiController->Disable (_uiController->simulationTestRef);
 
 	if (_miniGameActive == 1 && !_mineGamePlayed || _miniGameActive == 2 && !_windGamePlayed || _miniGameActive == 3 && !_oilGamePlayed || _messageClicked)
-	{
-		if (_miniGamesOn)
-			EnterMiniGame ();
-	}
+		EnterMiniGame ();
 	else
 		StartNewTurn ();
 
@@ -207,6 +215,8 @@ void ASimulationGameController::StopSimulation ()
 
 	_simulationRunning = false;
 	_messageClicked = false;
+
+	_simulation->StopSimulation ();
 }
 
 void ASimulationGameController::EnterMiniGame ()
@@ -216,20 +226,18 @@ void ASimulationGameController::EnterMiniGame ()
 	case 1:
 		//_cameraMovement->MoveTo (_minePosition, _mineRotation);
 		_cameraMovement->MoveTo (_mineCameraPositions [0], _mineCameraRotations [0]);
-		//_mine->SetActorLocation (FVector (-19420, 1268, 2030));
 		_movingToMine = true;
 		_mineGamePlayed = true;
 		break;
 	case 2:
-		ExitMiniGame ();
-
+		_cameraMovement->MoveTo (_windmillPosition, _windmillRotation);
 		_windGamePlayed = true;
 		break;
 	case 3:
 		_cameraMovement->MoveTo (_drillPosition, _drillRotation);
+		_oilGamePlayed = true;
 		FadeIn (0.75f, 0.5f);
 		FadeOut (3.5f, 0.5f);
-		_oilGamePlayed = true;
 		break;
 	}
 
@@ -255,9 +263,6 @@ void ASimulationGameController::ExitMiniGame ()
 	}
 	else
 		_cameraMovement->MoveTo (_defaultPosition, _defaultRotation);
-
-	//if (_miniGameActive == 1)
-	//	_mine->SetActorLocation (FVector (-19420, 1268, -2030));
 
 	_miniGameActive = 0;
 
