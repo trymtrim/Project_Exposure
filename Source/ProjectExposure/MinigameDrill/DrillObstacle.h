@@ -20,6 +20,7 @@ public:
 	//Called every frame
 	virtual void Tick (float DeltaTime) override;
 
+	void UpdateMovement (float deltaTime);
 	void Initialize (AActor* drill, AMinigameDrillController* gameController);
 
 protected:
