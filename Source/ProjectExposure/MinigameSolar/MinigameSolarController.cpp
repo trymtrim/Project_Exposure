@@ -2,6 +2,7 @@
 
 #include "MinigameSolarController.h"
 #include "SimulationGameController.h"
+#include "Engine/World.h"
 #include "UIController.h"
 
 //Sets default values
@@ -23,6 +24,43 @@ void AMinigameSolarController::BeginPlay ()
 void AMinigameSolarController::Tick (float DeltaTime)
 {
 	Super::Tick (DeltaTime);
+}
+
+void AMinigameSolarController::InitializeGrid ()
+{
+	/*UWorld* world = GetWorld ();
+	
+	if (world)
+	{
+		if (_controlledUnit)
+			_controlledUnit->Destroy ();
+
+		//Define the unit to spawn
+		TSubclassOf <APlaceableUnit> controlledUnit;
+		
+		switch (index)
+		{
+		case 0:
+			controlledUnit = _nuclearReactorPrefab;
+			break;
+		case 1:
+			controlledUnit = _windmillPrefab;
+			break;
+		case 2:
+			controlledUnit = _oilRigPrefab;
+			break;
+		}
+		
+		FActorSpawnParameters spawnParams;
+		FVector spawnPosition = GetActorLocation ();
+		FRotator rotator = FVector (0.0f, 0.0f, 0.0f).Rotation ();
+
+		//Spawn the unit
+		_controlledUnit = world->SpawnActor <APlaceableUnit> (controlledUnit, spawnPosition, rotator, spawnParams);
+
+		//Disable simulation UI
+		_uiController->Disable (1);
+	}*/
 }
 
 void AMinigameSolarController::SetGameController (ASimulationGameController* gameController)
@@ -47,7 +85,6 @@ void AMinigameSolarController::StartGamePlay ()
 	_uiController->Enable (20, 0);
 
 	EndGame ();
-
 }
 
 void AMinigameSolarController::EndGame ()

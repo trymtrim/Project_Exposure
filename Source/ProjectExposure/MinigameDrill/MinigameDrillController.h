@@ -30,6 +30,8 @@ public:
 	void GetHitByObstacle ();
 	void OvercomeObstacle ();
 
+	bool GetGameFinished ();
+	bool GetGameCompleted ();
 	int GetCurrentDrillType ();
 
 	//For blueprints
@@ -92,6 +94,7 @@ private:
 	float _endTimer = 0.0f;
 	float _height = 2200.0f;
 	bool _gameFinished = false;
+	bool _gameCompleted = false;
 	bool _endPanelShown = false;
 
 	//Spawn info

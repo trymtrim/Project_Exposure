@@ -69,6 +69,7 @@ void AMinigameDrillController::StartGame ()
 	_spawnCount = 0;
 
 	_gameFinished = false;
+	_gameCompleted = false;
 	
 	//Spawn drill
 	FVector pos = spawnPosition + FVector (0.0f, 0.0f, 492.0f);
@@ -147,6 +148,8 @@ void AMinigameDrillController::GoBackToSimulation ()
 	_hole->Destroy ();
 	_planeOne->Destroy ();
 	_planeTwo->Destroy ();
+
+	_gameCompleted = true;
 
 	Stop ();
 
@@ -265,6 +268,19 @@ void AMinigameDrillController::GetHitByObstacle ()
 void AMinigameDrillController::OvercomeObstacle ()
 {
 	SetScore (_score + 100);
+}
+
+bool AMinigameDrillController::GetGameFinished ()
+{
+	if (_lives <= 0)
+		return true;
+	
+	return false;
+}
+
+bool AMinigameDrillController::GetGameCompleted ()
+{
+	return _gameCompleted;
 }
 
 int AMinigameDrillController::GetCurrentDrillType ()

@@ -43,6 +43,7 @@ protected:
 	virtual void BeginPlay () override;
 
 private:
+	void InitializeGrid ();
 	void StartGamePlay ();
 	void EndGame ();
 	void SetScore (int score);
@@ -51,10 +52,18 @@ private:
 
 	ASimulationGameController* _gameController;
 
+	//Game positions
+	FVector _middlePosition = FVector (4245, 4925, 100);
+	TArray <FVector> _grid;
+
+	//Game stats
 	int _score = 0;
 
 	bool _gameStarted = false;
 	bool _endPanelShown = false;
+
+	UPROPERTY (EditAnywhere)
+	TSubclassOf <AActor> _gridSlot;
 
 	//UI controller
 	UPROPERTY (EditAnywhere)

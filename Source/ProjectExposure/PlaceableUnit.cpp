@@ -63,7 +63,7 @@ void APlaceableUnit::FollowMousePosition ()
 		}
 		else
 		{
-			if (hit.GetActor ()->GetRootComponent ()->ComponentHasTag ("Placeable"))
+			if (hit.GetActor ()->GetRootComponent ()->ComponentHasTag ("Placeable") || GetActorLocation ().Z > 150.0f)
 				_mesh->SetCustomDepthStencilValue (1);
 			else
 				_mesh->SetCustomDepthStencilValue (0);
