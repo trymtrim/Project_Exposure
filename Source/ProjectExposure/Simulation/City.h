@@ -23,15 +23,27 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	void ToggleStage(int pStage);
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	TArray<TSubclassOf<AActor>> _stageOne;
+	TArray< AActor* > _stageOne;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	TArray<TSubclassOf<AActor>> _stageTwo;
+	TArray< AActor* > _stageTwo;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	TArray<TSubclassOf<AActor>> _stageThree;
+	TArray< AActor* > _stageThree;
 
 private:
+	
+	void LerpStages(float DeltaTime);
 
+	UPROPERTY(EditAnywhere)
+	UMaterialInterface* _parentMaterial;
+
+	UPROPERTY()
+	TArray<bool> _stageActives;
+
+	UPROPERTY()
+	TArray<float> _stageLerps;
 };
