@@ -46,11 +46,7 @@ public:
 	UPROPERTY(EditAnywhere)
 	UStaticMesh* debrisMesh;
 
-	UPROPERTY(EditAnywhere)
-	FVector debrisScale;
 private:
-	void handleDeath();
-
 	UPROPERTY(VisibleAnywhere)
 	UnitType _currentType;
 
@@ -60,5 +56,4 @@ private:
 	UPROPERTY()
 	float _deathThreshhold;
 
-	FTimerHandle _deathTimer;
 };

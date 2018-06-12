@@ -8,6 +8,7 @@
 #include "CameraMovement.h"
 #include "MinigameCartController.h"
 #include "MinigameDrill/MinigameDrillController.h"
+#include "MinigameSolar/MinigameSolarController.h"
 #include "Simulation/Simulation.h"
 #include "UIController.h"
 #include "SimulationGameController.generated.h"
@@ -91,9 +92,9 @@ private:
 	bool _movingToMine = false;
 	bool _movingFromMine = false;
 	int _currentPositionIndex = 0;
-	TArray <FVector> _mineCameraPositions {FVector (-1514, 5644, 483)};
-	TArray <FVector> _mineCameraRotations {FVector (0, 0, 161)};
-
+	TArray <FVector> _mineCameraPositions {FVector (-1800, 6191, 615), FVector (-5700, 7014, -948)};
+	TArray <FVector> _mineCameraRotations {FVector (0, -10, 173), FVector (0, 0, 170)};
+	
 	//Inputs
 	void OnSpacePress ();
 	void OnMouseClick ();
@@ -150,15 +151,12 @@ private:
 	FVector _drillRotation;
 
 	//Windmill game
-	//
-	//
+	UPROPERTY (EditAnywhere)
+	AMinigameSolarController* _windmillPawn;
 	UPROPERTY (EditAnywhere)
 	FVector _windmillPosition;
 	UPROPERTY (EditAnywhere)
 	FVector _windmillRotation;
-
-	UPROPERTY (EditAnywhere)
-	AActor* _mine;
 
 	UPROPERTY (EditAnywhere)
 	float _simulationTime;
@@ -166,6 +164,6 @@ private:
 	UPROPERTY (EditAnywhere)
 	TSubclassOf <AActor> _optionalMinigameMessage;
 
-	//Temp
+	//Debug
 	UPROPERTY (EditAnywhere) bool _miniGamesOn = true;
 };

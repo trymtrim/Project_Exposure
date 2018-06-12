@@ -27,7 +27,7 @@ void AMinigameCartController::BeginPlay()
 
 	UWorld* world = GetWorld();
 	if (world) {
-		FVector Location = GetActorLocation() + FVector(-500, 0, -375);
+		FVector Location = GetActorLocation() + _offset;
 		FActorSpawnParameters SpawnInfo;
 		SpawnInfo.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 		_spawnedWagon = world->SpawnActor<AMinecart>(wagonPrefab, Location, _initTruckRotator, SpawnInfo);
@@ -80,10 +80,14 @@ void AMinigameCartController::decreaseLives() {
 //Called when minigames is finished by any means, handles cleaning up the minigame
 void AMinigameCartController::exitMinigame() {
 
+	endScoreUI = "You got " + FString::FromInt (_points) + " out of " + FString::FromInt (_uraniumToSpawn) + " points";
+
 	if (_lives <= 0)
 		_uiController->Enable (10, 0); //Lose
 	else
 		_uiController->Enable (11, 0); //Win
+
+	endScreen ();
 
 	_gameStarted = false;
 	_gameFinished = true;
@@ -94,7 +98,7 @@ void AMinigameCartController::exitMinigame() {
 }
 
 void AMinigameCartController::goBackToSimulation() {
-	FVector Location = GetActorLocation() + FVector(-500, 0, -375);
+	FVector Location = GetActorLocation() + _offset;
 	_spawnedWagon->SetActorLocationAndRotation(Location, _initTruckRotator);
 
 	simulationController->ExitMiniGame();
@@ -159,7 +163,7 @@ void AMinigameCartController::spawnFallingUnit(float DeltaTime) {
 				}
 			}
 
-			FVector Location = GetActorLocation() + FVector(-500.0f, FMath::RandRange(_maximumMovement.X, _maximumMovement.Y), 1000.0f);
+			FVector Location = GetActorLocation() + FVector(_offset.X, FMath::RandRange(_maximumMovement.X, _maximumMovement.Y), 1000.0f);
 
 			//Random Rotation for extra flair
 			FRotator Rotation(0.0f, 0.0f, FMath::FRandRange(0.0f, 360.0f));

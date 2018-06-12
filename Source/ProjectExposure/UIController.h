@@ -29,7 +29,9 @@ public:
 	cartLosePanelRef = 10		cartWinPanelRef = 11
 	cartAnimationRef = 12		drillAnimation2Ref = 13
 	videoRef = 14				videoPauseRef = 15
-	blackStartRef = 16
+	blackStartRef = 16			solarAnimationRef = 17
+	solarLosePanelRef = 18		solarWinPanelRef = 19
+	solarMiniGameRef = 20
 	*/
 	void Enable (int index, int order);
 	/*
@@ -41,7 +43,9 @@ public:
 	cartLosePanelRef = 10		cartWinPanelRef = 11
 	cartAnimationRef = 12		drillAnimation2Ref = 13
 	videoRef = 14				videoPauseRef = 15
-	blackStartRef = 16
+	blackStartRef = 16			solarAnimationRef = 17
+	solarLosePanelRef = 18		solarWinPanelRef = 19
+	solarMiniGameRef = 20
 	*/
 	void Disable (int index);
 
@@ -80,6 +84,14 @@ public:
 	TSubclassOf <UUserWidget> blackStart;
 	UPROPERTY (EditAnywhere)
 	TSubclassOf <UUserWidget> simulationTest;
+	UPROPERTY (EditAnywhere)
+	TSubclassOf <UUserWidget> solarAnimation;
+	UPROPERTY (EditAnywhere)
+	TSubclassOf <UUserWidget> solarLosePanel;
+	UPROPERTY (EditAnywhere)
+	TSubclassOf <UUserWidget> solarWinPanel;
+	UPROPERTY (EditAnywhere)
+	TSubclassOf <UUserWidget> solarMiniGame;
 
 	//Variables to hold the widgets After Creating it.
 	UPROPERTY (BlueprintReadOnly, Category = "UI") UUserWidget* currentTurnRef;
@@ -99,6 +111,10 @@ public:
 	UPROPERTY () UUserWidget* videoPauseRef;
 	UPROPERTY () UUserWidget* blackStartRef;
 	UPROPERTY () UUserWidget* simulationTestRef;
+	UPROPERTY () UUserWidget* solarAnimationRef;
+	UPROPERTY (BlueprintReadOnly, Category = "UI") UUserWidget* solarLosePanelRef;
+	UPROPERTY (BlueprintReadOnly, Category = "UI") UUserWidget* solarWinPanelRef;
+	UPROPERTY (BlueprintReadOnly, Category = "UI") UUserWidget* solarMiniGameRef;
 
 	TArray <UUserWidget*> userInterfaces;
 

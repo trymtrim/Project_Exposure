@@ -39,6 +39,11 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent, Category="UI")
 	void updateUI();
+	UFUNCTION(BlueprintImplementableEvent, Category="UI")
+	void endScreen();
+
+	UPROPERTY (BlueprintReadOnly)
+	FString endScoreUI = "";
 
 	UPROPERTY(BlueprintReadOnly)
 	FString livesUI = "Life(s): 3";
@@ -113,6 +118,9 @@ private:
 
 	UPROPERTY()
 	FVector2D _lastMousePos;
+
+	UPROPERTY(EditAnywhere)
+	FVector _offset = FVector(-500, 0, -375);
 
 	//Rotation Stuff
 	bool _faceLeft;

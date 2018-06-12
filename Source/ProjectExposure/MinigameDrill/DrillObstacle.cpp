@@ -9,7 +9,7 @@
 //Sets default values
 ADrillObstacle::ADrillObstacle ()
 {
- 	//Set this actor to call Tick () every frame.
+ 	//Set this actor to call Tick () every frame
 	PrimaryActorTick.bCanEverTick = true;
 }
 
@@ -24,7 +24,17 @@ void ADrillObstacle::Tick (float DeltaTime)
 {
 	Super::Tick (DeltaTime);
 
-	SetActorLocation (GetActorLocation () + (FVector (0.0f, 0.0f, 600.0f) * DeltaTime));
+	if (!_gameController->GetGameFinished ())
+		UpdateMovement (DeltaTime);
+	else if (_gameController->GetGameCompleted ())
+		Destroy ();
+}
+
+void ADrillObstacle::UpdateMovement (float deltaTime)
+{
+	float speed = 800.0f;
+
+	SetActorLocation (GetActorLocation () + (FVector (0.0f, 0.0f, speed) * deltaTime));
 
 	FVector position = GetActorLocation ();
 
@@ -67,5 +77,5 @@ void ADrillObstacle::Initialize (AActor* drill, AMinigameDrillController* gameCo
 	TArray <UStaticMeshComponent*> drillStaticComps;
 	drill->GetComponents <UStaticMeshComponent> (drillStaticComps);
 
-	_collideHeight = drill->GetActorLocation ().Z - 200.0f; //(drillStaticComps [0]->CalcBounds (drill->GetTransform ()).BoxExtent.Z) - (staticComps [0]->CalcBounds (GetTransform ()).BoxExtent.Z);
+	_collideHeight = drill->GetActorLocation ().Z - 200.0f;
 }

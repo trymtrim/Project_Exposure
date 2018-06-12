@@ -38,12 +38,14 @@ void AIntroController::Tick (float DeltaTime)
 	if (FVector::Distance (GetActorLocation (), _cameraMovement->GetTargetPosition ()) > 5.0f)
 		_cameraMovement->Update (DeltaTime);
 
-	if (FVector::Distance (GetActorLocation (), _cameraMovement->GetTargetPosition ()) < 10.0f && _currentState == CAMERAMOVING)
+	if (FVector::Distance (GetActorLocation (), _cameraMovement->GetTargetPosition ()) < 5.0f && _currentState == CAMERAMOVING)
 	{
-		FadeIn (0.0f, 0.5f);
+		/*FadeIn (0.0f, 0.5f);
 		FadeOut (1.5f, 0.5f);
 
-		_currentState = FADING;
+		_currentState = FADING;*/
+		
+		StartVideo ();
 	}
 
 	UpdateTimer (DeltaTime);

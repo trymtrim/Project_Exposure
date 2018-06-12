@@ -40,6 +40,10 @@ void AUIController::InitializeWidgets ()
 	videoRef = CreateWidget <UUserWidget> (GetWorld ()->GetFirstPlayerController (), video); //14
 	videoPauseRef = CreateWidget <UUserWidget> (GetWorld ()->GetFirstPlayerController (), videoPause); //15
 	blackStartRef = CreateWidget <UUserWidget> (GetWorld ()->GetFirstPlayerController (), blackStart); //16
+	solarAnimationRef = CreateWidget <UUserWidget> (GetWorld ()->GetFirstPlayerController (), solarAnimation); //17
+	solarLosePanelRef = CreateWidget <UUserWidget> (GetWorld ()->GetFirstPlayerController (), solarLosePanel); //18
+	solarWinPanelRef = CreateWidget <UUserWidget> (GetWorld ()->GetFirstPlayerController (), solarWinPanel); //19
+	solarMiniGameRef = CreateWidget <UUserWidget> (GetWorld ()->GetFirstPlayerController (), solarMiniGame); //20
 	
 	userInterfaces.Add (currentTurnRef);
 	userInterfaces.Add (simulationRef);
@@ -58,6 +62,10 @@ void AUIController::InitializeWidgets ()
 	userInterfaces.Add (videoRef);
 	userInterfaces.Add (videoPauseRef);
 	userInterfaces.Add (blackStartRef);
+	userInterfaces.Add (solarAnimationRef);
+	userInterfaces.Add (solarLosePanelRef);
+	userInterfaces.Add (solarWinPanelRef);
+	userInterfaces.Add (solarMiniGameRef);
 
 	if (GetWorld ()->GetMapName ().Mid (GetWorld ()->StreamingLevelsPrefix.Len ()) == "MainLevel_3")
 		Enable (16, 2);
