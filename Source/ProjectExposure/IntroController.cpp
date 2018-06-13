@@ -138,7 +138,7 @@ void AIntroController::PauseVideo ()
 	Pause ();
 
 	//Enable videoPause UI
-	uiController->Enable (15, 1);
+	//uiController->Enable (15, 1);
 
 	_currentState = PAUSE;
 }
@@ -161,7 +161,7 @@ void AIntroController::ContinueVideo ()
 		Resume ();
 
 		//Disable videoPause UI
-		uiController->Disable (15);
+		//uiController->Disable (15);
 
 		_currentState = AFTERPAUSE;
 	}
