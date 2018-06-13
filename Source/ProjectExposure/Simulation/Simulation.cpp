@@ -18,6 +18,8 @@ void ASimulation::BeginPlay ()
 	Super::BeginPlay ();
 	InitializeResources ();
 	ToggleParticlesEvent();
+	_currentTurn = 0;
+	_currentCityStage = 0;
 }
 
 //Called every frame
@@ -47,8 +49,11 @@ void ASimulation::OnPlaceUnit (int index)
 }
 
 void ASimulation::OnNewTurn (int currentTurn) {
+	_currentTurn = currentTurn;
 	//Every nth turn - right now every 3rd
 	if (currentTurn % 3 == 0) {
+		_currentCityStage++;
+		_city->ToggleStage(_currentCityStage);
 		maxEnergy += 2;
 		maxPollution += 1;
 	}
