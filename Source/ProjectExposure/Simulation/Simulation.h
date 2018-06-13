@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "Components/DirectionalLightComponent.h"
 #include "Runtime/Engine/Classes/Particles/ParticleSystemComponent.h"
+#include "City.h"
 #include "Simulation.generated.h"
 
 UCLASS(Blueprintable)
@@ -24,6 +25,9 @@ public:
 	void OnPlaceUnit (int index);
 
 	void OnNewTurn (int currentTurn);
+
+	UPROPERTY(EditAnywhere)
+	ACity* _city;
 
 	//Values for the energy and pollution bars //To make blocks, put a transparent sprite in front of the bars or something
 	UPROPERTY (BlueprintReadOnly)
@@ -54,6 +58,9 @@ private:
 	void UpdateResources (float deltaTime);
 
 	void ToggleParticles();
+
+	int _currentTurn;
+	int _currentCityStage;
 
 	//For lerping between values
 	float _targetEnergy;

@@ -4,6 +4,8 @@
 #include "Engine/World.h"
 #include "CustomGameViewportClient.h"
 
+#define print(text) if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 1.5, FColor::Green,text)
+
 //Sets default values
 AIntroController::AIntroController ()
 {
@@ -80,7 +82,8 @@ void AIntroController::UpdateTimer (float deltaTime)
 	{
 		_videoTimer += deltaTime;
 
-		if (_videoTimer >= 3.0f)
+		//Maybe change to "on video end"
+		if (_videoTimer >= 17.18f)
 		{
 			_videoTimer = 0.0f;
 			PauseVideo ();
@@ -142,13 +145,26 @@ void AIntroController::PauseVideo ()
 
 void AIntroController::ContinueVideo ()
 {
-	//Call Resume for blueprint
-	Resume ();
+	//If the video-buttuon is pressed
+	APlayerController* playerController = GetWorld ()->GetFirstPlayerController ();
+	FVector2D mousePos;
+	playerController->GetMousePosition (mousePos.X, mousePos.Y);
 
-	//Disable videoPause UI
-	uiController->Disable (15);
+	FIntVector viewportBounds;
+	playerController->GetViewportSize (viewportBounds.X, viewportBounds.Y);
 
-	_currentState = AFTERPAUSE;
+	FVector2D percentage = FVector2D (mousePos.X / viewportBounds.X * 100, mousePos.Y / viewportBounds.Y * 100);
+
+	if (percentage.X >= 66 && percentage.X <= 76 && percentage.Y >= 22 && percentage.Y <= 52)
+	{
+		//Call Resume for blueprint
+		Resume ();
+
+		//Disable videoPause UI
+		uiController->Disable (15);
+
+		_currentState = AFTERPAUSE;
+	}
 }
 
 void AIntroController::ExitVideo ()
