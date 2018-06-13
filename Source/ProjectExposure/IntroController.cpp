@@ -155,7 +155,7 @@ void AIntroController::ContinueVideo ()
 
 	FVector2D percentage = FVector2D (mousePos.X / viewportBounds.X * 100, mousePos.Y / viewportBounds.Y * 100);
 
-	if (percentage.X >= 66 && percentage.X <= 76 && percentage.Y >= 22 && percentage.Y <= 52)
+	if (percentage.X >= 81 && percentage.X <= 93 && percentage.Y >= 26 && percentage.Y <= 50)
 	{
 		//Call Resume for blueprint
 		Resume ();
