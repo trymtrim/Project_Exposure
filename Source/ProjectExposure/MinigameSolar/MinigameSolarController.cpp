@@ -46,7 +46,7 @@ void AMinigameSolarController::Tick (float DeltaTime)
 	{
 		_liftingTimer += DeltaTime;
 
-		if (_liftingTimer >= 0.25f)
+		if (_liftingTimer >= 0.15f)
 		{
 			_preparingLifting = false;
 			_liftingTimer = 0.0f;
@@ -62,50 +62,65 @@ void AMinigameSolarController::InitializeGame ()
 
 	UWorld* world = GetWorld ();
 
-	int mirrorCount = 2;
-
 	if (world)
 	{
 		//Spawn mirrors
 		FActorSpawnParameters spawnParams;
 		FVector spawnPosition = _middlePosition + FVector (300.0f, 200.0f, 0.0f);
-		FRotator rotator = FVector (0.0f, 0.0f, 0.0f).Rotation ();
+		FRotator rotator = FRotator (0.0f, 45.0f, 0.0f);
 
-		for (int i = 0; i < mirrorCount; i++)
+		for (int i = 0; i < _mirrorCount; i++)
 		{
 			AActor* mirror = world->SpawnActor <AActor> (_mirror, spawnPosition, rotator, spawnParams);
 			_mirrors.Add (mirror);
+			_mirrorRotations.Add (mirror, 1);
 
-			spawnPosition.Y -= 200.0f;
+			spawnPosition.Y -= 100.0f;
 		}
 
 		//Spawn beam start position
-		rotator = FRotator (0.0f, 180.0f, 0.0f);
-		spawnPosition = _grid [7]->GetActorLocation () + FVector (400.0f, 0.0f, 0.0f);
+		switch (_beamStartRotation)
+		{
+		case 1:
+			rotator = FRotator (0.0f, 90.0f, 0.0f);
+			break;
+		case 2:
+			rotator = FRotator (0.0f, -180.0f, 0.0f);
+			break;
+		case 3:
+			rotator = FRotator (0.0f, -90.0f, 0.0f);
+			break;
+		case 4:
+			rotator = FRotator (0.0f, 0.0f, 0.0f);
+			break;
+		}
+
+		spawnPosition = _grid [((_gridX * _gridY) - 1) / 2]->GetActorLocation () + FVector (_beamStartPositionX * 100, _beamStartPositionY * 100, 0.0f);
 		_beamPosition = world->SpawnActor <AActor> (_gridSlot, spawnPosition, rotator, spawnParams);
 		//Spawn beam end position
-		spawnPosition = _grid [0]->GetActorLocation () - FVector (400.0f, 0.0f, 0.0f);
+		spawnPosition = _grid [((_gridX * _gridY) - 1) / 2]->GetActorLocation () + FVector (_beamGoalPositionX * 100, _beamGoalPositionY * 100, 0.0f);
 		_goalPosition = world->SpawnActor <AActor> (_goal, spawnPosition, rotator, spawnParams);
+		//Spawn beam goal target
+		spawnPosition += FVector (0.0f, 0.0f, 120.0f);
+		_goalTarget = world->SpawnActor <AActor> (_goalTargetPrefab, spawnPosition, rotator, spawnParams);
 	}
 }
 
 void AMinigameSolarController::InitializeGrid ()
 {
 	UWorld* world = GetWorld ();
-	
-	int x = 3;
-	int y = 3;
+
 	int slotSize = 100;
 
 	if (world)
 	{
 		FActorSpawnParameters spawnParams;
-		FVector spawnPosition = _middlePosition - FVector ((slotSize * x) / 2, (slotSize * y) / 2, 0.0f);
+		FVector spawnPosition = _middlePosition - FVector ((slotSize * _gridX) / 2, (slotSize * _gridY) / 2, 0.0f);
 		FRotator rotator = FVector (0.0f, 0.0f, 0.0f).Rotation ();
 
-		for (int i = 0; i < x; i++)
+		for (int i = 0; i < _gridX; i++)
 		{
-			for (int j = 0; j < y; j++)
+			for (int j = 0; j < _gridY; j++)
 			{
 				//Spawn the unit
 				AActor* gridSlot = world->SpawnActor <AActor> (_gridSlot, spawnPosition, rotator, spawnParams);
@@ -114,7 +129,7 @@ void AMinigameSolarController::InitializeGrid ()
 				spawnPosition.Y += slotSize;
 			}
 
-			spawnPosition.Y -= (slotSize * y);
+			spawnPosition.Y -= (slotSize * _gridY);
 			spawnPosition.X += slotSize;
 		}
 	}
@@ -179,9 +194,16 @@ void AMinigameSolarController::RotateUnit ()
 
 	if (hit.bBlockingHit)
 	{
-		if (hit.GetActor ()->GetRootComponent ()->ComponentHasTag ("Mirror"))
+		AActor* mirror = hit.GetActor ();
+
+		if (mirror->GetRootComponent ()->ComponentHasTag ("Mirror"))
 		{
-			hit.GetActor ()->SetActorRotation (hit.GetActor ()->GetActorRotation () + FRotator (0.0f, 90.0f, 0.0f));
+			mirror->SetActorRotation (hit.GetActor ()->GetActorRotation () + FRotator (0.0f, 90.0f, 0.0f));
+
+			if (_mirrorRotations [mirror] == 4)
+				_mirrorRotations [mirror] = 1;
+			else
+				_mirrorRotations [mirror] = _mirrorRotations [mirror] + 1;
 
 			UpdateBeams ();
 		}
@@ -197,29 +219,29 @@ void AMinigameSolarController::UpdateBeams ()
 	_beams.Empty ();
 
 	CheckBeamHit (_beamPosition->GetActorLocation (), _beamPosition->GetActorRotation (), true);
-	count = 0;
 }
 
 void AMinigameSolarController::CheckBeamHit (FVector position, FRotator rotation, bool firstBeam)
 {
 	//Spawn the beam
 	FActorSpawnParameters spawnParams;
-	FVector spawnPosition = position;
+	FVector spawnPosition = position + FVector (0.0f, 00.0f, 50.0f);
 	FRotator rotator = rotation;
 
 	AActor* beam = GetWorld ()->SpawnActor <AActor> (_beam, spawnPosition, rotator, spawnParams);
 	_beams.Add (beam);
 
+	FHitResult hit;
+	FVector start = beam->GetActorLocation ();
+
 	if (firstBeam)
 		_startBeam = beam;
 
-	FHitResult hit;
-	FVector start = beam->GetActorLocation ();
 	FVector forwardVector = beam->GetActorForwardVector ();
 	FVector end = (forwardVector * 1000.0f) + start;
 	FCollisionQueryParams collisionParams;
 
-	DrawDebugLine (GetWorld (), start, end, FColor::Green, false, 1, 0, 5);
+	DrawDebugLine (GetWorld (), start, end, FColor::Green, false, 1, 0, 10);
 
 	TArray <AActor*> possibleMirrors;
 
@@ -250,28 +272,56 @@ void AMinigameSolarController::CheckBeamHit (FVector position, FRotator rotation
 		beamComponent->SetActorParameter ("Source", beam);
 		beamComponent->SetActorParameter ("Target", hitMirror);
 
-		count++;
+		//Mirror rotation
+		int rot = rotation.Yaw;
 
-		if (count < 5)
-			CheckBeamHit (hitMirror->GetActorLocation (), hitMirror->GetActorRotation (), false);
+		print (FString::FromInt (_mirrorRotations [hitMirror]));
+
+		switch (_mirrorRotations [hitMirror])
+		{
+		case 1:
+			if (rot < 5 && rot > -5)
+				CheckBeamHit (hitMirror->GetActorLocation (), FRotator (0.0f, -90.0f, 0.0f), false);
+			else if (rot - 90 < 5 && rot - 90 > -5)
+				CheckBeamHit (hitMirror->GetActorLocation (), FRotator (0.0f, 180.0f, 0.0f), false);
+			break;
+		case 2:
+			if (rot - 90 < 5 && rot - 90 > -5)
+				CheckBeamHit (hitMirror->GetActorLocation (), FRotator (0.0f, 0.0f, 0.0f), false);
+			else if (rot - 180 < 5 && rot - 180 > -5)
+				CheckBeamHit (hitMirror->GetActorLocation (), FRotator (0.0f, -90.0f, 0.0f), false);
+			break;
+		case 3:
+			if (rot + 90 < 5 && rot + 90 > -5)
+				CheckBeamHit (hitMirror->GetActorLocation (), FRotator (0.0f, 0.0f, 0.0f), false);
+			else if (rot - 180 < 5 && rot - 180 > -5)
+				CheckBeamHit (hitMirror->GetActorLocation (), FRotator (0.0f, 90.0f, 0.0f), false);
+			break;
+		case 4:
+			if (rot < 5 && rot > -5)
+				CheckBeamHit (hitMirror->GetActorLocation (), FRotator (0.0f, 90.0f, 0.0f), false);
+			else if (rot + 90 < 5 && rot + 90 > -5)
+				CheckBeamHit (hitMirror->GetActorLocation (), FRotator (0.0f, 180.0f, 0.0f), false);
+			break;
+		}
 	}
 	else
 	{
 		if (_goalPosition->ActorLineTraceSingle (hit, start + (forwardVector * 75), end, ECC_WorldDynamic, collisionParams))
+		{
+			//Get the beam particle component
+			TArray <UParticleSystemComponent*> staticComps;
+			beam->GetComponents <UParticleSystemComponent> (staticComps);
+			UParticleSystemComponent* beamComponent = staticComps [0];
+
+			//Set beam start and end position
+			beamComponent->SetActorParameter ("Source", beam);
+			beamComponent->SetActorParameter ("Target", _goalTarget);
+
 			EndGame ();
+		}
 	}
 }
-
-/*int AMinigameSolarController::GetSlot (AActor* mirror)
-{
-	for (int i = 0; i < _grid.Num (); i++)
-	{
-		if (FVector::Distance (_grid [i]->GetActorLocation (), mirror->GetActorLocation ()) < 5)
-			return i + 1;
-	}
-
-	return 0;
-}*/
 
 void AMinigameSolarController::SetGameController (ASimulationGameController* gameController)
 {
@@ -347,6 +397,7 @@ void AMinigameSolarController::GoBackToSimulation ()
 	//Clean up everything
 	_beamPosition->Destroy ();
 	_goalPosition->Destroy ();
+	_goalTarget->Destroy ();
 	_startBeam->Destroy ();
 
 	for (int i = 0; i < _grid.Num (); i++)
@@ -355,12 +406,13 @@ void AMinigameSolarController::GoBackToSimulation ()
 	_grid.Empty ();
 
 	for (int i = 0; i < _mirrors.Num (); i++)
-	_mirrors [i]->Destroy ();
+		_mirrors [i]->Destroy ();
 
 	_mirrors.Empty ();
+	_mirrorRotations.Empty ();
 
 	for (int i = 0; i < _beams.Num (); i++)
-	_beams [i]->Destroy ();
+		_beams [i]->Destroy ();
 
 	_beams.Empty ();
 }
@@ -391,7 +443,7 @@ void AMinigameSolarController::OnMouseRelease ()
 
 	if (_preparingLifting)
 	{
-		if (_liftingTimer < 0.25f)
+		if (_liftingTimer < 0.15f)
 		{
 			_preparingLifting = false;
 			_liftingTimer = 0.0f;

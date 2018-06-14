@@ -68,10 +68,13 @@ private:
 	FVector _middlePosition = FVector (4245, 4925, 110);
 	UPROPERTY () AActor* _beamPosition;
 	UPROPERTY () AActor* _goalPosition;
+	UPROPERTY () AActor* _goalTarget;
 	UPROPERTY () TArray <AActor*> _grid;
 	UPROPERTY () TArray <AActor*> _mirrors;
+	TMap <AActor*, int> _mirrorRotations;
 	UPROPERTY () TArray <AActor*> _beams;
 	UPROPERTY () AActor* _startBeam;
+
 
 	//Game stats
 	int _score = 0;
@@ -88,11 +91,28 @@ private:
 	TSubclassOf <AActor> _beam;
 	UPROPERTY (EditAnywhere)
 	TSubclassOf <AActor> _goal;
+	UPROPERTY (EditAnywhere)
+	TSubclassOf <AActor> _goalTargetPrefab;
 
 	//UI controller
 	UPROPERTY (EditAnywhere)
 	AUIController* _uiController;
 
-	//Temp
-	int count = 0;
+	//Game setup
+	UPROPERTY (EditAnywhere)
+	int _mirrorCount;
+	UPROPERTY (EditAnywhere)
+	int _gridX;
+	UPROPERTY (EditAnywhere)
+	int _gridY;
+	UPROPERTY (EditAnywhere)
+	int _beamStartRotation;
+	UPROPERTY (EditAnywhere)
+	int _beamStartPositionX;
+	UPROPERTY (EditAnywhere)
+	int _beamStartPositionY;
+	UPROPERTY (EditAnywhere)
+	int _beamGoalPositionX;
+	UPROPERTY (EditAnywhere)
+	int _beamGoalPositionY;
 };
