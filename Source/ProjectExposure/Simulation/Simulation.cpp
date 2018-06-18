@@ -50,13 +50,6 @@ void ASimulation::OnPlaceUnit (int index)
 
 void ASimulation::OnNewTurn (int currentTurn) {
 	_currentTurn = currentTurn;
-	//Every nth turn - right now every 3rd
-	if (currentTurn % 3 == 0) {
-		_currentCityStage++;
-		_city->ToggleStage(_currentCityStage);
-		maxEnergy += 2;
-		maxPollution += 1;
-	}
 }
 
 void ASimulation::InitializeResources ()
@@ -95,6 +88,14 @@ void ASimulation::UpdateResources (float deltaTime)
 
 void ASimulation::StartSimulation() {
 	ToggleParticles();
+
+	//Every nth turn - right now every 3rd
+	if (_currentTurn == 3 || _currentTurn == 6) {
+		_currentCityStage++;
+		_city->ToggleStage(_currentCityStage);
+		maxEnergy += 2;
+		maxPollution += 1;
+	}
 }
 
 void ASimulation::StopSimulation() {

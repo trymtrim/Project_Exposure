@@ -121,10 +121,16 @@ void AMinigameDrillController::EndGame ()
 {
 	SetActorTickEnabled (false);
 
+	if (_score < 30 / 3)
+		starAmount = 1;
+	else if (_score > 30 / 3 && _score < 30 - (30 /3))
+		starAmount = 2;
+	else starAmount = 3;
+
 	if (_lives == 0)
 	{
 		//Enable lose panel UI
-		_uiController->Enable (7, 2);
+		_uiController->Enable (8, 2);
 	}
 	else
 	{
@@ -135,11 +141,12 @@ void AMinigameDrillController::EndGame ()
 	//Disable drillMiniGame UI
 	_uiController->Disable (4);
 
-	endScoreText = "You got " + FString::FromInt (_score) + " out of 3000 points";
+	endScoreText = FString::FromInt (_score) + "/30";
 	EndScreen ();
 
 	_endPanelShown = true;
 	_gameStarted = false;
+	_gameController->StartClickDelay ();
 }
 
 void AMinigameDrillController::GoBackToSimulation ()
@@ -156,7 +163,7 @@ void AMinigameDrillController::GoBackToSimulation ()
 	if (_lives <= 0)
 	{
 		//Disable lose panel UI
-		_uiController->Disable (7);
+		_uiController->Disable (8);
 	}
 	else
 	{
@@ -208,7 +215,7 @@ void AMinigameDrillController::SpawnObstacle ()
 	//Set time before next spawn
 	_spawnInterval = FMath::RandRange (15, 25) / 10.0f;
 	_spawnInterval -= _spawnCount * 0.05f;
-		//_spawnInterval = FMath::RandRange ((5, 25) / 10.0f) / (_spawnCount / 15.0f);
+	//_spawnInterval = FMath::RandRange ((5, 25) / 10.0f) / (_spawnCount / 15.0f);
 	_spawnCount++;
 
 	if (_spawnCount == 30)
@@ -267,7 +274,7 @@ void AMinigameDrillController::GetHitByObstacle ()
 
 void AMinigameDrillController::OvercomeObstacle ()
 {
-	SetScore (_score + 100);
+	SetScore (_score + 1);
 }
 
 bool AMinigameDrillController::GetGameFinished ()
@@ -291,7 +298,10 @@ int AMinigameDrillController::GetCurrentDrillType ()
 void AMinigameDrillController::OnMouseClick ()
 {
 	if (_endPanelShown)
-		GoBackToSimulation ();
+	{
+		if (_gameController->CanContinue ())
+			GoBackToSimulation ();
+	}
 	else if (!_gameStarted)
 		StartDisableUI ();
 }

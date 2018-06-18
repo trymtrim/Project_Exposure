@@ -79,11 +79,18 @@ void AMinigameCartController::decreaseLives() {
 
 //Called when minigames is finished by any means, handles cleaning up the minigame
 void AMinigameCartController::exitMinigame() {
+	if (_points < (int) _uraniumToSpawn / 3)
+		starAmount = 1;
+	else if (_points > (int) _uraniumToSpawn / 3 && _points < (int) _uraniumToSpawn - ((int) _uraniumToSpawn / 3))
+		starAmount = 2;
+	else starAmount = 3;
 
-	endScoreUI = "You got " + FString::FromInt (_points) + " out of " + FString::FromInt (_uraniumToSpawn) + " points";
+	print (FString::FromInt (starAmount));
+
+	endScoreUI = FString::FromInt (_points) + "/" + FString::FromInt (_uraniumToSpawn);
 
 	if (_lives <= 0)
-		_uiController->Enable (10, 0); //Lose
+		_uiController->Enable (11, 0); //Lose
 	else
 		_uiController->Enable (11, 0); //Win
 
@@ -91,6 +98,7 @@ void AMinigameCartController::exitMinigame() {
 
 	_gameStarted = false;
 	_gameFinished = true;
+	simulationController->StartClickDelay ();
 
 	_uiController->Disable(6);
 
@@ -104,7 +112,7 @@ void AMinigameCartController::goBackToSimulation() {
 	simulationController->ExitMiniGame();
 
 	if (_lives <= 0)
-		_uiController->Disable (10); //Lose
+		_uiController->Disable (11); //Lose
 	else
 		_uiController->Disable (11); //Win
 }
@@ -140,16 +148,22 @@ void AMinigameCartController::spawnFallingUnit(float DeltaTime) {
 					type = UnitType::DEBRIS;
 					_debrisLeftToSpawn--;
 				}
-				else if (_uraniumLeftToSpawn > 0) {
+				else if (_uraniumLeftToSpawn > 1) {
 					type = UnitType::URANIUM;
 					_uraniumLeftToSpawn--;
 				}
 				else {
-					exitMinigame();
-					return;
+					if(_uraniumLeftToSpawn > 0) {
+						type = UnitType::URANIUM;
+						_uraniumLeftToSpawn--;
+					}
+					else {
+						exitMinigame();
+						return;
+					}
 				}
 			} else {
-				if (_uraniumLeftToSpawn > 0) {
+				if (_uraniumLeftToSpawn > 1) {
 					type = UnitType::URANIUM;
 					_uraniumLeftToSpawn--;
 				}
@@ -158,8 +172,14 @@ void AMinigameCartController::spawnFallingUnit(float DeltaTime) {
 					_debrisLeftToSpawn--;
 				}
 				else {
-					exitMinigame();
-					return;
+					if(_uraniumLeftToSpawn > 0) {
+						type = UnitType::URANIUM;
+						_uraniumLeftToSpawn--;
+					}
+					else {
+						exitMinigame();
+						return;
+					}
 				}
 			}
 
@@ -194,22 +214,22 @@ void AMinigameCartController::movement(float DeltaTime) {
 		playerController->GetViewportSize(viewportBounds.X, viewportBounds.Y);
 
 		float percentage = mousePos.X / viewportBounds.X * 100;
-			
-		if (mousePos.X > _lastMousePos.X) {
-			_faceLeft = true;
-			_reachedRotation = false;
-		} else if (mousePos.X < _lastMousePos.X) {
-			_faceLeft = false;
-			_reachedRotation = false;
-		} else {
-			//Exactly in the middle of viewport
-		}
 
 		FVector wagonPosition = _spawnedWagon->GetActorLocation();
 		FVector controllerLocation = GetActorLocation();
 		float desiredLocation = controllerLocation.Y + FMath::Lerp(_maximumMovement.Y, _maximumMovement.X, percentage / 100);
 		FVector minPosition = controllerLocation + FVector(0, _maximumMovement.X, 0);
 		FVector maxPosition = controllerLocation + FVector(0, _maximumMovement.Y, 0);
+		
+		if (wagonPosition.Y > desiredLocation) {
+			_faceLeft = true;
+			_reachedRotation = false;
+		} else if (wagonPosition.Y < desiredLocation) {
+			_faceLeft = false;
+			_reachedRotation = false;
+		} else {
+			//Exactly in the middle of viewport
+		}
 
 		//Do the movement
 		if (wagonPosition.Y != desiredLocation && IsValid(_spawnedWagon)) {
@@ -272,7 +292,10 @@ void AMinigameCartController::onMouseClick ()
 	if (_gameStarted)
 		handleTouchInputStart ();
 	else if (_gameFinished)
-		goBackToSimulation();
+	{
+		if (simulationController->CanContinue ())
+			goBackToSimulation();
+	}
 	else
 		startMinigame ();
 }

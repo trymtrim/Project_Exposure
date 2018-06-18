@@ -28,16 +28,17 @@ public:
 	virtual void SetupPlayerInputComponent (class UInputComponent* PlayerInputComponent) override;
 
 	void ExitMiniGame ();
+	void StartClickDelay ();
+	void EndGame (bool gameWon); //True if won, false if lost
+
+	bool CanContinue ();
 
 	//For blueprints
 	UFUNCTION (BlueprintCallable, Category = "ButtonPress")
 	void SpawnUnit (int index);
 
 	UPROPERTY (BlueprintReadOnly)
-	bool gameStarted = false;
-
-	UPROPERTY (BlueprintReadOnly)
-	FString currentTurnText = "Turn 1";
+	FString currentTurnText = "Year 1";
 
 	UFUNCTION (BlueprintImplementableEvent, Category = "Feedback")
 	void UpdateCycle ();
@@ -84,6 +85,11 @@ private:
 	UPROPERTY () AActor* _messageBox;
 
 	bool _messageClicked = false;
+
+	//For minigame panels
+	bool _panelDelay = false;
+	float _panelTimer = 0.0f;
+	float _panelDelayTime = 2.0f;
 
 	//UI
 	bool _uiEnabled = false;

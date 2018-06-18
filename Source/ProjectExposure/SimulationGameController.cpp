@@ -56,11 +56,23 @@ void ASimulationGameController::Tick (float DeltaTime)
 
 	if (!_uiEnabled)
 	{
-		//Enable menu UI
-		_uiController->Enable (3, 1);
+		//Enable simulation UI
+		_uiController->Enable (1, 0);
 
-		//Enable simulationTest UI
-		_uiController->Enable (5, 0);
+		//Enable resources UI
+		_uiController->Enable (2, 0);
+
+		//Enable currentTurn UI
+		_uiController->Enable (0, 1);
+
+		//Enable reset button UI
+		_uiController->Enable (5, 3);
+
+		//Disable menu UI
+		_uiController->Disable (3);
+
+		//Go to "placing state"
+		_placing = true;
 
 		_uiEnabled = true;
 	}
@@ -111,6 +123,14 @@ void ASimulationGameController::Tick (float DeltaTime)
 			_simulationTimer = 0.0f;
 			StopSimulation ();
 		}
+	}
+
+	if (_panelDelay)
+	{
+		_panelTimer += DeltaTime;
+
+		if (_panelTimer >= _panelDelayTime)
+			_panelDelay = false;
 	}
 }
 
@@ -272,10 +292,34 @@ void ASimulationGameController::ExitMiniGame ()
 	_uiController->Enable (0, 0);
 }
 
+void ASimulationGameController::StartClickDelay ()
+{
+	_panelDelay = true;
+}
+
+void ASimulationGameController::EndGame (bool gameWon)
+{
+	if (gameWon)
+	{
+		//Enable win UI
+		_uiController->Enable (21, 0);
+	}
+	else
+	{
+		//Enable lose UI
+		_uiController->Enable (21, 0);
+	}
+}
+
+bool ASimulationGameController::CanContinue ()
+{
+	return !_panelDelay;
+}
+
 void ASimulationGameController::StartNewTurn ()
 {
 	_currentTurn++;
-	currentTurnText = "Turn " + FString::FromInt (_currentTurn);
+	currentTurnText = "Year " + FString::FromInt (_currentTurn);
 
 	//Enable simulation UI
 	_uiController->Enable (1, 0);
@@ -383,29 +427,6 @@ void ASimulationGameController::OnSpacePress ()
 
 void ASimulationGameController::OnMouseClick ()
 {
-	//If game hasn't started, start it
-	if (!gameStarted)
-	{
-		gameStarted = true;
-
-		//Enable simulation UI
-		_uiController->Enable (1, 0);
-
-		//Enable resources UI
-		_uiController->Enable (2, 0);
-
-		//Enable currentTurn UI
-		_uiController->Enable (0, 1);
-
-		//Disable menu UI
-		_uiController->Disable (3);
-
-		//Go to "placing state"
-		_placing = true;
-
-		return;
-	}
-
 	if (_simulationRunning)
 	{
 		//Trace to see what is under the mouse cursor

@@ -75,7 +75,6 @@ private:
 	UPROPERTY () TArray <AActor*> _beams;
 	UPROPERTY () AActor* _startBeam;
 
-
 	//Game stats
 	int _score = 0;
 
