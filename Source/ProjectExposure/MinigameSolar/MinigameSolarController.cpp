@@ -275,8 +275,6 @@ void AMinigameSolarController::CheckBeamHit (FVector position, FRotator rotation
 		//Mirror rotation
 		int rot = rotation.Yaw;
 
-		print (FString::FromInt (_mirrorRotations [hitMirror]));
-
 		switch (_mirrorRotations [hitMirror])
 		{
 		case 1:
@@ -366,7 +364,7 @@ void AMinigameSolarController::EndGame ()
 	_uiController->Disable (20);
 
 	//Enable lose panel UI
-	//_uiController->Enable (18, 2);
+	//_uiController->Enable (19, 2);
 	//Enable win panel UI
 	_uiController->Enable (19, 2);
 
@@ -374,6 +372,7 @@ void AMinigameSolarController::EndGame ()
 	
 	_endPanelShown = true;
 	_gameStarted = false;
+	_gameController->StartClickDelay ();
 }
 
 void AMinigameSolarController::SetScore (int score)
@@ -420,7 +419,10 @@ void AMinigameSolarController::GoBackToSimulation ()
 void AMinigameSolarController::OnMouseClick ()
 {
 	if (_endPanelShown)
-		GoBackToSimulation ();
+	{
+		if (_gameController->CanContinue ())
+			GoBackToSimulation ();
+	}
 	else if (!_gameStarted)
 		StartGamePlay ();
 	else if (!_controlledUnit)

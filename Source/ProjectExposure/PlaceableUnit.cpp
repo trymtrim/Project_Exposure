@@ -73,6 +73,39 @@ void APlaceableUnit::FollowMousePosition ()
 	}
 }
 
+void APlaceableUnit::ActivateOutline (bool status)
+{
+	_mesh->bRenderCustomDepth = status;
+
+	if (status)
+		_mesh->SetCustomDepthStencilValue (0);
+
+	_mesh->MarkRenderStateDirty ();
+}
+
+void APlaceableUnit::ActivateRemoveOutline ()
+{
+	_mesh->bRenderCustomDepth = true;
+	_mesh->SetCustomDepthStencilValue (1);
+
+	_mesh->MarkRenderStateDirty ();
+}
+
+void APlaceableUnit::SetRemovable (bool status)
+{
+	_isRemovable = status;
+
+	if (status)
+		ActivateRemoveOutline ();
+	else
+		ActivateOutline (true);
+}
+
+bool APlaceableUnit::GetRemovable ()
+{
+	return _isRemovable;
+}
+
 bool APlaceableUnit::PlaceUnit ()
 {
 	if (_mesh->CustomDepthStencilValue == 1)
@@ -83,6 +116,9 @@ bool APlaceableUnit::PlaceUnit ()
 	//Disable outline
 	_mesh->bRenderCustomDepth = false;
 	_mesh->MarkRenderStateDirty ();
+
+	_mesh->SetCollisionEnabled (ECollisionEnabled::QueryAndPhysics);
+	_mesh->SetCollisionResponseToAllChannels (ECR_Block);
 
 	return true;
 }

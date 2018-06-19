@@ -41,6 +41,8 @@ public:
 	FString scoreText = "0";
 	UPROPERTY (BlueprintReadOnly)
 	FString endScoreText = "";
+	UPROPERTY (BlueprintReadOnly)
+	int starAmount = 1;
 
 	UFUNCTION (BlueprintImplementableEvent, Category = "Update")
 	void Update ();

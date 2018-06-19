@@ -42,7 +42,9 @@ void ACity::LerpStages(float DeltaTime) {
 		if (_stageActives[i]) {
 			//If the lerp value is under the value we need, increase it
 			if (_stageLerps[i] < 3.0f) {
-				_stageLerps[i] += (DeltaTime);
+				_stageLerps[i] += DeltaTime;
+			} else {
+				_stageLerps[i] = 3.0f;
 			}
 
 			//This exists because Unreal does not support nested arrays :(
@@ -75,17 +77,16 @@ void ACity::LerpStages(float DeltaTime) {
 
 					//Get and loop through all the materials, again should be just one
 					TArray<class UMaterialInterface*> materials = meshComponents[j]->GetMaterials();
-					for (int i = 0; i < materials.Num(); i++) {
+					for (int k = 0; k < materials.Num(); k++) {
 						//Create a dynamic material
 						UMaterialInstanceDynamic* matInstance = UMaterialInstanceDynamic::Create(_parentMaterial, building);
 
 						//Modify the lerp value for the buildup 
 						if (matInstance != nullptr) {
 							matInstance->SetScalarParameterValue("LerpValue", _stageLerps[i]);
-							//print("Changed Value");
 						}
 						//Apply changed material to the mesh component
-						meshComponents[j]->SetMaterial(i, matInstance);
+						meshComponents[j]->SetMaterial(k, matInstance);
 					}
 				}
 			}

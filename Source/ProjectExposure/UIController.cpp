@@ -44,6 +44,8 @@ void AUIController::InitializeWidgets ()
 	solarLosePanelRef = CreateWidget <UUserWidget> (GetWorld ()->GetFirstPlayerController (), solarLosePanel); //18
 	solarWinPanelRef = CreateWidget <UUserWidget> (GetWorld ()->GetFirstPlayerController (), solarWinPanel); //19
 	solarMiniGameRef = CreateWidget <UUserWidget> (GetWorld ()->GetFirstPlayerController (), solarMiniGame); //20
+	loseRef = CreateWidget <UUserWidget> (GetWorld ()->GetFirstPlayerController (), lose); //21
+	winRef = CreateWidget <UUserWidget> (GetWorld ()->GetFirstPlayerController (), win); //22
 	
 	userInterfaces.Add (currentTurnRef);
 	userInterfaces.Add (simulationRef);
@@ -66,6 +68,8 @@ void AUIController::InitializeWidgets ()
 	userInterfaces.Add (solarLosePanelRef);
 	userInterfaces.Add (solarWinPanelRef);
 	userInterfaces.Add (solarMiniGameRef);
+	userInterfaces.Add (loseRef);
+	userInterfaces.Add (winRef);
 
 	if (GetWorld ()->GetMapName ().Mid (GetWorld ()->StreamingLevelsPrefix.Len ()) == "MainLevel_3")
 		Enable (16, 2);

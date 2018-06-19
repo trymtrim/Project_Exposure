@@ -44,6 +44,8 @@ public:
 
 	UPROPERTY (BlueprintReadOnly)
 	FString endScoreUI = "";
+	UPROPERTY (BlueprintReadOnly)
+	int starAmount = 1;
 
 	UPROPERTY(BlueprintReadOnly)
 	FString livesUI = "Life(s): 3";

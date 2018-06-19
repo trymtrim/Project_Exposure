@@ -6,7 +6,7 @@
 
 CameraMovement::CameraMovement (AActor* cameraActor) : _cameraActor (cameraActor)
 {
-
+	_targetPosition = cameraActor->GetActorLocation ();
 }
 
 void CameraMovement::Update (float deltaTime)

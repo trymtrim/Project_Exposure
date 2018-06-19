@@ -116,6 +116,9 @@ void AIntroController::MoveToWindow ()
 	//Disable menu UI
 	uiController->Disable (3);
 
+	//Enable reset button UI
+	uiController->Enable (5, 3);
+
 	FVector targetPosition = FVector (-2510, -3357, 1018);
 	FVector targetRotation = FVector (0, -4, 180);
 

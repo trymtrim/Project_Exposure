@@ -28,16 +28,17 @@ public:
 	virtual void SetupPlayerInputComponent (class UInputComponent* PlayerInputComponent) override;
 
 	void ExitMiniGame ();
+	void StartClickDelay ();
+	void EndGame (bool gameWon); //True if won, false if lost
+
+	bool CanContinue ();
 
 	//For blueprints
 	UFUNCTION (BlueprintCallable, Category = "ButtonPress")
 	void SpawnUnit (int index);
 
 	UPROPERTY (BlueprintReadOnly)
-	bool gameStarted = false;
-
-	UPROPERTY (BlueprintReadOnly)
-	FString currentTurnText = "Turn 1";
+	FString currentTurnText = "Year 1";
 
 	UFUNCTION (BlueprintImplementableEvent, Category = "Feedback")
 	void UpdateCycle ();
@@ -53,6 +54,9 @@ protected:
 
 private:
 	void PlaceUnit ();
+	void RemoveUnit ();
+	void ClearRemovable ();
+	void ActivateOutlines (bool status);
 	void StartSimulation ();
 	void StopSimulation ();
 	void EnterMiniGame ();
@@ -63,6 +67,8 @@ private:
 	void UpdateMovingToMine (bool toMine);
 	void CheckAFK ();
 
+	UPROPERTY () TArray <APlaceableUnit*> _powerPlants;
+
 	float fadeInTimer;
 	float fadeOutTimer;
 	float fadeInDelay;
@@ -71,6 +77,7 @@ private:
 	bool fadingOut = false;
 	
 	float _simulationTimer = 0.0f;
+	bool _playSimulation = false;
 	bool _simulationRunning = false;
 	bool _placing = false;
 
@@ -82,8 +89,15 @@ private:
 	bool _oilGamePlayed = false;
 
 	UPROPERTY () AActor* _messageBox;
+	UPROPERTY () AActor* _removeBox;
+	AActor* _removePP;
 
-	bool _messageClicked = false;
+	bool _waitingForResponse = false;
+
+	//For minigame panels
+	bool _panelDelay = false;
+	float _panelTimer = 0.0f;
+	float _panelDelayTime = 2.0f;
 
 	//UI
 	bool _uiEnabled = false;
@@ -163,6 +177,8 @@ private:
 
 	UPROPERTY (EditAnywhere)
 	TSubclassOf <AActor> _optionalMinigameMessage;
+	UPROPERTY (EditAnywhere)
+	TSubclassOf <AActor> _removeMessage;
 
 	//Debug
 	UPROPERTY (EditAnywhere) bool _miniGamesOn = true;
