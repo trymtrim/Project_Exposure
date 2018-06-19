@@ -23,20 +23,31 @@ public:
 
 	//Called from SimulationGameController when a unit is placed
 	void OnPlaceUnit (int index);
+	void OnRemoveUnit(int unitType, int position);
 
 	void OnNewTurn (int currentTurn);
 
 	UPROPERTY(EditAnywhere)
 	ACity* _city;
 
+	UPROPERTY(EditAnywhere)
+	AActor* dayLightActor;
+	
+	UDirectionalLightComponent* dayLight;
+
+	UPROPERTY(EditAnywhere)
+	AActor* nightLightActor;
+
+	UDirectionalLightComponent* nightLight;
+
 	//Values for the energy and pollution bars //To make blocks, put a transparent sprite in front of the bars or something
-	UPROPERTY (BlueprintReadOnly)
+	UPROPERTY (BlueprintReadOnly, VisibleAnywhere)
 	float maxEnergy;
-	UPROPERTY (BlueprintReadOnly)
+	UPROPERTY (BlueprintReadOnly, VisibleAnywhere)
 	float currentEnergy;
-	UPROPERTY (BlueprintReadOnly)
+	UPROPERTY (BlueprintReadOnly, VisibleAnywhere)
 	float maxPollution;
-	UPROPERTY (BlueprintReadOnly)
+	UPROPERTY (BlueprintReadOnly, VisibleAnywhere)
 	float currentPollution;
 
 	UPROPERTY(BlueprintReadOnly)
@@ -44,6 +55,9 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "Feedback")
 	void ToggleParticlesEvent();
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "Feedback")
+	void UpdateCycle(bool isDay, float lerpValue, UDirectionalLightComponent* pDayLight, UDirectionalLightComponent* pNightLight);
 
 	void StartSimulation();
 	void StopSimulation();
@@ -54,16 +68,41 @@ protected:
 
 private:
 	void InitializeResources ();
-	void AddResources (int energyValue, int pollutionValue);
-	void UpdateResources (float deltaTime);
+	/*
+	* Use to add/remove resources, positive values for adding, negative values for removing
+	*/
+	void AddResources(int energyValue, int pollutionValue);
 
 	void ToggleParticles();
+	void CalculateFeedback();
+	void HandleResources();
+	void CheckForDeath();
+	void LerpLights(float DeltaTime);
+
+	bool _isSimulation;
+
+	bool _lightLerping;
+	bool _lightReversed;
+	float _lightLerpValue;
 
 	int _currentTurn;
 	int _currentCityStage;
 
-	//For lerping between values
-	float _targetEnergy;
-	float _targetPollution;
-	bool _lerping;
+	UPROPERTY(EditAnywhere)
+	FVector _feedbackNegativeScales;
+	UPROPERTY(EditAnywhere)
+	FVector _feedbackPositiveScales;
+
+	UPROPERTY(VisibleAnywhere)
+	int _cityEnergyNeed;
+	bool _insufficientLastRound;
+
+	UPROPERTY(VisibleAnywhere)
+	int _nuclearPollution;
+	UPROPERTY(VisibleAnywhere)
+	int _maxNuclearPollution;
+
+	TArray<int> _nuclear;
+	TArray<int> _solar;
+	TArray<int> _oil;
 };

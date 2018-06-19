@@ -18,8 +18,30 @@ void ASimulation::BeginPlay ()
 	Super::BeginPlay ();
 	InitializeResources ();
 	ToggleParticlesEvent();
+
 	_currentTurn = 0;
 	_currentCityStage = 0;
+
+	_lightLerping = false;
+	_lightReversed = false;
+	_lightLerpValue = 0;
+
+	//Get Light Components
+	if (dayLightActor->IsValidLowLevel()) {
+		UDirectionalLightComponent* temp = Cast<UDirectionalLightComponent>(dayLightActor->GetComponentByClass(UDirectionalLightComponent::StaticClass()));
+		if (temp->IsValidLowLevel()) {
+			dayLight = temp;
+		}
+	}
+	if (nightLightActor->IsValidLowLevel()) {
+		UDirectionalLightComponent* temp = Cast<UDirectionalLightComponent>(nightLightActor->GetComponentByClass(UDirectionalLightComponent::StaticClass()));
+		if (temp->IsValidLowLevel()) {
+			nightLight = temp;
+		}
+	}
+
+	_insufficientLastRound = false;
+	_isSimulation = false;
 }
 
 //Called every frame
@@ -27,7 +49,7 @@ void ASimulation::Tick (float DeltaTime)
 {
 	Super::Tick (DeltaTime);
 
-	UpdateResources (DeltaTime);
+	if (_lightLerping) LerpLights(DeltaTime);
 }
 
 void ASimulation::OnPlaceUnit (int index)
@@ -35,70 +57,200 @@ void ASimulation::OnPlaceUnit (int index)
 	switch (index)
 	{
 	case 1: //Nuclear reactor
-		AddResources (2, 1);
+		AddResources (3, 1);
+		_nuclear.Add(0);
 		break;
 	case 2: //Windmill
 		AddResources (1, 0);
+		_solar.Add(0);
 		break;
 	case 3: //Oil rig
 		AddResources (3, 3);
+		_oil.Add(0);
 		break;
 	}
-	//FTimerHandle _durationTimer;
-	//().SetTimer(_durationTimer, this, &ASimulation::toggleParticles, 5.0f, false);
+}
+
+void ASimulation::OnRemoveUnit(int unitType, int position) {
+	switch(unitType) 
+	{
+	case 1: //Nuclear reactor
+		AddResources(-3, 0);
+		_nuclear.Remove(position);
+		break;
+	case 2: //Windmill
+		AddResources(-1, 0);
+		_solar.Remove(position);
+		break;
+	case 3: //Oil rig
+		AddResources(-3, 0);
+		_oil.Remove(position);
+		break;
+	}
 }
 
 void ASimulation::OnNewTurn (int currentTurn) {
 	_currentTurn = currentTurn;
-	//Every nth turn - right now every 3rd
-	if (currentTurn % 3 == 0) {
-		_currentCityStage++;
-		_city->ToggleStage(_currentCityStage);
-		maxEnergy += 2;
-		maxPollution += 1;
-	}
 }
 
 void ASimulation::InitializeResources ()
 {
-	//Maximum resources at start
-	maxEnergy = 6;
-	maxPollution = 6;
+//Maximum resources at start
+maxEnergy = 0;
+maxPollution = 6;
 
-	//Starting resources
-	currentEnergy = 0;
-	currentPollution = 1;
+//Starting resources
+currentEnergy = 0;
+currentPollution = 0;
+
+_nuclearPollution = 0;
+_maxNuclearPollution = 5;
+
+//Misc
+_cityEnergyNeed = 2;
 }
 
-void ASimulation::AddResources (int energyValue, int pollutionValue)
-{
-	_targetEnergy = currentEnergy + energyValue;
-	_targetPollution = currentPollution + pollutionValue;
-
-	_lerping = true;
-}
-
-void ASimulation::UpdateResources (float deltaTime)
-{
-	if (_lerping)
-	{
-		if (currentEnergy != _targetEnergy || currentPollution != _targetPollution)
-		{
-			float speed = 1.0f;
-			currentEnergy = FMath::FInterpConstantTo (currentEnergy, _targetEnergy, deltaTime, speed);
-			currentPollution = FMath::FInterpConstantTo (currentPollution, _targetPollution, deltaTime, speed);
-		}
-		else
-			_lerping = false;
-	}
+void ASimulation::AddResources(int energyValue, int pollutionValue) {
+	currentEnergy += energyValue;
+	currentPollution += pollutionValue;
 }
 
 void ASimulation::StartSimulation() {
-	ToggleParticles();
+	_isSimulation = true;
+	_lightLerping = true;
+
+	//Increase all the resources 'n stuff
+	HandleResources();
+
+	//Check if the Player screwed up
+	CheckForDeath();
+
+	//Calc what the city is gonna do as feedback for this turn
+	CalculateFeedback();
 }
 
 void ASimulation::StopSimulation() {
-	ToggleParticles();
+	_isSimulation = false;
+	_lightLerping = true;
+}
+
+void ASimulation::LerpLights(float DeltaTime) {
+
+	if (!_lightReversed) _lightLerpValue += DeltaTime;
+	else _lightLerpValue -= DeltaTime;
+
+	if (_lightLerpValue > 1.0f && !_lightReversed) {
+		_lightLerping = false;
+		_lightReversed = true;
+		_lightLerpValue = 1.0f;
+	}
+	if (_lightReversed && _lightLerpValue < 0.0f) {
+		_lightLerping = false;
+		_lightReversed = false;
+		_lightLerpValue = 0.0f;
+	}
+	
+	bool temp = !_lightReversed;
+	//!_lightReversed because it is false when it is day -> so we need to swap them around to have true on day and false on night
+	UpdateCycle(temp, _lightLerpValue, dayLight, nightLight);
+}
+
+void ASimulation::HandleResources() {
+	//Every nth turn - right now every 3rd - make the city bigger, increase maximum resources and sizably increase city energy need
+	if (_currentTurn % 3 == 0 && _currentTurn > 2) {
+		_currentCityStage++;
+		if (_currentCityStage < 3) _city->ToggleStage(_currentCityStage);
+		_cityEnergyNeed += 3;
+	} else {
+		_cityEnergyNeed += 1;
+	}
+
+	if (_currentTurn % 2 == 1 && _currentTurn != 1) {
+		currentPollution -= 2;
+	}
+
+	//Loop through all the nuclear powerplants and increase and check the number of turns they exist
+	//If they exist for 2 turn, start adding nuclear waste
+	for (int i = 0; i < _nuclear.Num(); i++) {
+		_nuclear[i]++;
+		if (_nuclear[i] > 2) {
+			_nuclearPollution++;
+		}
+	}
+}
+
+void ASimulation::CheckForDeath() {
+	bool dead = false;
+	//Check if we have enough energy
+	if (currentEnergy < _cityEnergyNeed) {
+		dead = true;
+	}
+	//Check if there is too much nuclear waste
+	else if (_nuclearPollution > _maxNuclearPollution) {
+		dead = true;
+	}
+	//Check if there is too much pollution
+	else if (currentPollution > maxPollution) {
+		dead = true;
+	}
+
+	if (dead) {
+		if (_insufficientLastRound) {
+			//TODO: End game
+		} else {
+			_insufficientLastRound = true;
+		}
+	} else {
+		_insufficientLastRound = false;
+	}
+}
+
+void ASimulation::CalculateFeedback() {
+	//How much percent of the city energy need is our currentEnergy 
+	float percentage = currentEnergy / _cityEnergyNeed * 100;
+
+	//If we are negative
+	if (percentage < 100) {
+		//0 -> X
+		if (percentage < _feedbackNegativeScales.X) {
+
+		} 
+		//X -> Y
+		else if (percentage >= _feedbackNegativeScales.X && percentage < _feedbackNegativeScales.Y) {
+
+		} 
+		//Y -> Z
+		else if (percentage >= _feedbackNegativeScales.Y && percentage < _feedbackNegativeScales.Z) {
+
+		}
+		//Z -> 99
+		else {
+
+		}
+	} 
+	//If we are positive
+	else if (percentage > 100) {
+		//101 -> X
+		if (percentage < _feedbackPositiveScales.X) {
+
+		}
+		//X -> Y
+		else if (percentage >= _feedbackPositiveScales.X && percentage < _feedbackPositiveScales.Y) {
+
+		}
+		//Y -> Z
+		else if (percentage >= _feedbackPositiveScales.Y && percentage < _feedbackPositiveScales.Z) {
+
+		}
+		//Z -> infinity baby x)
+		else {
+
+		}
+	}
+	//If we are excatly at 100% needed energy
+	else {
+	
+	}
 }
 
 void ASimulation::ToggleParticles() {
