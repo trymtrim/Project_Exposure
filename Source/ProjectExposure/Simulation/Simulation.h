@@ -9,6 +9,8 @@
 #include "City.h"
 #include "Simulation.generated.h"
 
+class ASimulationGameController;
+
 UCLASS(Blueprintable)
 class PROJECTEXPOSURE_API ASimulation : public AActor
 {
@@ -26,6 +28,9 @@ public:
 	void OnRemoveUnit(int unitType, int position);
 
 	void OnNewTurn (int currentTurn);
+	
+	UPROPERTY(EditAnywhere)
+	ASimulationGameController* _controller;
 
 	UPROPERTY(EditAnywhere)
 	ACity* _city;
@@ -33,11 +38,13 @@ public:
 	UPROPERTY(EditAnywhere)
 	AActor* dayLightActor;
 	
+	UPROPERTY()
 	UDirectionalLightComponent* dayLight;
 
 	UPROPERTY(EditAnywhere)
 	AActor* nightLightActor;
 
+	UPROPERTY()
 	UDirectionalLightComponent* nightLight;
 
 	//Values for the energy and pollution bars //To make blocks, put a transparent sprite in front of the bars or something

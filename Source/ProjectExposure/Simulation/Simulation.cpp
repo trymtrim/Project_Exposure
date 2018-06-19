@@ -2,6 +2,7 @@
 
 #include "Simulation.h"
 #include "TimerManager.h"
+#include "SimulationGameController.h"
 
 #define print(text) if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 1.5, FColor::Green,text)
 
@@ -132,6 +133,8 @@ void ASimulation::StartSimulation() {
 void ASimulation::StopSimulation() {
 	_isSimulation = false;
 	_lightLerping = true;
+
+	if (_currentTurn == 9) _controller->EndGame(true);
 }
 
 void ASimulation::LerpLights(float DeltaTime) {
@@ -196,7 +199,7 @@ void ASimulation::CheckForDeath() {
 
 	if (dead) {
 		if (_insufficientLastRound) {
-			//TODO: End game
+			_controller->EndGame(false);
 		} else {
 			_insufficientLastRound = true;
 		}
