@@ -30,7 +30,7 @@ public:
 	cartAnimationRef = 12		drillAnimation2Ref = 13
 	videoRef = 14				videoPauseRef = 15
 	blackStartRef = 16			solarAnimationRef = 17
-	solarLosePanelRef = 18		solarWinPanelRef = 19
+	thrashRef = 18		solarWinPanelRef = 19
 	solarMiniGameRef = 20		loseRef = 21
 	winRef = 22
 	*/
@@ -45,7 +45,7 @@ public:
 	cartAnimationRef = 12		drillAnimation2Ref = 13
 	videoRef = 14				videoPauseRef = 15
 	blackStartRef = 16			solarAnimationRef = 17
-	solarLosePanelRef = 18		solarWinPanelRef = 19
+	thrashRef = 18		solarWinPanelRef = 19
 	solarMiniGameRef = 20		loseRef = 21
 	winRef = 22
 	*/

@@ -19,6 +19,9 @@ public:
 	//Called every frame
 	virtual void Tick (float deltaTime) override;
 
+	void ActivateOutline (bool status);
+	void SetRemovable (bool status);
+	bool GetRemovable ();
 	bool PlaceUnit ();
 	int GetTypeIndex ();
 
@@ -28,10 +31,12 @@ protected:
 	
 private:
 	void FollowMousePosition ();
+	void ActivateRemoveOutline ();
 
 	APlayerController* _playerController;
 
 	bool _isPlaced = false;
+	bool _isRemovable = false;
 
 	UPROPERTY () UStaticMeshComponent* _mesh;
 };

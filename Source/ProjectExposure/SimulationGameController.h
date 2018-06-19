@@ -54,6 +54,9 @@ protected:
 
 private:
 	void PlaceUnit ();
+	void RemoveUnit ();
+	void ClearRemovable ();
+	void ActivateOutlines (bool status);
 	void StartSimulation ();
 	void StopSimulation ();
 	void EnterMiniGame ();
@@ -64,6 +67,8 @@ private:
 	void UpdateMovingToMine (bool toMine);
 	void CheckAFK ();
 
+	UPROPERTY () TArray <APlaceableUnit*> _powerPlants;
+
 	float fadeInTimer;
 	float fadeOutTimer;
 	float fadeInDelay;
@@ -72,6 +77,7 @@ private:
 	bool fadingOut = false;
 	
 	float _simulationTimer = 0.0f;
+	bool _playSimulation = false;
 	bool _simulationRunning = false;
 	bool _placing = false;
 
@@ -83,8 +89,10 @@ private:
 	bool _oilGamePlayed = false;
 
 	UPROPERTY () AActor* _messageBox;
+	UPROPERTY () AActor* _removeBox;
+	AActor* _removePP;
 
-	bool _messageClicked = false;
+	bool _waitingForResponse = false;
 
 	//For minigame panels
 	bool _panelDelay = false;
@@ -169,6 +177,8 @@ private:
 
 	UPROPERTY (EditAnywhere)
 	TSubclassOf <AActor> _optionalMinigameMessage;
+	UPROPERTY (EditAnywhere)
+	TSubclassOf <AActor> _removeMessage;
 
 	//Debug
 	UPROPERTY (EditAnywhere) bool _miniGamesOn = true;

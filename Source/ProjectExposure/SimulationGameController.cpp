@@ -42,6 +42,8 @@ void ASimulationGameController::BeginPlay ()
 //Called every frame
 void ASimulationGameController::Tick (float DeltaTime)
 {
+	Super::Tick (DeltaTime);
+
 	//Disable the black start panel after set amount of seconds
 	if (_startPanelEnabled)
 	{
@@ -77,8 +79,6 @@ void ASimulationGameController::Tick (float DeltaTime)
 		_uiEnabled = true;
 	}
 
-	Super::Tick (DeltaTime);
-
 	if (FVector::Distance (GetActorLocation (), _cameraMovement->GetTargetPosition ()) > 5.0f)
 		_cameraMovement->Update (DeltaTime);
 	else if (!_miniGameIsActive && FVector::Distance (GetActorLocation (), _defaultPosition) > 50)
@@ -101,13 +101,18 @@ void ASimulationGameController::Tick (float DeltaTime)
 
 		_miniGameIsActive = true;
 	}
+	else if (!_waitingForResponse && _playSimulation)
+	{
+		_playSimulation = false;
+		StartSimulation ();
+	}
 
 	if (fadingIn || fadingOut)
 		UpdateFading (DeltaTime);
 
 	//As long as we are in the simulation run the day/night cycle
-	if (_simulationRunning)
-		UpdateCycle ();
+	//if (_simulationRunning)
+	//	UpdateCycle ();
 
 	if (_movingToMine)
 		UpdateMovingToMine (true);
@@ -168,6 +173,10 @@ void ASimulationGameController::SpawnUnit (int index)
 
 		//Disable simulation UI
 		_uiController->Disable (1);
+		//Enable thrash UI
+		_uiController->Enable (18, 0);
+
+		ClearRemovable ();
 	}
 }
 
@@ -176,8 +185,32 @@ void ASimulationGameController::PlaceUnit ()
 	if (!_controlledUnit)
 		return;
 
-	if (_controlledUnit->PlaceUnit ())
+	//If the video-buttuon is pressed
+	APlayerController* playerController = GetWorld ()->GetFirstPlayerController ();
+	FVector2D mousePos;
+	playerController->GetMousePosition (mousePos.X, mousePos.Y);
+
+	FIntVector viewportBounds;
+	playerController->GetViewportSize (viewportBounds.X, viewportBounds.Y);
+
+	FVector2D percentage = FVector2D (mousePos.X / viewportBounds.X * 100, mousePos.Y / viewportBounds.Y * 100);
+
+	print (FString::FromInt (percentage.X));
+	print (FString::FromInt (percentage.Y));
+
+	if (percentage.X >= 44 && percentage.X <= 55 && percentage.Y >= 81)
 	{
+		//Enable simulation UI
+		_uiController->Enable (1, 0);
+
+		//Remove currently controlled unit
+		_controlledUnit->Destroy ();
+		_controlledUnit = nullptr;
+	}
+	else if (_controlledUnit->PlaceUnit ())
+	{
+		_powerPlants.Add (_controlledUnit);
+
 		int miniGameType = _controlledUnit->GetTypeIndex ();
 
 		_simulation->OnPlaceUnit (miniGameType);
@@ -187,34 +220,131 @@ void ASimulationGameController::PlaceUnit ()
 		//Spawn the optional minigame message
 		FActorSpawnParameters spawnParams;
 		FVector spawnPosition = _controlledUnit->GetActorLocation () + FVector (0, 0, 500);
-		FRotator rotator = FVector (0.0f, 0.0f, 0.0f).Rotation ();
+
+		FVector rotation = spawnPosition - GetActorLocation ();
+		FRotator rotator = rotation.Rotation ();
 
 		//If the current mini game has been played before, give the player the option to play it again
 		if (_miniGameActive == 1 && _mineGamePlayed || _miniGameActive == 2 && _windGamePlayed || _miniGameActive == 3 && _oilGamePlayed)
 			_messageBox = GetWorld ()->SpawnActor <AActor> (_optionalMinigameMessage, spawnPosition + FVector (0, 0, 500), rotator, spawnParams);
 
 		_controlledUnit = nullptr;
-		
-		//When the unit is placed, start simulation
-		StartSimulation ();
+
+		//Check if player wants to play minigame first
+		if (_miniGameActive == 1 && !_mineGamePlayed || _miniGameActive == 2 && !_windGamePlayed || _miniGameActive == 3 && !_oilGamePlayed)
+			EnterMiniGame ();
+		else
+		{
+			_playSimulation = true;
+			_waitingForResponse = true;
+		}
 
 		_placing = false;
+		ActivateOutlines (false);
 	}
 	else
 	{
 		//Enable simulation UI
 		_uiController->Enable (1, 0);
+
 		//Remove currently controlled unit
 		_controlledUnit->Destroy ();
 		_controlledUnit = nullptr;
 	}
+
+	//Disable thrash UI
+	_uiController->Disable (18);
+}
+
+void ASimulationGameController::RemoveUnit ()
+{
+	if (_controlledUnit)
+		return;
+
+	//Trace to see what is under the mouse cursor
+	FHitResult hit;
+	GetWorld ()->GetFirstPlayerController ()->GetHitResultUnderCursor (ECC_Visibility, true, hit);
+
+	if (hit.GetActor ()->GetRootComponent ()->ComponentHasTag ("Nuclear") || hit.GetActor ()->GetRootComponent ()->ComponentHasTag ("Windmill") || hit.GetActor ()->GetRootComponent ()->ComponentHasTag ("Oil") || hit.GetActor ()->GetRootComponent ()->ComponentHasTag ("message"))
+	{
+		APlaceableUnit* unit = nullptr;
+
+		if (hit.GetActor ()->GetRootComponent ()->ComponentHasTag ("message"))
+			unit = Cast <APlaceableUnit> (_removePP);
+		else
+			unit = Cast <APlaceableUnit> (hit.GetActor ());
+	
+		if (unit->GetRemovable ())
+		{
+			if (hit.bBlockingHit)
+			{
+				unit->Destroy ();
+				_removeBox->Destroy ();
+
+				switch (unit->GetTypeIndex ())
+				{
+				case 1:
+					//_simulation.OnRemoveUnit (1, 0);
+					break;
+				case 2:
+					//_simulation.OnRemoveUnit (2, 0);
+					break;
+				case 3:
+					//_simulation.OnRemoveUnit (3, 0);
+					break;
+				}
+
+				_powerPlants.Remove (unit);
+				_removePP = nullptr;
+			}
+		}
+		else
+		{
+			if (_removeBox)
+				_removeBox->Destroy ();
+			if (_removePP)
+				Cast <APlaceableUnit> (_removePP)->SetRemovable (false);
+
+			unit->SetRemovable (true);
+			_removePP = unit;
+			
+			//Spawn the remove message
+			FActorSpawnParameters spawnParams;
+			FVector spawnPosition = unit->GetActorLocation () + FVector (0, 0, 750);
+
+			FVector rotation = spawnPosition - GetActorLocation ();
+			FRotator rotator = rotation.Rotation ();
+
+			_removeBox = GetWorld ()->SpawnActor <AActor> (_removeMessage, spawnPosition, rotator, spawnParams);
+		}
+	}
+	else
+		ClearRemovable ();
+}
+
+void ASimulationGameController::ClearRemovable ()
+{
+	if (_removeBox)
+	{
+		for (int i = 0; i < _powerPlants.Num (); i++)
+		{
+			if (_powerPlants [i]->GetRemovable ())
+				_powerPlants [i]->SetRemovable (false);
+		}
+
+		_removeBox->Destroy ();
+		_removePP = nullptr;
+	}
+}
+
+void ASimulationGameController::ActivateOutlines (bool status)
+{
+	for (int i = 0; i < _powerPlants.Num (); i++)
+		_powerPlants [i]->ActivateOutline (status);
 }
 
 void ASimulationGameController::StartSimulation ()
 {
-	//Enable simulationTest UI
-	//_uiController->Enable (_uiController->simulationTestRef, 0);
-
 	_simulationRunning = true;
 	
 	_simulation->StartSimulation ();
@@ -222,19 +352,12 @@ void ASimulationGameController::StartSimulation ()
 
 void ASimulationGameController::StopSimulation ()
 {
-	//Disable simulationTest UI
-	//_uiController->Disable (_uiController->simulationTestRef);
-
-	if (_miniGameActive == 1 && !_mineGamePlayed || _miniGameActive == 2 && !_windGamePlayed || _miniGameActive == 3 && !_oilGamePlayed || _messageClicked)
-		EnterMiniGame ();
-	else
-		StartNewTurn ();
+	StartNewTurn ();
 
 	if (_messageBox)
 		_messageBox->Destroy ();
 
 	_simulationRunning = false;
-	_messageClicked = false;
 
 	_simulation->StopSimulation ();
 }
@@ -244,7 +367,6 @@ void ASimulationGameController::EnterMiniGame ()
 	switch (_miniGameActive)
 	{
 	case 1:
-		//_cameraMovement->MoveTo (_minePosition, _mineRotation);
 		_cameraMovement->MoveTo (_mineCameraPositions [0], _mineCameraRotations [0]);
 		_movingToMine = true;
 		_mineGamePlayed = true;
@@ -274,7 +396,8 @@ void ASimulationGameController::ExitMiniGame ()
 	_miniGameIsActive = false;
 
 	//After exiting minigame, start a new turn
-	StartNewTurn ();
+	//StartNewTurn ();
+	_playSimulation = true;
 
 	if (_miniGameActive == 1)
 	{
@@ -327,6 +450,7 @@ void ASimulationGameController::StartNewTurn ()
 	_simulation->OnNewTurn (_currentTurn);
 
 	_placing = true;
+	ActivateOutlines (true);
 }
 
 void ASimulationGameController::FadeIn (float delayTime, float fadeTime)
@@ -427,7 +551,7 @@ void ASimulationGameController::OnSpacePress ()
 
 void ASimulationGameController::OnMouseClick ()
 {
-	if (_simulationRunning)
+	if (_waitingForResponse)
 	{
 		//Trace to see what is under the mouse cursor
 		FHitResult hit;
@@ -438,10 +562,17 @@ void ASimulationGameController::OnMouseClick ()
 			if (hit.GetActor ()->GetRootComponent ()->ComponentHasTag ("message"))
 			{
 				hit.GetActor ()->Destroy ();
-				_messageClicked = true;
+				EnterMiniGame ();
 			}
 		}
+
+		if (_messageBox)
+			_messageBox->Destroy ();
+
+		_waitingForResponse = false;
 	}
+	else if (_placing)
+		RemoveUnit ();
 }
 
 void ASimulationGameController::OnMouseRelease ()
