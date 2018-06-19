@@ -94,6 +94,8 @@ private:
 
 	bool _waitingForResponse = false;
 
+	bool _gameFinished = false;
+
 	//For minigame panels
 	bool _panelDelay = false;
 	float _panelTimer = 0.0f;

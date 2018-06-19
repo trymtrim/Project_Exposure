@@ -44,6 +44,9 @@ void ASimulationGameController::Tick (float DeltaTime)
 {
 	Super::Tick (DeltaTime);
 
+	if (_gameFinished)
+		return;
+
 	//Disable the black start panel after set amount of seconds
 	if (_startPanelEnabled)
 	{
@@ -195,9 +198,6 @@ void ASimulationGameController::PlaceUnit ()
 
 	FVector2D percentage = FVector2D (mousePos.X / viewportBounds.X * 100, mousePos.Y / viewportBounds.Y * 100);
 
-	print (FString::FromInt (percentage.X));
-	print (FString::FromInt (percentage.Y));
-
 	if (percentage.X >= 44 && percentage.X <= 55 && percentage.Y >= 81)
 	{
 		//Enable simulation UI
@@ -284,13 +284,13 @@ void ASimulationGameController::RemoveUnit ()
 				switch (unit->GetTypeIndex ())
 				{
 				case 1:
-					//_simulation.OnRemoveUnit (1, 0);
+					_simulation->OnRemoveUnit (1, 0);
 					break;
 				case 2:
-					//_simulation.OnRemoveUnit (2, 0);
+					_simulation->OnRemoveUnit (2, 0);
 					break;
 				case 3:
-					//_simulation.OnRemoveUnit (3, 0);
+					_simulation->OnRemoveUnit (3, 0);
 					break;
 				}
 
@@ -395,8 +395,7 @@ void ASimulationGameController::ExitMiniGame ()
 
 	_miniGameIsActive = false;
 
-	//After exiting minigame, start a new turn
-	//StartNewTurn ();
+	//After exiting minigame, play simulation
 	_playSimulation = true;
 
 	if (_miniGameActive == 1)
@@ -432,6 +431,8 @@ void ASimulationGameController::EndGame (bool gameWon)
 		//Enable lose UI
 		_uiController->Enable (21, 0);
 	}
+
+	_gameFinished = true;
 }
 
 bool ASimulationGameController::CanContinue ()
@@ -551,7 +552,9 @@ void ASimulationGameController::OnSpacePress ()
 
 void ASimulationGameController::OnMouseClick ()
 {
-	if (_waitingForResponse)
+	if (_gameFinished)
+		ReloadGame ();
+	else if (_waitingForResponse)
 	{
 		//Trace to see what is under the mouse cursor
 		FHitResult hit;
@@ -562,6 +565,7 @@ void ASimulationGameController::OnMouseClick ()
 			if (hit.GetActor ()->GetRootComponent ()->ComponentHasTag ("message"))
 			{
 				hit.GetActor ()->Destroy ();
+				_playSimulation = false;
 				EnterMiniGame ();
 			}
 		}

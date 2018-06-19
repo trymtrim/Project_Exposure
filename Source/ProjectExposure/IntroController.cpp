@@ -235,4 +235,3 @@ void AIntroController::SetupPlayerInputComponent (UInputComponent* PlayerInputCo
 	PlayerInputComponent->BindAction ("R", IE_Pressed, this, &AIntroController::RestartLevel);
 	PlayerInputComponent->BindAction ("S", IE_Pressed, this, &AIntroController::ChangeLevel);
 }
-
