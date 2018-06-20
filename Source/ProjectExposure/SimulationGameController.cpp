@@ -213,8 +213,6 @@ void ASimulationGameController::PlaceUnit ()
 
 		int miniGameType = _controlledUnit->GetTypeIndex ();
 
-		_simulation->OnPlaceUnit (miniGameType);
-
 		_miniGameActive = miniGameType;
 
 		//Spawn the optional minigame message
@@ -278,21 +276,21 @@ void ASimulationGameController::RemoveUnit ()
 		{
 			if (hit.bBlockingHit)
 			{
-				unit->Destroy ();
-				_removeBox->Destroy ();
-
 				switch (unit->GetTypeIndex ())
 				{
 				case 1:
-					_simulation->OnRemoveUnit (1, 0);
+					_simulation->OnRemoveUnit (unit);
 					break;
 				case 2:
-					_simulation->OnRemoveUnit (2, 0);
+					_simulation->OnRemoveUnit (unit);
 					break;
 				case 3:
-					_simulation->OnRemoveUnit (3, 0);
+					_simulation->OnRemoveUnit (unit);
 					break;
 				}
+
+				unit->Destroy ();
+				_removeBox->Destroy ();
 
 				_powerPlants.Remove (unit);
 				_removePP = nullptr;
@@ -343,10 +341,32 @@ void ASimulationGameController::ActivateOutlines (bool status)
 		_powerPlants [i]->ActivateOutline (status);
 }
 
+void ASimulationGameController::SetMinigamePerformance (MinigamePerformance performance)
+{
+	switch (performance)
+	{
+	case BAD:
+		_minigamePerformance = 0.75f;
+		break;
+	case NORMAL:
+		_minigamePerformance = 1.0f;
+		break;
+	case GOOD:
+		_minigamePerformance = 1.25f;
+		break;
+	}
+}
+
 void ASimulationGameController::StartSimulation ()
 {
 	_simulationRunning = true;
-	
+
+	_powerPlants [_powerPlants.Num () -1]->SetPerformancePercentage (_minigamePerformance);
+	_simulation->OnPlaceUnit (_powerPlants [_powerPlants.Num () - 1]);
+
+	_miniGameActive = 0;
+	_minigamePerformance = 1.0f;
+
 	_simulation->StartSimulation ();
 }
 
@@ -405,8 +425,6 @@ void ASimulationGameController::ExitMiniGame ()
 	}
 	else
 		_cameraMovement->MoveTo (_defaultPosition, _defaultRotation);
-
-	_miniGameActive = 0;
 
 	//Enable resources UI
 	_uiController->Enable (2, 0);

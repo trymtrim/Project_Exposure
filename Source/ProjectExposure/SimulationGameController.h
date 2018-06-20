@@ -27,9 +27,17 @@ public:
 	//Called to bind functionality to input
 	virtual void SetupPlayerInputComponent (class UInputComponent* PlayerInputComponent) override;
 
+	enum MinigamePerformance
+	{
+		BAD,
+		NORMAL,
+		GOOD
+	};
+
 	void ExitMiniGame ();
 	void StartClickDelay ();
 	void EndGame (bool gameWon); //True if won, false if lost
+	void SetMinigamePerformance (MinigamePerformance performance);
 
 	bool CanContinue ();
 
@@ -88,12 +96,13 @@ private:
 	bool _windGamePlayed = false;
 	bool _oilGamePlayed = false;
 
+	float _minigamePerformance = 1.0f;
+
 	UPROPERTY () AActor* _messageBox;
 	UPROPERTY () AActor* _removeBox;
 	AActor* _removePP;
 
 	bool _waitingForResponse = false;
-
 	bool _gameFinished = false;
 
 	//For minigame panels

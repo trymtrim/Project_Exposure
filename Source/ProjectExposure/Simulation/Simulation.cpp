@@ -53,39 +53,39 @@ void ASimulation::Tick (float DeltaTime)
 	if (_lightLerping) LerpLights(DeltaTime);
 }
 
-void ASimulation::OnPlaceUnit (int index)
+void ASimulation::OnPlaceUnit (APlaceableUnit* unit)
 {
-	switch (index)
+	switch (unit->GetTypeIndex ())
 	{
 	case 1: //Nuclear reactor
-		AddResources (3, 1);
-		_nuclear.Add(0);
+		AddResources (3.0f * unit->GetPerformancePercentage (), 1.0f);
+		_nuclear.Add(unit);
 		break;
 	case 2: //Windmill
-		AddResources (1, 0);
-		_solar.Add(0);
+		AddResources (1.0f * unit->GetPerformancePercentage (), 0.0f);
+		_solar.Add(unit);
 		break;
 	case 3: //Oil rig
-		AddResources (3, 3);
-		_oil.Add(0);
+		AddResources (3.0f * unit->GetPerformancePercentage (), 3.0f);
+		_oil.Add(unit);
 		break;
 	}
 }
 
-void ASimulation::OnRemoveUnit(int unitType, int position) {
-	switch(unitType) 
+void ASimulation::OnRemoveUnit(APlaceableUnit* unit) {
+	switch(unit->GetTypeIndex ()) 
 	{
 	case 1: //Nuclear reactor
-		AddResources(-3, 0);
-		_nuclear.Remove(position);
+		AddResources(-3 * unit->GetPerformancePercentage (), 0);
+		_nuclear.Remove (unit);
 		break;
 	case 2: //Windmill
-		AddResources(-1, 0);
-		_solar.Remove(position);
+		AddResources(-1 * unit->GetPerformancePercentage (), 0);
+		_solar.Remove (unit);
 		break;
 	case 3: //Oil rig
-		AddResources(-3, 0);
-		_oil.Remove(position);
+		AddResources(-3 * unit->GetPerformancePercentage (), 0);
+		_oil.Remove (unit);
 		break;
 	}
 }
@@ -111,7 +111,7 @@ _maxNuclearPollution = 5;
 _cityEnergyNeed = 2;
 }
 
-void ASimulation::AddResources(int energyValue, int pollutionValue) {
+void ASimulation::AddResources(float energyValue, float pollutionValue) {
 	currentEnergy += energyValue;
 	currentPollution += pollutionValue;
 }
@@ -123,9 +123,6 @@ void ASimulation::StartSimulation() {
 	//Increase all the resources 'n stuff
 	HandleResources();
 
-	//Check if the Player screwed up
-	CheckForDeath();
-
 	//Calc what the city is gonna do as feedback for this turn
 	CalculateFeedback();
 }
@@ -134,7 +131,8 @@ void ASimulation::StopSimulation() {
 	_isSimulation = false;
 	_lightLerping = true;
 
-	if (_currentTurn == 9) _controller->EndGame(true);
+	//Check if the Player screwed up
+	CheckForDeath();
 }
 
 void ASimulation::LerpLights(float DeltaTime) {
@@ -175,8 +173,8 @@ void ASimulation::HandleResources() {
 	//Loop through all the nuclear powerplants and increase and check the number of turns they exist
 	//If they exist for 2 turn, start adding nuclear waste
 	for (int i = 0; i < _nuclear.Num(); i++) {
-		_nuclear[i]++;
-		if (_nuclear[i] > 2) {
+		_nuclear[i]->AddTurn ();
+		if (_nuclear[i]->GetTurn () > 2) {
 			_nuclearPollution++;
 		}
 	}
@@ -206,6 +204,8 @@ void ASimulation::CheckForDeath() {
 	} else {
 		_insufficientLastRound = false;
 	}
+	
+	if (_currentTurn == 9 && !dead) _controller->EndGame(true);
 }
 
 void ASimulation::CalculateFeedback() {

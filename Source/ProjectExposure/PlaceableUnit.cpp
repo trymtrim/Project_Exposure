@@ -73,6 +73,16 @@ void APlaceableUnit::FollowMousePosition ()
 	}
 }
 
+void APlaceableUnit::SetPerformancePercentage (float percentage)
+{
+	_performancePercentage = percentage;
+}
+
+float APlaceableUnit::GetPerformancePercentage ()
+{
+	return _performancePercentage;
+}
+
 void APlaceableUnit::ActivateOutline (bool status)
 {
 	_mesh->bRenderCustomDepth = status;
@@ -81,6 +91,16 @@ void APlaceableUnit::ActivateOutline (bool status)
 		_mesh->SetCustomDepthStencilValue (0);
 
 	_mesh->MarkRenderStateDirty ();
+}
+
+void APlaceableUnit::AddTurn ()
+{
+	_turns++;
+}
+
+int APlaceableUnit::GetTurn ()
+{
+	return _turns;
 }
 
 void APlaceableUnit::ActivateRemoveOutline ()

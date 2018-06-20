@@ -65,13 +65,13 @@ private:
 	ASimulationGameController* _gameController;
 
 	//Game positions
-	FVector _middlePosition = FVector (4245, 4925, 110);
+	UPROPERTY () FVector _middlePosition = FVector (4245, 4925, 110);
 	UPROPERTY () AActor* _beamPosition;
 	UPROPERTY () AActor* _goalPosition;
 	UPROPERTY () AActor* _goalTarget;
 	UPROPERTY () TArray <AActor*> _grid;
 	UPROPERTY () TArray <AActor*> _mirrors;
-	TMap <AActor*, int> _mirrorRotations;
+	UPROPERTY () TMap <AActor*, int> _mirrorRotations;
 	UPROPERTY () TArray <AActor*> _beams;
 	UPROPERTY () AActor* _startBeam;
 

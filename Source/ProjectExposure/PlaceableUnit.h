@@ -20,6 +20,10 @@ public:
 	virtual void Tick (float deltaTime) override;
 
 	void ActivateOutline (bool status);
+	void AddTurn ();
+	int GetTurn ();
+	void SetPerformancePercentage (float percentage);
+	float GetPerformancePercentage ();
 	void SetRemovable (bool status);
 	bool GetRemovable ();
 	bool PlaceUnit ();
@@ -37,6 +41,10 @@ private:
 
 	bool _isPlaced = false;
 	bool _isRemovable = false;
+
+	float _performancePercentage = 1.0f;
+
+	int _turns = 0;
 
 	UPROPERTY () UStaticMeshComponent* _mesh;
 };
