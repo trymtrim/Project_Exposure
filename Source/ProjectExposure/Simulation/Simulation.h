@@ -7,6 +7,7 @@
 #include "Components/DirectionalLightComponent.h"
 #include "Runtime/Engine/Classes/Particles/ParticleSystemComponent.h"
 #include "City.h"
+#include "PlaceableUnit.h"
 #include "Simulation.generated.h"
 
 class ASimulationGameController;
@@ -24,8 +25,8 @@ public:
 	virtual void Tick (float DeltaTime) override;
 
 	//Called from SimulationGameController when a unit is placed
-	void OnPlaceUnit (int index);
-	void OnRemoveUnit(int unitType, int position);
+	void OnPlaceUnit (APlaceableUnit* unit);
+	void OnRemoveUnit(APlaceableUnit* unit);
 
 	void OnNewTurn (int currentTurn);
 	
@@ -78,7 +79,7 @@ private:
 	/*
 	* Use to add/remove resources, positive values for adding, negative values for removing
 	*/
-	void AddResources(int energyValue, int pollutionValue);
+	void AddResources(float energyValue, float pollutionValue);
 
 	void ToggleParticles();
 	void CalculateFeedback();
@@ -109,7 +110,7 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	int _maxNuclearPollution;
 
-	TArray<int> _nuclear;
-	TArray<int> _solar;
-	TArray<int> _oil;
+	TArray<APlaceableUnit*> _nuclear;
+	TArray<APlaceableUnit*> _solar;
+	TArray<APlaceableUnit*> _oil;
 };
