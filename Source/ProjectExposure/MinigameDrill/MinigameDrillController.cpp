@@ -122,10 +122,20 @@ void AMinigameDrillController::EndGame ()
 	SetActorTickEnabled (false);
 
 	if (_score < 30 / 3)
+	{
 		starAmount = 1;
+		_gameController->SetMinigamePerformance (_gameController->BAD);
+	}
 	else if (_score > 30 / 3 && _score < 30 - (30 /3))
+	{
 		starAmount = 2;
-	else starAmount = 3;
+		_gameController->SetMinigamePerformance (_gameController->NORMAL);
+	}
+	else 
+	{
+		starAmount = 3;
+		_gameController->SetMinigamePerformance (_gameController->GOOD);
+	}
 
 	if (_lives == 0)
 	{

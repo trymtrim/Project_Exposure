@@ -358,7 +358,7 @@ void AMinigameSolarController::EndGame ()
 	SetActorTickEnabled (false);
 
 	SetScore (500);
-	endScoreText = "You got " + FString::FromInt (_score) + " out of 3000 points";
+	endScoreText = "1/1";
 
 	//Disable solarMiniGame UI
 	_uiController->Disable (20);

@@ -53,17 +53,15 @@ void AIntroController::Tick (float DeltaTime)
 	UpdateTimer (DeltaTime);
 }
 
+void AIntroController::StartGame ()
+{
+	MoveToWindow ();
+}
+
 void AIntroController::OnMouseClick ()
 {
-	switch (_currentState)
-	{
-	case MENU:
-		MoveToWindow ();
-		break;
-	case PAUSE:
+	if (_currentState == PAUSE)
 		ContinueVideo ();
-		break;
-	}
 }
 
 void AIntroController::UpdateTimer (float deltaTime)

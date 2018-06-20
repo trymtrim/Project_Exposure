@@ -65,7 +65,7 @@ void ASimulationGameController::Tick (float DeltaTime)
 		_uiController->Enable (1, 0);
 
 		//Enable resources UI
-		_uiController->Enable (2, 0);
+		//_uiController->Enable (2, 0);
 
 		//Enable currentTurn UI
 		_uiController->Enable (0, 1);
@@ -112,10 +112,6 @@ void ASimulationGameController::Tick (float DeltaTime)
 
 	if (fadingIn || fadingOut)
 		UpdateFading (DeltaTime);
-
-	//As long as we are in the simulation run the day/night cycle
-	//if (_simulationRunning)
-	//	UpdateCycle ();
 
 	if (_movingToMine)
 		UpdateMovingToMine (true);
@@ -346,7 +342,7 @@ void ASimulationGameController::SetMinigamePerformance (MinigamePerformance perf
 	switch (performance)
 	{
 	case BAD:
-		_minigamePerformance = 0.75f;
+		_minigamePerformance = 1.0f; //TEMP
 		break;
 	case NORMAL:
 		_minigamePerformance = 1.0f;
@@ -404,7 +400,7 @@ void ASimulationGameController::EnterMiniGame ()
 	}
 
 	//Disable resources UI
-	_uiController->Disable (2);
+	//_uiController->Disable (2);
 	//Disable currentTurn UI
 	_uiController->Disable (0);
 }
@@ -427,7 +423,7 @@ void ASimulationGameController::ExitMiniGame ()
 		_cameraMovement->MoveTo (_defaultPosition, _defaultRotation);
 
 	//Enable resources UI
-	_uiController->Enable (2, 0);
+	//_uiController->Enable (2, 0);
 	//Enable currentTurn UI
 	_uiController->Enable (0, 0);
 }

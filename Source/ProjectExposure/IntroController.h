@@ -31,6 +31,9 @@ public:
 	UFUNCTION (BlueprintImplementableEvent, Category = "Video")
 	void Resume ();
 
+	UFUNCTION (BlueprintCallable)
+	void StartGame ();
+
 	//Debug
 	UFUNCTION (BlueprintImplementableEvent, Category = "Video")
 	void RestartLevel ();

@@ -103,7 +103,7 @@ public:
 	UPROPERTY (BlueprintReadOnly, Category = "UI") UUserWidget* currentTurnRef;
 	UPROPERTY (BlueprintReadOnly, Category = "UI") UUserWidget* simulationRef;
 	UPROPERTY (BlueprintReadOnly, Category = "UI") UUserWidget* resourcesRef;
-	UPROPERTY () UUserWidget* menuRef;
+	UPROPERTY (BlueprintReadOnly, Category = "UI") UUserWidget* menuRef;
 	UPROPERTY (BlueprintReadOnly, Category = "UI") UUserWidget* drillMiniGameRef;
 	UPROPERTY (BlueprintReadOnly, Category = "UI") UUserWidget* cartMiniGameRef;
 	UPROPERTY (BlueprintReadOnly, Category = "UI") UUserWidget* drillLosePanelRef;

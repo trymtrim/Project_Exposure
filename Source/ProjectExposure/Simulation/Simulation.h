@@ -11,6 +11,7 @@
 #include "Simulation.generated.h"
 
 class ASimulationGameController;
+class AEmitter;
 
 UCLASS(Blueprintable)
 class PROJECTEXPOSURE_API ASimulation : public AActor
@@ -47,6 +48,15 @@ public:
 
 	UPROPERTY()
 	UDirectionalLightComponent* nightLight;
+	
+	UPROPERTY(EditAnywhere)
+	TArray<AEmitter*> positiveParticles;
+	
+	UPROPERTY(EditAnywhere)
+	TArray<AEmitter*> negativeParticles;
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf <AActor> nuclearWastePrefab;
 
 	//Values for the energy and pollution bars //To make blocks, put a transparent sprite in front of the bars or something
 	UPROPERTY (BlueprintReadOnly, VisibleAnywhere)
@@ -62,10 +72,13 @@ public:
 	bool particlesActive = false;
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "Feedback")
-	void ToggleParticlesEvent();
+	void ToggleParticlesEvent(const TArray<AEmitter*>& particles);
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "Feedback")
 	void UpdateCycle(bool isDay, float lerpValue, UDirectionalLightComponent* pDayLight, UDirectionalLightComponent* pNightLight);
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "Feedback")
+	void UpdateTower(float towerStage, FVector color);
 
 	void StartSimulation();
 	void StopSimulation();
@@ -81,11 +94,14 @@ private:
 	*/
 	void AddResources(float energyValue, float pollutionValue);
 
-	void ToggleParticles();
+
+	void ToggleParticles(bool pActive, bool positive);
 	void CalculateFeedback();
 	void HandleResources();
 	void CheckForDeath();
 	void LerpLights(float DeltaTime);
+	void ScaleNuclearWaste (float deltaTime);
+	void ScaleFog (float deltaTime);
 
 	bool _isSimulation;
 
@@ -96,10 +112,30 @@ private:
 	int _currentTurn;
 	int _currentCityStage;
 
+	UPROPERTY ()
+	AActor* _currentWaste;
+	float _wasteLerpValue;
+
+	bool _wasteAddedThisTurn;
+
+	UPROPERTY (EditAnywhere)
+	AActor* _fog;
+	float _fogLerpValue = 0.0f;
+	bool _isScalingFog = false;
+	FVector _originalFogScale;
+	FVector _targetFogScale;
+
 	UPROPERTY(EditAnywhere)
 	FVector _feedbackNegativeScales;
 	UPROPERTY(EditAnywhere)
 	FVector _feedbackPositiveScales;
+	
+	UPROPERTY(EditAnywhere)
+	FVector _colorInsufficient;
+	UPROPERTY(EditAnywhere)
+	FVector _colorSufficient;
+	UPROPERTY(EditAnywhere)
+	FVector _colorOversufficient;
 
 	UPROPERTY(VisibleAnywhere)
 	int _cityEnergyNeed;

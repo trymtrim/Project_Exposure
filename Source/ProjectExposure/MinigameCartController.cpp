@@ -8,6 +8,7 @@
 #include "SimulationGameController.h"
 #include "IntVector.h"
 #include "Runtime/Engine/Classes/GameFramework/PlayerController.h"
+#include "TimerManager.h"
 #include "MinigameCart/FallingUnit.h"
 
 #define print(text) if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 1.5, FColor::Green,text)
@@ -80,12 +81,20 @@ void AMinigameCartController::decreaseLives() {
 //Called when minigames is finished by any means, handles cleaning up the minigame
 void AMinigameCartController::exitMinigame() {
 	if (_points < (int) _uraniumToSpawn / 3)
+	{
 		starAmount = 1;
+		simulationController->SetMinigamePerformance (simulationController->BAD);
+	}
 	else if (_points > (int) _uraniumToSpawn / 3 && _points < (int) _uraniumToSpawn - ((int) _uraniumToSpawn / 3))
+	{
 		starAmount = 2;
-	else starAmount = 3;
-
-	print (FString::FromInt (starAmount));
+		simulationController->SetMinigamePerformance (simulationController->NORMAL);
+	}
+	else 
+	{
+		starAmount = 3;
+		simulationController->SetMinigamePerformance (simulationController->GOOD);
+	}
 
 	endScoreUI = FString::FromInt (_points) + "/" + FString::FromInt (_uraniumToSpawn);
 
@@ -127,6 +136,18 @@ void AMinigameCartController::Tick(float DeltaTime)
 		movement(DeltaTime);
 		spawnFallingUnit(DeltaTime);
 	}
+
+	if (_timerActive)
+	{
+		_timer += DeltaTime;
+
+		if (_timer > 3.0f)
+		{
+			_timer = 0.0f;
+			_timerActive = false;
+			exitMinigame();
+		}
+	}
 }
 
 //Spawn a Falling Unit within the bounds the player can move in
@@ -158,7 +179,7 @@ void AMinigameCartController::spawnFallingUnit(float DeltaTime) {
 						_uraniumLeftToSpawn--;
 					}
 					else {
-						exitMinigame();
+						_timerActive = true;
 						return;
 					}
 				}
@@ -177,7 +198,7 @@ void AMinigameCartController::spawnFallingUnit(float DeltaTime) {
 						_uraniumLeftToSpawn--;
 					}
 					else {
-						exitMinigame();
+						_timerActive = true;
 						return;
 					}
 				}

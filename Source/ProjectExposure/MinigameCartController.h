@@ -135,6 +135,9 @@ private:
 	const FRotator _rightRotator = FRotator::MakeFromEuler(FVector(0.0f, 0.0f, 180.0f));
 	const FRotator _initTruckRotator = FRotator::MakeFromEuler(FVector(0.0f, 0.0f, 180.0f));
 
+	bool _timerActive = false;
+	float _timer = 0.0f;
+
 	UPROPERTY(EditAnywhere)
 	AUIController* _uiController;
 };
