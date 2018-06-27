@@ -30,24 +30,29 @@ void AMinigameDrillController::Tick (float DeltaTime)
 {
 	Super::Tick (DeltaTime);
 
-	//Will only run while game is running
-	if (_gameStarted)
+	if (_animatingStars)
+		AnimateStars (DeltaTime);
+	else
 	{
-		UpdateGameState (DeltaTime);
-		UpdateObstacles (DeltaTime);
-		MovePlane (DeltaTime);
-	}
-
-	if (_disableUI)
-	{
-		_disableUITimer += DeltaTime;
-
-		if (_disableUITimer >= 0.8f)
+		//Will only run while game is running
+		if (_gameStarted)
 		{
-			_disableUITimer = 0.0f;
-			_disableUI = false;
+			UpdateGameState (DeltaTime);
+			UpdateObstacles (DeltaTime);
+			MovePlane (DeltaTime);
+		}
 
-			StartGamePlay ();
+		if (_disableUI)
+		{
+			_disableUITimer += DeltaTime;
+
+			if (_disableUITimer >= 0.8f)
+			{
+				_disableUITimer = 0.0f;
+				_disableUI = false;
+
+				StartGamePlay ();
+			}
 		}
 	}
 }
@@ -119,8 +124,6 @@ void AMinigameDrillController::StartDisableUI ()
 
 void AMinigameDrillController::EndGame ()
 {
-	SetActorTickEnabled (false);
-
 	if (_score < 30 / 3)
 	{
 		starAmount = 1;
@@ -151,12 +154,43 @@ void AMinigameDrillController::EndGame ()
 	//Disable drillMiniGame UI
 	_uiController->Disable (4);
 
-	endScoreText = FString::FromInt (_score) + "/30";
-	EndScreen ();
+	_animatingStars = true;
 
 	_endPanelShown = true;
 	_gameStarted = false;
 	_gameController->StartClickDelay ();
+}
+
+void AMinigameDrillController::AnimateStars (float deltaTime)
+{
+	_starLerp += deltaTime;
+
+	if (_starLerp > 0.075f)
+	{
+		_starLerp = 0.0f;
+		_currentScoreLerp++;
+		_barValue = (float) _currentScoreLerp / 30.0f;
+
+		endScoreText = FString::FromInt (_currentScoreLerp) + "/30";
+		EndScreen ();
+
+		if (_currentScoreLerp == 1 || _score == 0)
+			OneStar ();
+		else if (_currentScoreLerp == 11)
+			TwoStar ();
+		else if (_currentScoreLerp == 21)
+			ThreeStars ();
+
+		if (_currentScoreLerp == _score || _score == 0)
+		{
+			_animatingStars = false;
+			_starLerp = 0.0f;
+			_currentScoreLerp = 0;
+			_barValue = 0.0f;
+	
+			SetActorTickEnabled (false);
+		}
+	}
 }
 
 void AMinigameDrillController::GoBackToSimulation ()

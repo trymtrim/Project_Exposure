@@ -34,7 +34,6 @@ public:
 	UFUNCTION (BlueprintCallable)
 	void StartGame ();
 
-	//Debug
 	UFUNCTION (BlueprintImplementableEvent, Category = "Video")
 	void RestartLevel ();
 
@@ -53,7 +52,11 @@ private:
 	void PauseVideo ();
 	void ContinueVideo ();
 	void ExitVideo ();
+	void QuitGame ();
 
+	bool _startingGame = false;
+
+	float _startTimer = 0.0f;
 	float _videoTimer = 0.0f;
 
 	//Fading

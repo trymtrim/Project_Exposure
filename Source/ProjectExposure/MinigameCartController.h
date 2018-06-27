@@ -41,6 +41,15 @@ public:
 	void updateUI();
 	UFUNCTION(BlueprintImplementableEvent, Category="UI")
 	void endScreen();
+	UFUNCTION (BlueprintImplementableEvent, Category = "EndCart")
+	void OneStar ();
+	UFUNCTION (BlueprintImplementableEvent, Category = "EndCart")
+	void ThreeStars ();
+	UFUNCTION (BlueprintImplementableEvent, Category = "EndCart")
+	void TwoStar ();
+
+	UPROPERTY (BlueprintReadOnly)
+	float _barValue = 0.0f;
 
 	UPROPERTY (BlueprintReadOnly)
 	FString endScoreUI = "";
@@ -74,8 +83,13 @@ private:
 	void exitMinigame();
 	void startMinigame();
 	void goBackToSimulation();
+	void AnimateStars (float deltaTime);
 
 	void onMouseClick();
+
+	bool _animatingStars = false;
+	float _starLerp = 0.0f;
+	int _currentScoreLerp = 0;
 
 	UPROPERTY () AMinecart* _spawnedWagon;
 	FVector _velocity;

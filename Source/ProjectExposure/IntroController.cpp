@@ -50,12 +50,29 @@ void AIntroController::Tick (float DeltaTime)
 		StartVideo ();
 	}
 
+	if (_startingGame)
+	{
+		_startTimer += DeltaTime;
+
+		if (_startTimer >= 1.0f)
+		{
+			_startingGame = false;
+			MoveToWindow ();
+		}
+	}
+
 	UpdateTimer (DeltaTime);
 }
 
 void AIntroController::StartGame ()
 {
-	MoveToWindow ();
+	//Disable menu UI
+	uiController->Disable (3);
+
+	//Enable reset button UI
+	uiController->Enable (5, 3);
+
+	_startingGame = true;
 }
 
 void AIntroController::OnMouseClick ()
@@ -111,12 +128,6 @@ void AIntroController::UpdateTimer (float deltaTime)
 
 void AIntroController::MoveToWindow ()
 {
-	//Disable menu UI
-	uiController->Disable (3);
-
-	//Enable reset button UI
-	uiController->Enable (5, 3);
-
 	FVector targetPosition = FVector (-2510, -3357, 1018);
 	FVector targetRotation = FVector (0, -4, 180);
 
@@ -224,12 +235,16 @@ void AIntroController::UpdateFading (float deltaTime)
 	}
 }
 
+void AIntroController::QuitGame ()
+{
+	delete _cameraMovement;
+	RestartLevel ();
+}
+
 //Called to bind functionality to input
 void AIntroController::SetupPlayerInputComponent (UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent (PlayerInputComponent);
 
 	PlayerInputComponent->BindAction ("MouseClick", IE_Pressed, this, &AIntroController::OnMouseClick);
-	PlayerInputComponent->BindAction ("R", IE_Pressed, this, &AIntroController::RestartLevel);
-	PlayerInputComponent->BindAction ("S", IE_Pressed, this, &AIntroController::ChangeLevel);
 }

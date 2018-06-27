@@ -37,6 +37,15 @@ public:
 	void Update ();
 	UFUNCTION (BlueprintImplementableEvent, Category = "SolarEnd")
 	void EndScreen ();
+	UFUNCTION (BlueprintImplementableEvent, Category = "EndSolar")
+	void OneStar ();
+	UFUNCTION (BlueprintImplementableEvent, Category = "EndSolar")
+	void ThreeStars ();
+	UFUNCTION (BlueprintImplementableEvent, Category = "EndSolar")
+	void TwoStar ();
+
+	UPROPERTY (BlueprintReadOnly)
+	float _barValue = 0.0f;
 
 protected:
 	//Called when the game starts or when spawned
@@ -56,6 +65,11 @@ private:
 	void GoBackToSimulation ();
 	void OnMouseClick ();
 	void OnMouseRelease ();
+	void AnimateStars (float deltaTime);
+
+	bool _animatingStars = false;
+	float _starLerp = 0.0f;
+	int _currentScoreLerp = 0;
 
 	AActor* _controlledUnit = nullptr;
 	bool _lifting = false;
@@ -77,6 +91,7 @@ private:
 
 	//Game stats
 	int _score = 0;
+	int _maxScore = 30;
 
 	bool _gameStarted = false;
 	bool _endPanelShown = false;

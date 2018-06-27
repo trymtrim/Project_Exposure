@@ -29,29 +29,68 @@ void AMinigameSolarController::Tick (float DeltaTime)
 {
 	Super::Tick (DeltaTime);
 
-	if (_controlledUnit)
+	if (_animatingStars)
+		AnimateStars (DeltaTime);
+	else
 	{
-		//Trace to see what is under the mouse cursor
-		FHitResult hit;
-		GetWorld ()->GetFirstPlayerController ()->GetHitResultUnderCursor (ECC_Visibility, true, hit);
-
-		if (hit.bBlockingHit)
+		if (_controlledUnit)
 		{
-			FVector position = FVector (hit.Location.X, hit.Location.Y, _middlePosition.Z);
-			_controlledUnit->SetActorLocation (position);
+			//Trace to see what is under the mouse cursor
+			FHitResult hit;
+			GetWorld ()->GetFirstPlayerController ()->GetHitResultUnderCursor (ECC_Visibility, true, hit);
+
+			if (hit.bBlockingHit)
+			{
+				FVector position = FVector (hit.Location.X, hit.Location.Y, _middlePosition.Z);
+				_controlledUnit->SetActorLocation (position);
+			}
+		}
+
+		if (_preparingLifting)
+		{
+			_liftingTimer += DeltaTime;
+
+			if (_liftingTimer >= 0.15f)
+			{
+				_preparingLifting = false;
+				_liftingTimer = 0.0f;
+
+				ControlUnit ();
+			}
 		}
 	}
+}
 
-	if (_preparingLifting)
+void AMinigameSolarController::AnimateStars (float deltaTime)
+{
+	_starLerp += deltaTime;
+
+	if (_starLerp > 0.075f)
 	{
-		_liftingTimer += DeltaTime;
+		_starLerp = 0.0f;
+		_currentScoreLerp++;
+		_barValue = (float) _currentScoreLerp / 30.0f;
 
-		if (_liftingTimer >= 0.15f)
+		endScoreText = FString::FromInt (_currentScoreLerp) + "/" + FString::FromInt (_maxScore);
+		EndScreen ();
+
+		int points = _currentScoreLerp + 1;
+
+		if (_currentScoreLerp == 1 || _score == 0)
+			OneStar ();
+		else if (points == _maxScore / 3)
+			TwoStar ();
+		else if (points == ((( _maxScore / 3) * 2) + 1))
+			ThreeStars ();
+
+		if (_currentScoreLerp == _score || _score == 0)
 		{
-			_preparingLifting = false;
-			_liftingTimer = 0.0f;
-
-			ControlUnit ();
+			_animatingStars = false;
+			_starLerp = 0.0f;
+			_currentScoreLerp = 0;
+			_barValue = 0.0f;
+	
+			SetActorTickEnabled (false);
 		}
 	}
 }
@@ -355,9 +394,7 @@ void AMinigameSolarController::StartGamePlay ()
 
 void AMinigameSolarController::EndGame ()
 {
-	SetActorTickEnabled (false);
-
-	SetScore (500);
+	SetScore (30);
 	endScoreText = "1/1";
 
 	//Disable solarMiniGame UI
@@ -368,7 +405,7 @@ void AMinigameSolarController::EndGame ()
 	//Enable win panel UI
 	_uiController->Enable (19, 2);
 
-	EndScreen ();
+	_animatingStars = true;
 	
 	_endPanelShown = true;
 	_gameStarted = false;
