@@ -118,13 +118,18 @@ private:
 
 	bool _wasteAddedThisTurn;
 
-	UPROPERTY (EditAnywhere)
-	AActor* _fog;
 	float _fogLerpValue = 0.0f;
 	bool _isScalingFog = false;
 	FVector _originalFogScale;
 	FVector _targetFogScale;
 
+	UPROPERTY(EditAnywhere)
+	TArray<AActor*> _fogStageOne;
+	UPROPERTY(EditAnywhere)
+	TArray<AActor*> _fogStageTwo;
+	UPROPERTY(EditAnywhere)
+	TArray<AActor*> _fogStageThree;
+	
 	UPROPERTY(EditAnywhere)
 	FVector _feedbackNegativeScales;
 	UPROPERTY(EditAnywhere)

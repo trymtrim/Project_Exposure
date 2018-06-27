@@ -138,7 +138,23 @@ void ASimulation::ScaleNuclearWaste (float deltaTime)
 void ASimulation::ScaleFog (float deltaTime)
 {
 	_fogLerpValue += deltaTime * 0.4f;
-	_fog->SetActorScale3D (FMath::Lerp (_originalFogScale, _targetFogScale, _fogLerpValue));
+
+	if (_currentCityStage >= 0) {
+		for (int i = 0; i < _fogStageOne.Num(); i++) {
+			_fogStageOne[i]->SetActorScale3D(FMath::Lerp(_originalFogScale, _targetFogScale, _fogLerpValue));
+		}
+	}
+	if (_currentCityStage > 0) {
+		for (int j = 0; j < _fogStageTwo.Num(); j++) {
+			_fogStageTwo[j]->SetActorScale3D(FMath::Lerp(_originalFogScale, _targetFogScale, _fogLerpValue));
+		}
+	}
+	if (_currentCityStage > 1) {
+		for (int k = 0; k < _fogStageThree.Num(); k++) {
+			_fogStageThree[k]->SetActorScale3D(FMath::Lerp(_originalFogScale, _targetFogScale, _fogLerpValue));
+		}
+	}
+	
 
 	if (_fogLerpValue >= 1)
 	{
@@ -245,6 +261,7 @@ void ASimulation::CheckForDeath() {
 		dead = true;
 	}
 
+	//If we hit a lose condition this turn, check if we already screwed up the last turn, if yes game over, if no give the player one turn to fix his problems
 	if (dead) {
 		if (_insufficientLastRound) {
 			_controller->EndGame(false);
@@ -319,7 +336,7 @@ void ASimulation::CalculateFeedback() {
 	if (happiness < 0) ToggleParticles(true, false);
 	else ToggleParticles(true, true);
 
-	_originalFogScale = _fog->GetActorScale3D ();
+	_originalFogScale = _fogStageOne[0]->GetActorScale3D ();
 	_isScalingFog = true;
 
 }

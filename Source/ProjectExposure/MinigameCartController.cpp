@@ -207,7 +207,7 @@ void AMinigameCartController::spawnFallingUnit(float DeltaTime) {
 			FVector Location = GetActorLocation() + FVector(_offset.X, FMath::RandRange(_maximumMovement.X, _maximumMovement.Y), 1000.0f);
 
 			//Random Rotation for extra flair
-			FRotator Rotation(0.0f, 0.0f, FMath::FRandRange(0.0f, 360.0f));
+			FRotator Rotation = FRotator::MakeFromEuler(FVector(0.0f, 180.0f, FMath::FRandRange(0.0f, 360.0f)));
 
 			FActorSpawnParameters SpawnInfo;
 			SpawnInfo.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;

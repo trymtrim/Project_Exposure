@@ -46,9 +46,13 @@ public:
 	UPROPERTY(EditAnywhere)
 	UStaticMesh* debrisMesh;
 
-private:
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	UnitType _currentType;
+
+	UPROPERTY(EditAnywhere)
+	UMaterialInterface* _parentMaterial;
+
+private:
 
 	UPROPERTY()
 	float _speed;
@@ -56,4 +60,6 @@ private:
 	UPROPERTY()
 	float _deathThreshhold;
 
+	bool _isDissolving = false;
+	float _dissolveValue = 3;
 };
