@@ -103,15 +103,13 @@ void AMinigameCartController::exitMinigame() {
 	else
 		_uiController->Enable (11, 0); //Win
 
-	endScreen ();
+	_animatingStars = true;
 
 	_gameStarted = false;
 	_gameFinished = true;
 	simulationController->StartClickDelay ();
 
 	_uiController->Disable(6);
-
-	SetActorTickEnabled (false);
 }
 
 void AMinigameCartController::goBackToSimulation() {
@@ -131,21 +129,60 @@ void AMinigameCartController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (_gameStarted)
+	if (_animatingStars)
+		AnimateStars (DeltaTime);
+	else
 	{
-		movement(DeltaTime);
-		spawnFallingUnit(DeltaTime);
-	}
-
-	if (_timerActive)
-	{
-		_timer += DeltaTime;
-
-		if (_timer > 3.0f)
+		if (_gameStarted)
 		{
-			_timer = 0.0f;
-			_timerActive = false;
-			exitMinigame();
+			movement(DeltaTime);
+			spawnFallingUnit(DeltaTime);
+		}
+
+		if (_timerActive)
+		{
+			_timer += DeltaTime;
+
+			if (_timer > 3.0f)
+			{
+				_timer = 0.0f;
+				_timerActive = false;
+				exitMinigame();
+			}
+		}
+	}
+}
+
+void AMinigameCartController::AnimateStars (float deltaTime)
+{
+	_starLerp += deltaTime;
+
+	if (_starLerp > 0.075f)
+	{
+		_starLerp = 0.0f;
+		_currentScoreLerp++;
+		_barValue = (float) _currentScoreLerp / 30.0f;
+
+		endScoreUI = FString::FromInt (_currentScoreLerp) + "/" + FString::FromInt (_uraniumToSpawn);
+		endScreen ();
+
+		int points = _currentScoreLerp + 1;
+
+		if (_currentScoreLerp == 1 || _points == 0)
+			OneStar ();
+		else if (points == (int) _uraniumToSpawn / 3)
+			TwoStar ();
+		else if (points == ((((int) _uraniumToSpawn / 3) * 2) + 1))
+			ThreeStars ();
+
+		if (_currentScoreLerp == _points || _points == 0)
+		{
+			_animatingStars = false;
+			_starLerp = 0.0f;
+			_currentScoreLerp = 0;
+			_barValue = 0.0f;
+	
+			SetActorTickEnabled (false);
 		}
 	}
 }

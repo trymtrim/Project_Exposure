@@ -3,6 +3,7 @@
 #include "SimulationGameController.h"
 #include "Engine/World.h"
 #include "CustomGameViewportClient.h"
+#include "Highscore.h"
 
 #define print(text) if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 1.5, FColor::Green,text)
 
@@ -37,6 +38,8 @@ void ASimulationGameController::BeginPlay ()
 	_windmillPawn->SetGameController (this);
 
 	FadeOut (0.5f, 1.5f);
+
+	new Highscore ();
 }
 
 //Called every frame
@@ -342,7 +345,7 @@ void ASimulationGameController::SetMinigamePerformance (MinigamePerformance perf
 	switch (performance)
 	{
 	case BAD:
-		_minigamePerformance = 1.0f; //TEMP
+		_minigamePerformance = 0.75f;
 		break;
 	case NORMAL:
 		_minigamePerformance = 1.0f;
@@ -558,6 +561,12 @@ void ASimulationGameController::CheckAFK ()
 
 }
 
+void ASimulationGameController::QuitGame ()
+{
+	delete _cameraMovement;
+	ReloadGame ();
+}
+
 void ASimulationGameController::OnSpacePress ()
 {
 	if (_simulationRunning)
@@ -610,6 +619,4 @@ void ASimulationGameController::SetupPlayerInputComponent (UInputComponent* Play
 	PlayerInputComponent->BindAction ("MouseClick", IE_Pressed, this, &ASimulationGameController::OnMouseClick);
 	PlayerInputComponent->BindAction ("MouseClick", IE_Released, this, &ASimulationGameController::OnMouseRelease);
 	PlayerInputComponent->BindAction ("Space", IE_Pressed, this, &ASimulationGameController::OnSpacePress);
-	PlayerInputComponent->BindAction ("R", IE_Pressed, this, &ASimulationGameController::ResetLevel);
-	PlayerInputComponent->BindAction ("S", IE_Pressed, this, &ASimulationGameController::ReloadGame);
 }

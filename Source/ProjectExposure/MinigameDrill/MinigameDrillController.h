@@ -43,6 +43,8 @@ public:
 	FString endScoreText = "";
 	UPROPERTY (BlueprintReadOnly)
 	int starAmount = 1;
+	UPROPERTY (BlueprintReadOnly)
+	float _barValue = 0.0f;
 
 	UFUNCTION (BlueprintImplementableEvent, Category = "Update")
 	void Update ();
@@ -52,6 +54,12 @@ public:
 	void Stop ();
 	UFUNCTION (BlueprintImplementableEvent, Category = "End")
 	void EndScreen ();
+	UFUNCTION (BlueprintImplementableEvent, Category = "End")
+	void OneStar ();
+	UFUNCTION (BlueprintImplementableEvent, Category = "End")
+	void ThreeStars ();
+	UFUNCTION (BlueprintImplementableEvent, Category = "End")
+	void TwoStar ();
 
 protected:
 	//Called when the game starts or when spawned
@@ -69,6 +77,7 @@ private:
 	void SetLives (int lives);
 	void SetScore (int score);
 	void OnMouseClick ();
+	void AnimateStars (float deltaTime);
 
 	UFUNCTION (BLueprintCallable)
 	void ChangeDrill (int index);
@@ -87,6 +96,10 @@ private:
 	bool _disableUI = false;
 
 	bool _gameStarted = false;
+
+	bool _animatingStars = false;
+	float _starLerp = 0.0f;
+	int _currentScoreLerp = 0;
 
 	//Game stats
 	int _lives = 3;

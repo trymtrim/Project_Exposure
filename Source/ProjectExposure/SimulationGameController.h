@@ -74,6 +74,7 @@ private:
 	void UpdateFading (float deltaTime);
 	void UpdateMovingToMine (bool toMine);
 	void CheckAFK ();
+	void QuitGame ();
 
 	UPROPERTY () TArray <APlaceableUnit*> _powerPlants;
 
