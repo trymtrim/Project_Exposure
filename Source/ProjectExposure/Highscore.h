@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "XmlParser.h"
 
 class PROJECTEXPOSURE_API Highscore
 {
