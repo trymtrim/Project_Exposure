@@ -33,6 +33,7 @@ void ADrillObstacle::Tick (float DeltaTime)
 void ADrillObstacle::UpdateMovement (float deltaTime)
 {
 	float speed = 800.0f;
+	speed += _gameController->GetSpawnCount () * 17.5f;
 
 	SetActorLocation (GetActorLocation () + (FVector (0.0f, 0.0f, speed) * deltaTime));
 

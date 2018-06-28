@@ -92,7 +92,9 @@ private:
 	float _starLerp = 0.0f;
 	int _currentScoreLerp = 0;
 
-	UPROPERTY () AMinecart* _spawnedWagon;
+	UPROPERTY () 
+	AMinecart* _spawnedWagon;
+	UPROPERTY()
 	FVector _velocity;
 
 	UPROPERTY(EditAnywhere, meta = (ClampMin = "1.0", ClampMax = "1000.0", UIMin = "1.0", UIMax = "1000.0"))
@@ -146,8 +148,11 @@ private:
 	bool _gameStarted = false;
 	bool _gameFinished = false;
 
+	UPROPERTY()
 	const FRotator _leftRotator = FRotator::MakeFromEuler(FVector(0.0f, 0.0f, 0.0f));
+	UPROPERTY()
 	const FRotator _rightRotator = FRotator::MakeFromEuler(FVector(0.0f, 0.0f, 180.0f));
+	UPROPERTY()
 	const FRotator _initTruckRotator = FRotator::MakeFromEuler(FVector(0.0f, 0.0f, 180.0f));
 
 	bool _timerActive = false;

@@ -258,7 +258,8 @@ void AMinigameDrillController::SpawnObstacle ()
 
 	//Set time before next spawn
 	_spawnInterval = FMath::RandRange (15, 25) / 10.0f;
-	_spawnInterval -= _spawnCount * 0.05f;
+	_spawnInterval = 2.0f;
+	_spawnInterval -= _spawnCount * 0.025f;
 	//_spawnInterval = FMath::RandRange ((5, 25) / 10.0f) / (_spawnCount / 15.0f);
 	_spawnCount++;
 
@@ -281,6 +282,7 @@ void AMinigameDrillController::ChangeDrill (int index)
 void AMinigameDrillController::MovePlane (float deltaTime)
 {
 	float speed = 800.0f;
+	speed += _spawnCount * 17.5f;
 
 	_planeOne->SetActorLocation (_planeOne->GetActorLocation () + FVector (0.0f, 0.0f, speed) * deltaTime);
 	_planeTwo->SetActorLocation (_planeTwo->GetActorLocation () + FVector (0.0f, 0.0f, speed) * deltaTime);
@@ -289,6 +291,11 @@ void AMinigameDrillController::MovePlane (float deltaTime)
 		_planeOne->SetActorLocation (_planeTwo->GetActorLocation () - FVector (0.0f, 0.0f, 5000.0f));
 	else if (_planeTwo->GetActorLocation ().Z > 6000.0f)
 		_planeTwo->SetActorLocation (_planeOne->GetActorLocation () - FVector (0.0f, 0.0f, 5000.0f));
+}
+
+int AMinigameDrillController::GetSpawnCount ()
+{
+	return _spawnCount;
 }
 
 void AMinigameDrillController::SetLives (int lives)
@@ -311,6 +318,8 @@ void AMinigameDrillController::SetScore (int score)
 void AMinigameDrillController::GetHitByObstacle ()
 {
 	SetLives (_lives - 1);
+
+	//Camera shake
 
 	if (_lives == 0)
 		EndGame ();
