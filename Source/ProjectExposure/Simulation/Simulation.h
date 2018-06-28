@@ -115,12 +115,15 @@ private:
 	UPROPERTY ()
 	AActor* _currentWaste;
 	float _wasteLerpValue;
+	bool _firstWaste = true;
 
 	bool _wasteAddedThisTurn;
 
 	float _fogLerpValue = 0.0f;
 	bool _isScalingFog = false;
+	UPROPERTY()
 	FVector _originalFogScale;
+	UPROPERTY()
 	FVector _targetFogScale;
 
 	UPROPERTY(EditAnywhere)
@@ -151,7 +154,10 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	int _maxNuclearPollution;
 
+	UPROPERTY()
 	TArray<APlaceableUnit*> _nuclear;
+	UPROPERTY()
 	TArray<APlaceableUnit*> _solar;
+	UPROPERTY()
 	TArray<APlaceableUnit*> _oil;
 };

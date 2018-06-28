@@ -234,6 +234,12 @@ void ASimulation::HandleResources() {
 		if (_nuclear[i]->GetTurn () > 2) {
 			_nuclearPollution++;
 			_wasteAddedThisTurn = true;
+
+			if (_firstWaste) {
+				_firstWaste = false;
+				_controller->ShowPermanentPollutionMessage();
+			}
+
 			if (_nuclear [i]->GetTurn () == 3)
 			{
 				FActorSpawnParameters spawnParams;
