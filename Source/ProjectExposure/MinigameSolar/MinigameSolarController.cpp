@@ -5,7 +5,6 @@
 #include "Engine/World.h"
 #include "UIController.h"
 #include "ConstructorHelpers.h"
-#include "DrawDebugHelpers.h"
 
 #define print(text) if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 1.5, FColor::Green,text)
 
@@ -279,8 +278,6 @@ void AMinigameSolarController::CheckBeamHit (FVector position, FRotator rotation
 	FVector forwardVector = beam->GetActorForwardVector ();
 	FVector end = (forwardVector * 1000.0f) + start;
 	FCollisionQueryParams collisionParams;
-
-	DrawDebugLine (GetWorld (), start, end, FColor::Green, false, 1, 0, 10);
 
 	TArray <AActor*> possibleMirrors;
 

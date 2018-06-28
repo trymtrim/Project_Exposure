@@ -38,6 +38,7 @@ public:
 	void StartClickDelay ();
 	void EndGame (bool gameWon); //True if won, false if lost
 	void SetMinigamePerformance (MinigamePerformance performance);
+	void ShowPermanentPollutionMessage ();
 
 	bool CanContinue ();
 
@@ -75,6 +76,9 @@ private:
 	void UpdateMovingToMine (bool toMine);
 	void CheckAFK ();
 	void QuitGame ();
+	void InitializeStartUI ();
+	void GoToNextUI ();
+	void StopShowingPollutionMessage ();
 
 	UPROPERTY () TArray <APlaceableUnit*> _powerPlants;
 
@@ -102,6 +106,9 @@ private:
 	UPROPERTY () AActor* _messageBox;
 	UPROPERTY () AActor* _removeBox;
 	AActor* _removePP;
+	AActor* _replayPP;
+
+	bool _showPermanentPollutionMessage = false;
 
 	bool _waitingForResponse = false;
 	bool _gameFinished = false;
@@ -142,6 +149,12 @@ private:
 	//Currently active minigame
 	int _miniGameActive = 0; //0 = nothing, 1 = nuclear, 2 = windmill, 3 = oilrig
 	bool _miniGameIsActive = false;
+
+	//Currently active start UI
+	int _currentUI = 0;
+	bool _showingUI = false;
+
+	bool _showingPollutionMessage = false;
 
 	//Actual simulation controller
 	UPROPERTY (EditAnywhere)
@@ -191,6 +204,16 @@ private:
 	TSubclassOf <AActor> _optionalMinigameMessage;
 	UPROPERTY (EditAnywhere)
 	TSubclassOf <AActor> _removeMessage;
+
+	//UI
+	UPROPERTY (EditAnywhere)
+	TArray <TSubclassOf <UUserWidget>> UIs;
+	UPROPERTY ()
+	TArray <UUserWidget*> uiRefs;
+	UPROPERTY (EditAnywhere)
+	TSubclassOf <UUserWidget> permanentPollutionMessage;
+	UPROPERTY ()
+	UUserWidget* permanentPollutionMessageRef;
 
 	//Debug
 	UPROPERTY (EditAnywhere) bool _miniGamesOn = true;

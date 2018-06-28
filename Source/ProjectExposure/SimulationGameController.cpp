@@ -4,6 +4,9 @@
 #include "Engine/World.h"
 #include "CustomGameViewportClient.h"
 #include "Highscore.h"
+#include "Runtime/UMG/Public/UMG.h"
+#include "UserWidget.h"
+#include "Slate.h"
 
 #define print(text) if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 1.5, FColor::Green,text)
 
@@ -39,7 +42,12 @@ void ASimulationGameController::BeginPlay ()
 
 	FadeOut (0.5f, 1.5f);
 
-	new Highscore ();
+	InitializeStartUI ();
+
+	//Temp
+	//new Highscore ();
+
+	ShowPermanentPollutionMessage ();
 }
 
 //Called every frame
@@ -64,9 +72,6 @@ void ASimulationGameController::Tick (float DeltaTime)
 
 	if (!_uiEnabled)
 	{
-		//Enable simulation UI
-		_uiController->Enable (1, 0);
-
 		//Enable resources UI
 		//_uiController->Enable (2, 0);
 
@@ -83,6 +88,8 @@ void ASimulationGameController::Tick (float DeltaTime)
 		_placing = true;
 
 		_uiEnabled = true;
+
+		GoToNextUI ();
 	}
 
 	if (FVector::Distance (GetActorLocation (), _cameraMovement->GetTargetPosition ()) > 5.0f)
@@ -187,6 +194,8 @@ void ASimulationGameController::PlaceUnit ()
 	if (!_controlledUnit)
 		return;
 
+	_replayPP = nullptr;
+
 	//If the video-buttuon is pressed
 	APlayerController* playerController = GetWorld ()->GetFirstPlayerController ();
 	FVector2D mousePos;
@@ -223,7 +232,10 @@ void ASimulationGameController::PlaceUnit ()
 
 		//If the current mini game has been played before, give the player the option to play it again
 		if (_miniGameActive == 1 && _mineGamePlayed || _miniGameActive == 2 && _windGamePlayed || _miniGameActive == 3 && _oilGamePlayed)
+		{
 			_messageBox = GetWorld ()->SpawnActor <AActor> (_optionalMinigameMessage, spawnPosition + FVector (0, 0, 500), rotator, spawnParams);
+			_replayPP = _controlledUnit;
+		}
 
 		_controlledUnit = nullptr;
 
@@ -356,6 +368,11 @@ void ASimulationGameController::SetMinigamePerformance (MinigamePerformance perf
 	}
 }
 
+void ASimulationGameController::ShowPermanentPollutionMessage ()
+{
+	_showPermanentPollutionMessage = true;
+}
+
 void ASimulationGameController::StartSimulation ()
 {
 	_simulationRunning = true;
@@ -383,6 +400,8 @@ void ASimulationGameController::StopSimulation ()
 
 void ASimulationGameController::EnterMiniGame ()
 {
+	FVector rot;
+
 	switch (_miniGameActive)
 	{
 	case 1:
@@ -391,8 +410,11 @@ void ASimulationGameController::EnterMiniGame ()
 		_mineGamePlayed = true;
 		break;
 	case 2:
-		_cameraMovement->MoveTo (_windmillPosition, _windmillRotation);
+		rot = GetActorLocation () - _powerPlants [_powerPlants.Num () - 1]->GetActorLocation ();
+		_cameraMovement->MoveTo (_powerPlants [_powerPlants.Num () - 1]->GetActorLocation (), rot.Rotation ().Vector ());
 		_windGamePlayed = true;
+		FadeIn (0.5f, 0.5f);
+		FadeOut (3.5f, 0.5f);
 		break;
 	case 3:
 		_cameraMovement->MoveTo (_drillPosition, _drillRotation);
@@ -441,12 +463,12 @@ void ASimulationGameController::EndGame (bool gameWon)
 	if (gameWon)
 	{
 		//Enable win UI
-		_uiController->Enable (21, 0);
+		_uiController->Enable (22, 0);
 	}
 	else
 	{
 		//Enable lose UI
-		_uiController->Enable (21, 0);
+		_uiController->Enable (22, 0);
 	}
 
 	_gameFinished = true;
@@ -462,13 +484,33 @@ void ASimulationGameController::StartNewTurn ()
 	_currentTurn++;
 	currentTurnText = "Year " + FString::FromInt (_currentTurn);
 
-	//Enable simulation UI
-	_uiController->Enable (1, 0);
-
 	_simulation->OnNewTurn (_currentTurn);
 
 	_placing = true;
 	ActivateOutlines (true);
+
+	if (_showPermanentPollutionMessage)
+	{
+		permanentPollutionMessageRef->AddToViewport (3);
+
+		_showingPollutionMessage = true;
+		_showPermanentPollutionMessage = false;
+	}
+	else
+	{
+		//Enable simulation UI
+		_uiController->Enable (1, 0);
+	}
+}
+
+void ASimulationGameController::StopShowingPollutionMessage ()
+{
+	permanentPollutionMessageRef->RemoveFromParent ();
+
+	//Enable simulation UI
+	_uiController->Enable (1, 0);
+
+	_showingPollutionMessage = false;
 }
 
 void ASimulationGameController::FadeIn (float delayTime, float fadeTime)
@@ -556,6 +598,38 @@ void ASimulationGameController::UpdateMovingToMine (bool toMine)
 	}
 }
 
+void ASimulationGameController::InitializeStartUI ()
+{
+	for (int i = 0; i < UIs.Num (); i++)
+		uiRefs.Add (CreateWidget <UUserWidget> (GetWorld ()->GetFirstPlayerController (), UIs [i]));
+
+	permanentPollutionMessageRef = CreateWidget <UUserWidget> (GetWorld ()->GetFirstPlayerController (), permanentPollutionMessage);
+}
+
+void ASimulationGameController::GoToNextUI ()
+{
+	if (_currentUI == uiRefs.Num ())
+	{
+		uiRefs [_currentUI - 1]->RemoveFromParent ();
+
+		//Enable simulation UI
+		_uiController->Enable (1, 0);
+
+		_showingUI = false;
+	}
+	else
+	{
+		if (_currentUI == 0)
+			_showingUI = true;
+		else
+			uiRefs [_currentUI - 1]->RemoveFromParent ();
+
+		uiRefs [_currentUI]->AddToViewport (3);
+
+		_currentUI++;
+	}
+}
+
 void ASimulationGameController::CheckAFK ()
 {
 
@@ -577,6 +651,8 @@ void ASimulationGameController::OnMouseClick ()
 {
 	if (_gameFinished)
 		ReloadGame ();
+	else if (_showingPollutionMessage)
+		StopShowingPollutionMessage ();
 	else if (_waitingForResponse)
 	{
 		//Trace to see what is under the mouse cursor
@@ -591,6 +667,12 @@ void ASimulationGameController::OnMouseClick ()
 				_playSimulation = false;
 				EnterMiniGame ();
 			}
+			else if (hit.GetActor () == _replayPP)
+			{
+				_messageBox->Destroy ();
+				_playSimulation = false;
+				EnterMiniGame ();
+			}
 		}
 
 		if (_messageBox)
@@ -598,6 +680,8 @@ void ASimulationGameController::OnMouseClick ()
 
 		_waitingForResponse = false;
 	}
+	else if (_showingUI)
+		GoToNextUI ();
 	else if (_placing)
 		RemoveUnit ();
 }

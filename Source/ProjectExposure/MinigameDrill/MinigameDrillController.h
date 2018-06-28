@@ -33,6 +33,7 @@ public:
 	bool GetGameFinished ();
 	bool GetGameCompleted ();
 	int GetCurrentDrillType ();
+	int GetSpawnCount ();
 
 	//For blueprints
 	UPROPERTY (BlueprintReadOnly)
