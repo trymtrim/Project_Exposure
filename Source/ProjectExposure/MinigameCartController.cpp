@@ -60,6 +60,7 @@ void AMinigameCartController::startMinigame () {
 	_uiController->Enable (6, 0);
 	updateUI ();
 
+	_diggerEmitter->Activate();
 	_gameStarted = true;
 }
 
@@ -103,6 +104,7 @@ void AMinigameCartController::exitMinigame() {
 	else
 		_uiController->Enable (11, 0); //Win
 
+	_diggerEmitter->Deactivate();
 	_animatingStars = true;
 
 	_gameStarted = false;

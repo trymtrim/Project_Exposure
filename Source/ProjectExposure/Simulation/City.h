@@ -39,7 +39,7 @@ private:
 	void LerpStages(float DeltaTime);
 
 	UPROPERTY(EditAnywhere)
-	UMaterialInterface* _parentMaterial;
+	TArray<UMaterialInterface*> _parentMaterial;
 
 	UPROPERTY()
 	TArray<bool> _stageActives;

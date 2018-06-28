@@ -8,6 +8,7 @@
 #include "Engine/World.h"
 #include "MinigameCart/Minecart.h"
 #include "UIController.h"
+#include "Particles/Emitter.h"
 #include "MinigameCartController.generated.h"
 
 class ASimulationGameController;
@@ -154,4 +155,7 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	AUIController* _uiController;
+
+	UPROPERTY(EditAnywhere)
+	AEmitter* _diggerEmitter;
 };

@@ -41,10 +41,10 @@ void ACity::LerpStages(float DeltaTime) {
 		//Check if the stage is active aka. should build up
 		if (_stageActives[i]) {
 			//If the lerp value is under the value we need, increase it
-			if (_stageLerps[i] < 3.0f) {
+			if (_stageLerps[i] < 3.2f) {
 				_stageLerps[i] += DeltaTime;
 			} else {
-				_stageLerps[i] = 3.0f;
+				_stageLerps[i] = 3.2f;
 			}
 
 			//This exists because Unreal does not support nested arrays :(
@@ -66,6 +66,8 @@ void ACity::LerpStages(float DeltaTime) {
 				break;
 			}
 
+			int stage2Counter = 0;
+
 			//Loop through all the buildings/actor objects withing the stage array
 			for (auto& building : currentStage) {
 				//Get all the StaticMeshComponents, should be just one
@@ -78,8 +80,28 @@ void ACity::LerpStages(float DeltaTime) {
 					//Get and loop through all the materials, again should be just one
 					TArray<class UMaterialInterface*> materials = meshComponents[j]->GetMaterials();
 					for (int k = 0; k < materials.Num(); k++) {
+
 						//Create a dynamic material
-						UMaterialInstanceDynamic* matInstance = UMaterialInstanceDynamic::Create(_parentMaterial, building);
+						UMaterialInstanceDynamic* matInstance = nullptr;
+
+						//Get the correct array for our stage
+						switch (i) {
+						case 0:
+							if(k == 0) matInstance = UMaterialInstanceDynamic::Create(_parentMaterial[0], building);
+							if(k == 1) matInstance = UMaterialInstanceDynamic::Create(_parentMaterial[1], building);
+							break;
+						case 1:
+							if (stage2Counter == 0) matInstance = UMaterialInstanceDynamic::Create(_parentMaterial[2], building);
+							if (stage2Counter == 1) matInstance = UMaterialInstanceDynamic::Create(_parentMaterial[3], building);
+							stage2Counter++;
+							break;
+						case 2:
+							matInstance = UMaterialInstanceDynamic::Create(_parentMaterial[4], building);
+							break;
+						default:
+							matInstance = UMaterialInstanceDynamic::Create(_parentMaterial[0], building);
+							break;
+						}
 
 						//Modify the lerp value for the buildup 
 						if (matInstance != nullptr) {
