@@ -46,8 +46,6 @@ void ASimulationGameController::BeginPlay ()
 
 	//Temp
 	//new Highscore ();
-
-	ShowPermanentPollutionMessage ();
 }
 
 //Called every frame
@@ -482,7 +480,7 @@ bool ASimulationGameController::CanContinue ()
 void ASimulationGameController::StartNewTurn ()
 {
 	_currentTurn++;
-	currentTurnText = "Year " + FString::FromInt (_currentTurn);
+	currentTurnText = "Jaar " + FString::FromInt (_currentTurn);
 
 	_simulation->OnNewTurn (_currentTurn);
 
@@ -503,14 +501,25 @@ void ASimulationGameController::StartNewTurn ()
 	}
 }
 
-void ASimulationGameController::StopShowingPollutionMessage ()
+void ASimulationGameController::StopShowingPollutionMessage (int index)
 {
-	permanentPollutionMessageRef->RemoveFromParent ();
+	if (index == 1)
+	{
+		permanentPollutionMessageRef->RemoveFromParent ();
+		permanentPollutionMessage2Ref->AddToViewport (3);
 
-	//Enable simulation UI
-	_uiController->Enable (1, 0);
+		_showingPollutionMessage = false;
+		_showingPollutionMessage2 = true;
+	}
+	else
+	{
+		permanentPollutionMessage2Ref->RemoveFromParent ();
 
-	_showingPollutionMessage = false;
+		//Enable simulation UI
+		_uiController->Enable (1, 0);
+
+		_showingPollutionMessage2 = false;
+	}
 }
 
 void ASimulationGameController::FadeIn (float delayTime, float fadeTime)
@@ -604,6 +613,7 @@ void ASimulationGameController::InitializeStartUI ()
 		uiRefs.Add (CreateWidget <UUserWidget> (GetWorld ()->GetFirstPlayerController (), UIs [i]));
 
 	permanentPollutionMessageRef = CreateWidget <UUserWidget> (GetWorld ()->GetFirstPlayerController (), permanentPollutionMessage);
+	permanentPollutionMessage2Ref = CreateWidget <UUserWidget> (GetWorld ()->GetFirstPlayerController (), permanentPollutionMessage2);
 }
 
 void ASimulationGameController::GoToNextUI ()
@@ -652,7 +662,9 @@ void ASimulationGameController::OnMouseClick ()
 	if (_gameFinished)
 		ReloadGame ();
 	else if (_showingPollutionMessage)
-		StopShowingPollutionMessage ();
+		StopShowingPollutionMessage (1);
+	else if (_showingPollutionMessage2)
+		StopShowingPollutionMessage (2);
 	else if (_waitingForResponse)
 	{
 		//Trace to see what is under the mouse cursor

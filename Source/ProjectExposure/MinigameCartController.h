@@ -149,11 +149,11 @@ private:
 	bool _gameFinished = false;
 
 	UPROPERTY()
-	const FRotator _leftRotator = FRotator::MakeFromEuler(FVector(0.0f, 0.0f, 0.0f));
+	FRotator _leftRotator = FRotator::MakeFromEuler(FVector(0.0f, 0.0f, 0.0f));
 	UPROPERTY()
-	const FRotator _rightRotator = FRotator::MakeFromEuler(FVector(0.0f, 0.0f, 180.0f));
+	FRotator _rightRotator = FRotator::MakeFromEuler(FVector(0.0f, 0.0f, 180.0f));
 	UPROPERTY()
-	const FRotator _initTruckRotator = FRotator::MakeFromEuler(FVector(0.0f, 0.0f, 180.0f));
+	FRotator _initTruckRotator = FRotator::MakeFromEuler(FVector(0.0f, 0.0f, 180.0f));
 
 	bool _timerActive = false;
 	float _timer = 0.0f;

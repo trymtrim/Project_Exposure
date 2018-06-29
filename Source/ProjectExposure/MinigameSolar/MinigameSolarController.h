@@ -56,7 +56,7 @@ private:
 	void InitializeGrid ();
 	void ControlUnit ();
 	void PlaceUnit ();
-	void RotateUnit ();
+	void RotateUnit (AActor* mirror);
 	void UpdateBeams ();
 	void CheckBeamHit (FVector position, FRotator rotation, bool firstBeam);
 	void StartGamePlay ();
@@ -66,6 +66,7 @@ private:
 	void OnMouseClick ();
 	void OnMouseRelease ();
 	void AnimateStars (float deltaTime);
+	void AddObstacle (int gridIndex);
 
 	bool _animatingStars = false;
 	float _starLerp = 0.0f;
@@ -73,13 +74,11 @@ private:
 
 	AActor* _controlledUnit = nullptr;
 	bool _lifting = false;
-	bool _preparingLifting = false;
-	float _liftingTimer = 0.0f;
 
 	ASimulationGameController* _gameController;
 
 	//Game positions
-	UPROPERTY () FVector _middlePosition = FVector (4245, 4925, 110);
+	UPROPERTY () FVector _middlePosition = FVector (7955, 6612, 110);
 	UPROPERTY () AActor* _beamPosition;
 	UPROPERTY () AActor* _goalPosition;
 	UPROPERTY () AActor* _goalTarget;
@@ -88,6 +87,7 @@ private:
 	UPROPERTY () TMap <AActor*, int> _mirrorRotations;
 	UPROPERTY () TArray <AActor*> _beams;
 	UPROPERTY () AActor* _startBeam;
+	UPROPERTY () TArray <AActor*> _rotators;
 
 	//Game stats
 	int _score = 0;
@@ -95,6 +95,8 @@ private:
 
 	bool _gameStarted = false;
 	bool _endPanelShown = false;
+
+	UPROPERTY () TArray <AActor*> _obstacles;
 
 	//Prefabs
 	UPROPERTY (EditAnywhere)
@@ -107,6 +109,10 @@ private:
 	TSubclassOf <AActor> _goal;
 	UPROPERTY (EditAnywhere)
 	TSubclassOf <AActor> _goalTargetPrefab;
+	UPROPERTY (EditAnywhere)
+	TSubclassOf <AActor> _rotatePrefab;
+	UPROPERTY (EditAnywhere)
+	TSubclassOf <AActor> _obstaclePrefab;
 
 	//UI controller
 	UPROPERTY (EditAnywhere)

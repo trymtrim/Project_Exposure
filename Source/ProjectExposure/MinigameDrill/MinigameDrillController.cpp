@@ -200,6 +200,12 @@ void AMinigameDrillController::GoBackToSimulation ()
 	_planeOne->Destroy ();
 	_planeTwo->Destroy ();
 
+	if (_oilPlane)
+	{
+		_oilPlane->Destroy ();
+		_oilPlane = nullptr;
+	}
+
 	_gameCompleted = true;
 
 	Stop ();
@@ -227,7 +233,7 @@ void AMinigameDrillController::UpdateGameState (float deltaTime)
 	{
 		_endTimer += deltaTime;
 
-		if (_endTimer >= 5.0f)
+		if (_endTimer >= 5.5f)
 			EndGame ();
 	}
 }
@@ -264,7 +270,16 @@ void AMinigameDrillController::SpawnObstacle ()
 	_spawnCount++;
 
 	if (_spawnCount == 30)
+	{
 		_gameFinished = true;
+
+		//Spawn oil plane
+		FActorSpawnParameters oilSpawnParams;
+		FVector oilSpawnPosition = _drill->GetActorLocation () - FVector (0.0f, 0.0f, 6500.0f);
+		FRotator oilRotator = FRotator (0.0f, 0.0f, 90.0f);
+		
+		_oilPlane = GetWorld ()->SpawnActor <AActor> (_oilPlanePrefab, oilSpawnPosition, oilRotator, oilSpawnParams);
+	}
 }
 
 void AMinigameDrillController::ChangeDrill (int index)
@@ -291,6 +306,9 @@ void AMinigameDrillController::MovePlane (float deltaTime)
 		_planeOne->SetActorLocation (_planeTwo->GetActorLocation () - FVector (0.0f, 0.0f, 5000.0f));
 	else if (_planeTwo->GetActorLocation ().Z > 6000.0f)
 		_planeTwo->SetActorLocation (_planeOne->GetActorLocation () - FVector (0.0f, 0.0f, 5000.0f));
+
+	if (_oilPlane && _endTimer < 4.0f)
+		_oilPlane->SetActorLocation (_oilPlane->GetActorLocation () + FVector (0.0f, 0.0f, speed) * deltaTime);
 }
 
 int AMinigameDrillController::GetSpawnCount ()

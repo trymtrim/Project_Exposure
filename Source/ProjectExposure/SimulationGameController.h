@@ -47,7 +47,7 @@ public:
 	void SpawnUnit (int index);
 
 	UPROPERTY (BlueprintReadOnly)
-	FString currentTurnText = "Year 1";
+	FString currentTurnText = "Jaar 1";
 
 	UFUNCTION (BlueprintImplementableEvent, Category = "Feedback")
 	void UpdateCycle ();
@@ -78,7 +78,7 @@ private:
 	void QuitGame ();
 	void InitializeStartUI ();
 	void GoToNextUI ();
-	void StopShowingPollutionMessage ();
+	void StopShowingPollutionMessage (int index);
 
 	UPROPERTY () TArray <APlaceableUnit*> _powerPlants;
 
@@ -155,6 +155,7 @@ private:
 	bool _showingUI = false;
 
 	bool _showingPollutionMessage = false;
+	bool _showingPollutionMessage2 = false;
 
 	//Actual simulation controller
 	UPROPERTY (EditAnywhere)
@@ -212,8 +213,12 @@ private:
 	TArray <UUserWidget*> uiRefs;
 	UPROPERTY (EditAnywhere)
 	TSubclassOf <UUserWidget> permanentPollutionMessage;
+	UPROPERTY (EditAnywhere)
+	TSubclassOf <UUserWidget> permanentPollutionMessage2;
 	UPROPERTY ()
 	UUserWidget* permanentPollutionMessageRef;
+	UPROPERTY ()
+	UUserWidget* permanentPollutionMessage2Ref;
 
 	//Debug
 	UPROPERTY (EditAnywhere) bool _miniGamesOn = true;

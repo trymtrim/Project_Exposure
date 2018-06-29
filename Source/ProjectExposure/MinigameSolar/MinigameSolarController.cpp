@@ -44,19 +44,6 @@ void AMinigameSolarController::Tick (float DeltaTime)
 				_controlledUnit->SetActorLocation (position);
 			}
 		}
-
-		if (_preparingLifting)
-		{
-			_liftingTimer += DeltaTime;
-
-			if (_liftingTimer >= 0.15f)
-			{
-				_preparingLifting = false;
-				_liftingTimer = 0.0f;
-
-				ControlUnit ();
-			}
-		}
 	}
 }
 
@@ -104,16 +91,16 @@ void AMinigameSolarController::InitializeGame ()
 	{
 		//Spawn mirrors
 		FActorSpawnParameters spawnParams;
-		FVector spawnPosition = _middlePosition + FVector (300.0f, 200.0f, 0.0f);
+		FVector spawnPosition = _middlePosition + FVector (175.0f, 275.0f, 0.0f);
 		FRotator rotator = FRotator (0.0f, 45.0f, 0.0f);
 
 		for (int i = 0; i < _mirrorCount; i++)
 		{
 			AActor* mirror = world->SpawnActor <AActor> (_mirror, spawnPosition, rotator, spawnParams);
 			_mirrors.Add (mirror);
-			_mirrorRotations.Add (mirror, 1);
+			_mirrorRotations.Add (mirror, 2);
 
-			spawnPosition.Y -= 100.0f;
+			spawnPosition.X -= 100.0f;
 		}
 
 		//Spawn beam start position
@@ -141,7 +128,25 @@ void AMinigameSolarController::InitializeGame ()
 		//Spawn beam goal target
 		spawnPosition += FVector (0.0f, 0.0f, 120.0f);
 		_goalTarget = world->SpawnActor <AActor> (_goalTargetPrefab, spawnPosition, rotator, spawnParams);
+
+		//Spawn obstacles
+		AddObstacle (2);
+		AddObstacle (4);
+		AddObstacle (19);
+		AddObstacle (13);
+		AddObstacle (14);
 	}
+}
+
+void AMinigameSolarController::AddObstacle (int gridIndex)
+{
+	FActorSpawnParameters spawnParams;
+	FRotator rotator = FRotator (0.0f, 0.0f, 0.0f);
+
+	FVector spawnPosition = _grid [gridIndex]->GetActorLocation () + FVector (0.0f, 0.0f, 50.0f);
+
+	AActor* obstacle = GetWorld ()->SpawnActor <AActor> (_obstaclePrefab, spawnPosition, rotator, spawnParams);
+	_obstacles.Add (obstacle);
 }
 
 void AMinigameSolarController::InitializeGrid ()
@@ -185,6 +190,11 @@ void AMinigameSolarController::ControlUnit ()
 		{
 			_controlledUnit = hit.GetActor ();
 			_lifting = true;
+
+			for (int i = 0; i < _rotators.Num (); i++)
+				_rotators [i]->Destroy ();
+
+			_rotators.Empty ();
 		}
 	}
 }
@@ -219,33 +229,36 @@ void AMinigameSolarController::PlaceUnit ()
 		
 	_controlledUnit->SetActorLocation (closestGridSlot->GetActorLocation ());
 
+	//Spawn rotator
+	FActorSpawnParameters spawnParams;
+	FRotator rotator = FRotator (0.0f, 0.0f, 0.0f);
+
+	UWorld* world = GetWorld ();
+
+	for (int i = 0; i < _mirrorCount; i++)
+	{
+		FVector spawnPosition = _mirrors [i]->GetActorLocation () + FVector (0.0f, 0.0f, 100.0f);
+
+		AActor* rotate = world->SpawnActor <AActor> (_rotatePrefab, spawnPosition, rotator, spawnParams);
+		_rotators.Add (rotate);
+	}
+
 	_lifting = false;
 	_controlledUnit = nullptr;
 
 	UpdateBeams ();
 }
 
-void AMinigameSolarController::RotateUnit ()
+void AMinigameSolarController::RotateUnit (AActor* mirror)
 {
-	FHitResult hit;
-	GetWorld ()->GetFirstPlayerController ()->GetHitResultUnderCursor (ECC_Visibility, true, hit);
+	mirror->SetActorRotation (mirror->GetActorRotation () + FRotator (0.0f, 90.0f, 0.0f));
 
-	if (hit.bBlockingHit)
-	{
-		AActor* mirror = hit.GetActor ();
+	if (_mirrorRotations [mirror] == 4)
+		_mirrorRotations [mirror] = 1;
+	else
+		_mirrorRotations [mirror] = _mirrorRotations [mirror] + 1;
 
-		if (mirror->GetRootComponent ()->ComponentHasTag ("Mirror"))
-		{
-			mirror->SetActorRotation (hit.GetActor ()->GetActorRotation () + FRotator (0.0f, 90.0f, 0.0f));
-
-			if (_mirrorRotations [mirror] == 4)
-				_mirrorRotations [mirror] = 1;
-			else
-				_mirrorRotations [mirror] = _mirrorRotations [mirror] + 1;
-
-			UpdateBeams ();
-		}
-	}
+	UpdateBeams ();
 }
 
 void AMinigameSolarController::UpdateBeams ()
@@ -276,7 +289,7 @@ void AMinigameSolarController::CheckBeamHit (FVector position, FRotator rotation
 		_startBeam = beam;
 
 	FVector forwardVector = beam->GetActorForwardVector ();
-	FVector end = (forwardVector * 1000.0f) + start;
+	FVector end = (forwardVector * 2000.0f) + start;
 	FCollisionQueryParams collisionParams;
 
 	TArray <AActor*> possibleMirrors;
@@ -285,6 +298,12 @@ void AMinigameSolarController::CheckBeamHit (FVector position, FRotator rotation
 	{
 		if (_mirrors [i]->ActorLineTraceSingle (hit, start + (forwardVector * 75), end, ECC_WorldDynamic, collisionParams))
 			possibleMirrors.Add (_mirrors [i]);
+	}
+
+	for (int i = 0; i < _obstacles.Num (); i++)
+	{
+		if (_obstacles [i]->ActorLineTraceSingle (hit, start + (forwardVector * 75), end, ECC_WorldDynamic, collisionParams))
+			possibleMirrors.Add (_obstacles [i]);
 	}
 
 	if (possibleMirrors.Num () > 0)
@@ -298,6 +317,20 @@ void AMinigameSolarController::CheckBeamHit (FVector position, FRotator rotation
 		}
 
 		AActor* hitMirror = possibleMirrors [closestMirrorIndex];
+
+		if (!hitMirror->GetRootComponent ()->ComponentHasTag ("Mirror"))
+		{
+			//Get the beam particle component
+			TArray <UParticleSystemComponent*> staticComps;
+			beam->GetComponents <UParticleSystemComponent> (staticComps);
+			UParticleSystemComponent* beamComponent = staticComps [0];
+
+			//Set beam start and end position
+			beamComponent->SetActorParameter ("Source", beam);
+			beamComponent->SetActorParameter ("Target", hitMirror);
+
+			return;
+		}
 
 		//Get the beam particle component
 		TArray <UParticleSystemComponent*> staticComps;
@@ -448,6 +481,16 @@ void AMinigameSolarController::GoBackToSimulation ()
 		_beams [i]->Destroy ();
 
 	_beams.Empty ();
+
+	for (int i = 0; i < _obstacles.Num (); i++)
+		_obstacles [i]->Destroy ();
+
+	_obstacles.Empty ();
+
+	for (int i = 0; i < _rotators.Num (); i++)
+		_rotators [i]->Destroy ();
+
+	_rotators.Empty ();
 }
 
 void AMinigameSolarController::OnMouseClick ()
@@ -467,7 +510,18 @@ void AMinigameSolarController::OnMouseClick ()
 		if (hit.bBlockingHit)
 		{
 			if (hit.GetActor ()->GetRootComponent ()->ComponentHasTag ("Mirror"))
-				_preparingLifting = true;
+				ControlUnit ();
+			else if (hit.GetActor ()->GetRootComponent ()->ComponentHasTag ("Rotate"))
+			{
+				for (int i = 0; i < _rotators.Num (); i++)
+				{
+					if (hit.GetActor () == _rotators [i])
+					{
+						RotateUnit (_mirrors [i]);
+						break;
+					}
+				}
+			}
 		}
 	}
 }
@@ -476,17 +530,6 @@ void AMinigameSolarController::OnMouseRelease ()
 {
 	if (_lifting)
 		PlaceUnit ();
-
-	if (_preparingLifting)
-	{
-		if (_liftingTimer < 0.15f)
-		{
-			_preparingLifting = false;
-			_liftingTimer = 0.0f;
-
-			RotateUnit ();
-		}
-	}
 }
 
 //Called to bind functionality to input

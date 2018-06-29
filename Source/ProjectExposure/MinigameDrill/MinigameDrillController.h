@@ -89,6 +89,7 @@ private:
 	UPROPERTY () AActor* _hole;
 	UPROPERTY () AActor* _planeOne;
 	UPROPERTY () AActor* _planeTwo;
+	UPROPERTY () AActor* _oilPlane = nullptr;
 
 	float _spawnInterval = 1.0f;
 	float _timer = 0.0f;
@@ -125,6 +126,8 @@ private:
 	//Prefabs
 	UPROPERTY (EditAnywhere)
 	TSubclassOf <AActor> _planePrefab;
+	UPROPERTY (EditAnywhere)
+	TSubclassOf <AActor> _oilPlanePrefab;
 	UPROPERTY (EditAnywhere)
 	TSubclassOf <AActor> _holePrefab;
 	UPROPERTY (EditAnywhere)
