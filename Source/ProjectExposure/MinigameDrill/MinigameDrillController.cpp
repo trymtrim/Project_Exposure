@@ -339,6 +339,7 @@ void AMinigameDrillController::GetHitByObstacle ()
 	SetLives (_lives - 1);
 
 	//Camera shake
+	GetWorld ()->GetFirstPlayerController ()->ClientPlayCameraShake (_cameraShake);
 
 	if (_lives == 0)
 		EndGame ();
@@ -374,7 +375,7 @@ void AMinigameDrillController::OnMouseClick ()
 		if (_gameController->CanContinue ())
 			GoBackToSimulation ();
 	}
-	else if (!_gameStarted)
+	else if (!_gameStarted && !_disableUI)
 		StartDisableUI ();
 }
 

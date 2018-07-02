@@ -166,7 +166,7 @@ void AMinigameCartController::AnimateStars (float deltaTime)
 	{
 		_starLerp = 0.0f;
 		_currentScoreLerp++;
-		_barValue = (float) _currentScoreLerp / 30.0f;
+		_barValue = (float) _currentScoreLerp / _uraniumToSpawn;
 
 		endScoreUI = FString::FromInt (_currentScoreLerp) + "/" + FString::FromInt (_uraniumToSpawn);
 		endScreen ();

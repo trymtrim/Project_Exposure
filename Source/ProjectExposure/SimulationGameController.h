@@ -11,6 +11,7 @@
 #include "MinigameSolar/MinigameSolarController.h"
 #include "Simulation/Simulation.h"
 #include "UIController.h"
+#include "Highscore.h"
 #include "SimulationGameController.generated.h"
 
 UCLASS()
@@ -40,7 +41,12 @@ public:
 	void SetMinigamePerformance (MinigamePerformance performance);
 	void ShowPermanentPollutionMessage ();
 
+	int GetCurrentTurn ();
+
 	bool CanContinue ();
+	TArray <int> GetHighscores (bool daily);
+	TArray <FString> GetHighscoreNames (bool daily);
+	FString GetPlayerName ();
 
 	//For blueprints
 	UFUNCTION (BlueprintCallable, Category = "ButtonPress")
@@ -57,9 +63,6 @@ public:
 	void ResetLevel ();
 	UFUNCTION (BlueprintImplementableEvent, Category = "ReloadGame")
 	void ReloadGame ();
-
-	UFUNCTION()
-	int GetCurrentTurn();
 
 protected:
 	virtual void BeginPlay () override;
@@ -141,6 +144,8 @@ private:
 	FVector _defaultRotation;
 
 	CameraMovement* _cameraMovement;
+	Highscore* _overallHighscore;
+	Highscore* _dailyHighscore;
 
 	//Currently controlled unit
 	APlaceableUnit* _controlledUnit = nullptr;
@@ -222,6 +227,10 @@ private:
 	UUserWidget* permanentPollutionMessageRef;
 	UPROPERTY ()
 	UUserWidget* permanentPollutionMessage2Ref;
+	UPROPERTY (EditAnywhere)
+	TSubclassOf <UUserWidget> hourGlass;
+	UPROPERTY ()
+	UUserWidget* hourGlassRef;
 
 	//Debug
 	UPROPERTY (EditAnywhere) bool _miniGamesOn = true;

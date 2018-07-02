@@ -2,16 +2,13 @@
 
 #include "MainGameMode.h"
 #include "MainPlayerController.h"
-//#include "UObject/ConstructorHelpers.h"
+#include "MainGameState.h"
 
 AMainGameMode::AMainGameMode ()
 {
-	//Use our custom PlayerController class
+	//Use custom PlayerController class
 	PlayerControllerClass = AMainPlayerController::StaticClass ();
-	
-	//Set default pawn class to our Blueprinted character
-	/*static ConstructorHelpers::FClassFinder <APawn> PlayerPawnBPClass(TEXT("/Game/TopDownCPP/Blueprints/TopDownCharacter"));
 
-	if (PlayerPawnBPClass.Class != NULL)
-		DefaultPawnClass = PlayerPawnBPClass.Class;*/
+	//Use custom GameState class
+	GameStateClass = AMainGameState::StaticClass ();
 }

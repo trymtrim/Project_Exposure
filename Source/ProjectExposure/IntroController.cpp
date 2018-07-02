@@ -3,6 +3,7 @@
 #include "IntroController.h"
 #include "Engine/World.h"
 #include "CustomGameViewportClient.h"
+#include "MainGameInstance.h"
 
 #define print(text) if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 1.5, FColor::Green,text)
 
@@ -72,7 +73,30 @@ void AIntroController::StartGame ()
 	//Enable reset button UI
 	uiController->Enable (5, 3);
 
+	//Enable keyboard UI
+	uiController->Enable (7, 0);
+
+	_keyboard = true;
+}
+
+void AIntroController::FinishName ()
+{
+	//Disable keyboard UI
+	uiController->Disable (7);
+
 	_startingGame = true;
+	
+	Cast <UMainGameInstance> (GetWorld ()->GetGameInstance ())->PlayerName = playerName;
+}
+
+void AIntroController::AddLetter (FString letter)
+{
+	if (letter == "BACKSPACE")
+		playerName.RemoveAt (playerName.Len () - 1);
+	else
+		playerName += letter;
+
+	UpdateName ();
 }
 
 void AIntroController::OnMouseClick ()

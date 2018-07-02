@@ -46,6 +46,8 @@ public:
 
 	UPROPERTY (BlueprintReadOnly)
 	float _barValue = 0.0f;
+	UPROPERTY (BlueprintReadOnly)
+	FString timerText = "01:00";
 
 protected:
 	//Called when the game starts or when spawned
@@ -95,6 +97,8 @@ private:
 
 	bool _gameStarted = false;
 	bool _endPanelShown = false;
+
+	float _timer = 60.0f;
 
 	UPROPERTY () TArray <AActor*> _obstacles;
 

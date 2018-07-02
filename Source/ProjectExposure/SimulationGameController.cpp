@@ -3,10 +3,13 @@
 #include "SimulationGameController.h"
 #include "Engine/World.h"
 #include "CustomGameViewportClient.h"
-#include "Highscore.h"
 #include "Runtime/UMG/Public/UMG.h"
 #include "UserWidget.h"
 #include "Slate.h"
+#include <ctime>
+#include <iomanip>
+#include <sstream>
+#include "MainGameInstance.h"
 
 #define print(text) if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 1.5, FColor::Green,text)
 
@@ -44,8 +47,24 @@ void ASimulationGameController::BeginPlay ()
 
 	InitializeStartUI ();
 
-	//Temp
-	//new Highscore ();
+	//Initialize highscores
+	_overallHighscore = new Highscore (FPaths::ProjectContentDir () + "../highscores/Highscore.csv");
+
+	//Get current date and time for daily highscore filepath
+	auto t = std::time (nullptr);
+	auto tm = *std::localtime (&t);
+
+	std::ostringstream dateStream;
+	dateStream << std::put_time (&tm, "%d.%m.%Y");
+
+	std::string date = dateStream.str ();
+
+	FString dailyFilePath = date.c_str ();
+
+	_dailyHighscore = new Highscore (FPaths::ProjectContentDir () + "../highscores/daily/" + dailyFilePath + ".csv");
+
+	//_overallHighscore->AddScore ("yo", 150);
+	//_dailyHighscore->AddScore ("yo", 150);
 }
 
 //Called every frame
@@ -56,7 +75,7 @@ void ASimulationGameController::Tick (float DeltaTime)
 	if (_gameFinished)
 		return;
 
-	//Disable the black start panel after set amount of seconds
+	//Disable the black start panel after certain amount of seconds
 	if (_startPanelEnabled)
 	{
 		_startPanelTimer += DeltaTime;
@@ -142,7 +161,10 @@ void ASimulationGameController::Tick (float DeltaTime)
 		_panelTimer += DeltaTime;
 
 		if (_panelTimer >= _panelDelayTime)
+		{
+			_panelTimer = 0.0f;
 			_panelDelay = false;
+		}
 	}
 }
 
@@ -381,6 +403,8 @@ void ASimulationGameController::StartSimulation ()
 	_miniGameActive = 0;
 	_minigamePerformance = 1.0f;
 
+	hourGlassRef->AddToViewport (0);
+
 	_simulation->StartSimulation ();
 }
 
@@ -392,6 +416,8 @@ void ASimulationGameController::StopSimulation ()
 		_messageBox->Destroy ();
 
 	_simulationRunning = false;
+
+	hourGlassRef->RemoveFromParent ();
 
 	_simulation->StopSimulation ();
 }
@@ -475,6 +501,27 @@ void ASimulationGameController::EndGame (bool gameWon)
 bool ASimulationGameController::CanContinue ()
 {
 	return !_panelDelay;
+}
+
+TArray <int> ASimulationGameController::GetHighscores (bool daily)
+{
+	if (daily)
+		return _dailyHighscore->GetHighscores ();
+
+	return _overallHighscore->GetHighscores ();
+}
+
+TArray <FString> ASimulationGameController::GetHighscoreNames (bool daily)
+{
+	if (daily)
+		return _dailyHighscore->GetHighscoreNames ();
+
+	return _overallHighscore->GetHighscoreNames ();
+}
+
+FString ASimulationGameController::GetPlayerName ()
+{
+	return Cast <UMainGameInstance> (GetWorld ()->GetGameInstance ())->PlayerName;
 }
 
 void ASimulationGameController::StartNewTurn ()
@@ -614,6 +661,7 @@ void ASimulationGameController::InitializeStartUI ()
 
 	permanentPollutionMessageRef = CreateWidget <UUserWidget> (GetWorld ()->GetFirstPlayerController (), permanentPollutionMessage);
 	permanentPollutionMessage2Ref = CreateWidget <UUserWidget> (GetWorld ()->GetFirstPlayerController (), permanentPollutionMessage2);
+	hourGlassRef = CreateWidget <UUserWidget> (GetWorld ()->GetFirstPlayerController (), hourGlass);
 }
 
 void ASimulationGameController::GoToNextUI ()
@@ -648,6 +696,9 @@ void ASimulationGameController::CheckAFK ()
 void ASimulationGameController::QuitGame ()
 {
 	delete _cameraMovement;
+	delete _overallHighscore;
+	delete _dailyHighscore;
+
 	ReloadGame ();
 }
 
@@ -655,6 +706,11 @@ void ASimulationGameController::OnSpacePress ()
 {
 	if (_simulationRunning)
 		StopSimulation ();
+}
+
+int ASimulationGameController::GetCurrentTurn ()
+{
+	return _currentTurn;
 }
 
 void ASimulationGameController::OnMouseClick ()
@@ -705,17 +761,11 @@ void ASimulationGameController::OnMouseRelease ()
 		PlaceUnit ();
 }
 
-int ASimulationGameController::GetCurrentTurn() {
-	return _currentTurn;
-}
-
 //Called to bind functionality to input
 void ASimulationGameController::SetupPlayerInputComponent (UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent (PlayerInputComponent);
 
-	//When reseting the game later, remember to delete _cameraMovement!
-	
 	PlayerInputComponent->BindAction ("MouseClick", IE_Pressed, this, &ASimulationGameController::OnMouseClick);
 	PlayerInputComponent->BindAction ("MouseClick", IE_Released, this, &ASimulationGameController::OnMouseRelease);
 	PlayerInputComponent->BindAction ("Space", IE_Pressed, this, &ASimulationGameController::OnSpacePress);

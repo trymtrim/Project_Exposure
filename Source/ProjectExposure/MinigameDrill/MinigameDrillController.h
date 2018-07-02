@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
+#include "Camera/CameraShake.h"
 #include "MinigameDrillController.generated.h"
 
 class ASimulationGameController;
@@ -134,4 +135,6 @@ private:
 	TArray <TSubclassOf <AActor>> _drillPrefabs;
 	UPROPERTY (EditAnywhere)
 	TArray <TSubclassOf <AActor>> _obstaclePrefabs;
+	UPROPERTY (EditAnywhere)
+	TSubclassOf <UCameraShake> _cameraShake;
 };

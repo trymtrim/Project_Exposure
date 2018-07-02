@@ -45,6 +45,16 @@ void AMinigameSolarController::Tick (float DeltaTime)
 			}
 		}
 	}
+
+	if (_gameStarted)
+	{
+		_timer -= DeltaTime;
+
+		timerText = "00:" + FString::FromInt ((int) _timer);
+
+		if (_timer <= 0.0f)
+			EndGame ();
+	}
 }
 
 void AMinigameSolarController::AnimateStars (float deltaTime)
@@ -195,6 +205,8 @@ void AMinigameSolarController::ControlUnit ()
 				_rotators [i]->Destroy ();
 
 			_rotators.Empty ();
+
+			UpdateBeams ();
 		}
 	}
 }
@@ -205,12 +217,16 @@ void AMinigameSolarController::PlaceUnit ()
 		
 	for (int i = 0; i < _grid.Num (); i++)
 	{
+		if (i == 2 || i == 4 || i == 19 || i == 13 || i == 14)
+			continue;
+
 		AActor* gridSlot = _grid [i];
 
 		bool skip = false;
 
 		for (int i = 0; i < _mirrors.Num (); i++)
 		{
+
 			if (FVector::Distance (_mirrors [i]->GetActorLocation (), gridSlot->GetActorLocation ()) < 5)
 			{
 				skip = true;
@@ -296,6 +312,9 @@ void AMinigameSolarController::CheckBeamHit (FVector position, FRotator rotation
 
 	for (int i = 0; i < _mirrors.Num (); i++)
 	{
+		if (_mirrors [i] == _controlledUnit)
+			continue;
+
 		if (_mirrors [i]->ActorLineTraceSingle (hit, start + (forwardVector * 75), end, ECC_WorldDynamic, collisionParams))
 			possibleMirrors.Add (_mirrors [i]);
 	}
@@ -424,8 +443,10 @@ void AMinigameSolarController::StartGamePlay ()
 
 void AMinigameSolarController::EndGame ()
 {
-	SetScore (30);
+	SetScore ((int) _timer);
 	endScoreText = "1/1";
+
+	_timer = 60.0f;
 
 	//Disable solarMiniGame UI
 	_uiController->Disable (20);

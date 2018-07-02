@@ -30,9 +30,18 @@ public:
 	void Pause ();
 	UFUNCTION (BlueprintImplementableEvent, Category = "Video")
 	void Resume ();
+	UFUNCTION (BlueprintImplementableEvent, Category = "Keyboard")
+	void UpdateName ();
 
 	UFUNCTION (BlueprintCallable)
 	void StartGame ();
+	UFUNCTION (BlueprintCallable)
+	void FinishName ();
+	UFUNCTION (BlueprintCallable)
+	void AddLetter (FString letter);
+
+	UPROPERTY (BlueprintReadOnly)
+	FString playerName = "";
 
 	UFUNCTION (BlueprintImplementableEvent, Category = "Video")
 	void RestartLevel ();
@@ -73,6 +82,7 @@ private:
 
 	//UI
 	bool _uiEnabled = false;
+	bool _keyboard = false;
 
 	CameraMovement* _cameraMovement;
 
