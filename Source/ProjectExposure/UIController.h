@@ -122,7 +122,7 @@ public:
 	UPROPERTY (BlueprintReadOnly, Category = "UI") UUserWidget* solarWinPanelRef;
 	UPROPERTY (BlueprintReadOnly, Category = "UI") UUserWidget* solarMiniGameRef;
 	UPROPERTY () UUserWidget* loseRef;
-	UPROPERTY () UUserWidget* winRef;
+	UPROPERTY (BlueprintReadOnly, Category = "UI") UUserWidget* winRef;
 
 	TArray <UUserWidget*> userInterfaces;
 

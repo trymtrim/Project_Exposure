@@ -705,6 +705,10 @@ void ASimulationGameController::OnMouseRelease ()
 		PlaceUnit ();
 }
 
+int ASimulationGameController::GetCurrentTurn() {
+	return _currentTurn;
+}
+
 //Called to bind functionality to input
 void ASimulationGameController::SetupPlayerInputComponent (UInputComponent* PlayerInputComponent)
 {

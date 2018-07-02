@@ -127,7 +127,8 @@ void AMinigameDrillController::EndGame ()
 	if (_score < 30 / 3)
 	{
 		starAmount = 1;
-		_gameController->SetMinigamePerformance (_gameController->BAD);
+		if (_gameController->GetCurrentTurn() == 1) _gameController->SetMinigamePerformance(_gameController->NORMAL);
+		else _gameController->SetMinigamePerformance(_gameController->BAD);
 	}
 	else if (_score > 30 / 3 && _score < 30 - (30 /3))
 	{
