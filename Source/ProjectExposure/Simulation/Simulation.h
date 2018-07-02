@@ -80,6 +80,9 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, Category = "Feedback")
 	void UpdateTower(float towerStage, FVector color);
 
+	UFUNCTION(BlueprintImplementableEvent, Category = "EndGame")
+	void UpdateEndUI(int cityEnergyConsumption, int oilEnergy, int nuclearEnergy, int renewableEnergy, float timePlayed, int renewablePlaced, int nuclearPlaced, int oilPlaced, const FString& name, int score);
+
 	void StartSimulation();
 	void StopSimulation();
 
@@ -97,6 +100,7 @@ private:
 
 	void ToggleParticles(bool pActive, bool positive);
 	void CalculateFeedback();
+	void CalculateTower();
 	void HandleResources();
 	void CheckForDeath();
 	void LerpLights(float DeltaTime);
@@ -112,6 +116,8 @@ private:
 	int _currentTurn;
 	int _currentCityStage;
 
+	float _timePlayed;
+		
 	UPROPERTY ()
 	AActor* _currentWaste;
 	float _wasteLerpValue;

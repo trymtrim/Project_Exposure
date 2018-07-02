@@ -34,6 +34,8 @@ void AMinigameCartController::BeginPlay()
 		_spawnedWagon = world->SpawnActor<AMinecart>(wagonPrefab, Location, _initTruckRotator, SpawnInfo);
 		_spawnedWagon->setController(this);
 	}
+
+	_diggerEmitter->Deactivate();
 }
 
 //Setup the minigame
@@ -84,7 +86,8 @@ void AMinigameCartController::exitMinigame() {
 	if (_points < (int) _uraniumToSpawn / 3)
 	{
 		starAmount = 1;
-		simulationController->SetMinigamePerformance (simulationController->BAD);
+		if (simulationController->GetCurrentTurn() == 1) simulationController->SetMinigamePerformance(simulationController->NORMAL);
+		else simulationController->SetMinigamePerformance (simulationController->BAD);
 	}
 	else if (_points > (int) _uraniumToSpawn / 3 && _points < (int) _uraniumToSpawn - ((int) _uraniumToSpawn / 3))
 	{
