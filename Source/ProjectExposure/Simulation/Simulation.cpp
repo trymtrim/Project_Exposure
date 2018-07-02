@@ -63,6 +63,8 @@ void ASimulation::Tick (float DeltaTime)
 
 	if (_isScalingFog)
 		ScaleFog (DeltaTime);
+
+	_timePlayed += DeltaTime;
 }
 
 void ASimulation::OnPlaceUnit (APlaceableUnit* unit)
@@ -82,6 +84,7 @@ void ASimulation::OnPlaceUnit (APlaceableUnit* unit)
 		_oil.Add(unit);
 		break;
 	}
+
 }
 
 void ASimulation::OnRemoveUnit(APlaceableUnit* unit) {
@@ -100,6 +103,8 @@ void ASimulation::OnRemoveUnit(APlaceableUnit* unit) {
 		_oil.Remove (unit);
 		break;
 	}
+
+	CalculateTower();
 }
 
 void ASimulation::OnNewTurn (int currentTurn) {
@@ -270,7 +275,9 @@ void ASimulation::CheckForDeath() {
 	//If we hit a lose condition this turn, check if we already screwed up the last turn, if yes game over, if no give the player one turn to fix his problems
 	if (dead) {
 		if (_insufficientLastRound) {
+			FString name = "Jeebus";
 			_controller->EndGame(false);
+			UpdateEndUI(_cityEnergyNeed, 3 * _oil.Num(), 3 * _nuclear.Num(), 3 * _solar.Num(), FMath::FloorToInt(_timePlayed), _solar.Num(), _nuclear.Num(), _oil.Num(), name, 100000);
 		} else {
 			_insufficientLastRound = true;
 		}
@@ -296,12 +303,10 @@ void ASimulation::CalculateFeedback() {
 		//Y -> Z
 		//60 - 80
 		else if (percentage >= _feedbackNegativeScales.Y && percentage < _feedbackNegativeScales.Z) {
-			UpdateTower(-0.8f, _colorInsufficient);
 		}
 		//Z -> 99
 		//80 - 99
 		else {
-			UpdateTower(-0.6f, _colorInsufficient);
 		}
 		happiness -= 1;
 		
@@ -312,21 +317,20 @@ void ASimulation::CalculateFeedback() {
 		//100 - 120
 		if (percentage >= _feedbackPositiveScales.X && percentage < _feedbackPositiveScales.Y) {
 			happiness += 1;
-			UpdateTower(-0.4f, _colorSufficient);
 		}
 		//Y -> Z
 		//120 - 140
 		else if (percentage >= _feedbackPositiveScales.Y && percentage < _feedbackPositiveScales.Z) {
 			happiness += 2;
-			UpdateTower(-0.2f, _colorOversufficient);
 		}
 		//Z -> infinity baby x)
 		// 140 - infinity
 		else {
 			happiness += 3;
-			UpdateTower(-0.0f, _colorOversufficient);
 		}
 	}
+
+	CalculateTower();
 
 	//Pollution
 	if (currentPollution == 0)
@@ -345,6 +349,48 @@ void ASimulation::CalculateFeedback() {
 	_originalFogScale = _fogStageOne[0]->GetActorScale3D ();
 	_isScalingFog = true;
 
+}
+
+void ASimulation::CalculateTower() {
+	//How much percent of the city energy need is our currentEnergy 
+	float percentage = currentEnergy / _cityEnergyNeed * 100;
+
+	//If we are negative
+	if (percentage < 100) {
+		//X -> Y
+		//0 - 60
+		if (percentage >= _feedbackNegativeScales.X && percentage < _feedbackNegativeScales.Y) {
+			UpdateTower(-0.8f, _colorInsufficient);
+		}
+		//Y -> Z
+		//60 - 80
+		else if (percentage >= _feedbackNegativeScales.Y && percentage < _feedbackNegativeScales.Z) {
+			UpdateTower(-0.8f, _colorInsufficient);
+		}
+		//Z -> 99
+		//80 - 99
+		else {
+			UpdateTower(-0.6f, _colorInsufficient);
+		}
+	}
+	//If we are positive
+	else if (percentage >= 100) {
+		//X -> Y
+		//100 - 120
+		if (percentage >= _feedbackPositiveScales.X && percentage < _feedbackPositiveScales.Y) {
+			UpdateTower(-0.4f, _colorSufficient);
+		}
+		//Y -> Z
+		//120 - 140
+		else if (percentage >= _feedbackPositiveScales.Y && percentage < _feedbackPositiveScales.Z) {
+			UpdateTower(-0.2f, _colorOversufficient);
+		}
+		//Z -> infinity baby x)
+		// 140 - infinity
+		else {
+			UpdateTower(-0.0f, _colorOversufficient);
+		}
+	}
 }
 
 void ASimulation::ToggleParticles(bool pActive, bool positive) {

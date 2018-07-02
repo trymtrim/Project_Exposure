@@ -58,6 +58,9 @@ public:
 	UFUNCTION (BlueprintImplementableEvent, Category = "ReloadGame")
 	void ReloadGame ();
 
+	UFUNCTION()
+	int GetCurrentTurn();
+
 protected:
 	virtual void BeginPlay () override;
 
