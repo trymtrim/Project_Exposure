@@ -89,6 +89,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Feedback")
 	void CalculateFeedback();
 
+	UFUNCTION(BlueprintCallable, Category = "Feedback")
+	void UpdateHighscores(const bool isDaily, TArray<FString>& highscores);
+
 protected:
 	//Called when the game starts or when spawned
 	virtual void BeginPlay () override;
