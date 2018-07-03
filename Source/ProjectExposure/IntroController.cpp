@@ -29,8 +29,17 @@ void AIntroController::Tick (float DeltaTime)
 
 	if (!_uiEnabled)
 	{
-		//Enable menu UI
-		uiController->Enable (3, 0);
+		if (Cast <UMainGameInstance> (GetWorld ()->GetGameInstance ())->Restart)
+		{
+			Cast <UMainGameInstance> (GetWorld ()->GetGameInstance ())->Restart = false;
+
+			_restartingGame = true;
+		}
+		else
+		{
+			//Enable menu UI
+			uiController->Enable (3, 0);
+		}
 
 		_uiEnabled = true;
 	}
@@ -62,21 +71,39 @@ void AIntroController::Tick (float DeltaTime)
 		}
 	}
 
+	if (_restartingGame)
+	{
+		_restartGameTimer += DeltaTime;
+
+		if (_restartGameTimer >= 0.3f)
+		{
+			_restartGameTimer = 0.0f;
+			_restartingGame = false;
+
+			StartGame ();
+		}
+	}
+
 	UpdateTimer (DeltaTime);
 }
 
 void AIntroController::StartGame ()
 {
-	//Disable menu UI
-	uiController->Disable (3);
+	if (!Cast <UMainGameInstance> (GetWorld ()->GetGameInstance ())->Restart)
+	{
+		//Disable menu UI
+		uiController->Disable (3);
+	}
 
 	//Enable reset button UI
-	uiController->Enable (5, 3);
+	//uiController->Enable (5, 3);
 
 	//Enable keyboard UI
 	uiController->Enable (7, 0);
 
 	_keyboard = true;
+
+	UpdateName ();
 }
 
 void AIntroController::FinishName ()
@@ -93,10 +120,8 @@ void AIntroController::AddLetter (FString letter)
 {
 	if (letter == "BACKSPACE")
 		playerName.RemoveAt (playerName.Len () - 1);
-	else
+	else if (playerName.Len () < 15)
 		playerName += letter;
-
-	UpdateName ();
 }
 
 void AIntroController::OnMouseClick ()
@@ -143,11 +168,14 @@ void AIntroController::UpdateTimer (float deltaTime)
 		_videoTimer += deltaTime;
 
 		if (_videoTimer >= 1.0f)
-		{
-			delete _cameraMovement;
-			ChangeLevel ();
-		}
+			GoToGameLevel ();
 	}
+}
+
+void AIntroController::GoToGameLevel ()
+{
+	delete _cameraMovement;
+	ChangeLevel ();
 }
 
 void AIntroController::MoveToWindow ()

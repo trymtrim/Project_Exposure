@@ -116,7 +116,7 @@ public:
 	UPROPERTY (BlueprintReadOnly, Category = "UI") UUserWidget* videoRef;
 	UPROPERTY () UUserWidget* videoPauseRef;
 	UPROPERTY () UUserWidget* blackStartRef;
-	UPROPERTY () UUserWidget* simulationTestRef;
+	UPROPERTY (BlueprintReadOnly, Category = "UI") UUserWidget* simulationTestRef;
 	UPROPERTY () UUserWidget* solarAnimationRef;
 	UPROPERTY (BlueprintReadOnly, Category = "UI") UUserWidget* solarLosePanelRef;
 	UPROPERTY (BlueprintReadOnly, Category = "UI") UUserWidget* solarWinPanelRef;

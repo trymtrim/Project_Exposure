@@ -293,6 +293,9 @@ void AMinigameDrillController::ChangeDrill (int index)
 	//Spawn new drill
 	FVector pos = spawnPosition + FVector (0.0f, 0.0f, 492.0f);
 	_drill = GetWorld ()->SpawnActor <AActor> (_drillPrefabs [index - 1], pos, rotator, spawnParams);
+
+	if (_gameController->GetInOptions ())
+		_gameController->GoBackToGame ();
 }
 
 void AMinigameDrillController::MovePlane (float deltaTime)
@@ -377,6 +380,9 @@ void AMinigameDrillController::OnMouseClick ()
 	}
 	else if (!_gameStarted && !_disableUI)
 		StartDisableUI ();
+
+	if (_gameController->GetInOptions ())
+		_gameController->GoBackToGame ();
 }
 
 //Called to bind functionality to input

@@ -6,10 +6,10 @@
 #include "Runtime/UMG/Public/UMG.h"
 #include "UserWidget.h"
 #include "Slate.h"
+#include "MainGameInstance.h"
 #include <ctime>
 #include <iomanip>
 #include <sstream>
-#include "MainGameInstance.h"
 
 #define print(text) if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 1.5, FColor::Green,text)
 
@@ -48,7 +48,7 @@ void ASimulationGameController::BeginPlay ()
 	InitializeStartUI ();
 
 	//Initialize highscores
-	_overallHighscore = new Highscore (FPaths::ProjectContentDir () + "../highscores/Highscore.csv");
+	//_overallHighscore = new Highscore (FPaths::ProjectContentDir () + "../highscores/Highscore.csv");
 
 	//Get current date and time for daily highscore filepath
 	auto t = std::time (nullptr);
@@ -61,10 +61,7 @@ void ASimulationGameController::BeginPlay ()
 
 	FString dailyFilePath = date.c_str ();
 
-	_dailyHighscore = new Highscore (FPaths::ProjectContentDir () + "../highscores/daily/" + dailyFilePath + ".csv");
-
-	//_overallHighscore->AddScore ("yo", 150);
-	//_dailyHighscore->AddScore ("yo", 150);
+	//_dailyHighscore = new Highscore (FPaths::ProjectContentDir () + "../highscores/daily/" + dailyFilePath + ".csv");
 }
 
 //Called every frame
@@ -166,6 +163,59 @@ void ASimulationGameController::Tick (float DeltaTime)
 			_panelDelay = false;
 		}
 	}
+
+	if (_controlledUnit)
+	{
+		APlayerController* playerController = GetWorld ()->GetFirstPlayerController ();
+		FVector2D mousePos;
+		playerController->GetMousePosition (mousePos.X, mousePos.Y);
+
+		FIntVector viewportBounds;
+		playerController->GetViewportSize (viewportBounds.X, viewportBounds.Y);
+
+		FVector2D percentage = FVector2D (mousePos.X / viewportBounds.X * 100, mousePos.Y / viewportBounds.Y * 100);
+
+		if (percentage.X > 90 && percentage.Y > 82 && !_thrashBinOpen)
+		{
+			//Disable thrashbin UI
+			_uiController->Disable (18);
+
+			//Enable open thrashbin UI
+			_uiController->Enable (10, 0);
+
+			_thrashBinOpen = true;
+		}
+		else if (percentage.X <= 90 && _thrashBinOpen || percentage.Y <= 82 && _thrashBinOpen)
+		{
+			//Disable open thrashbin UI
+			_uiController->Disable (10);
+
+			//Enable thrashbin UI
+			_uiController->Enable (18, 0);
+
+			_thrashBinOpen = false;
+		}
+	}
+}
+
+void ASimulationGameController::AddHighscore (FString name, int score)
+{
+	_overallHighscore->AddScore (name, score);
+	_dailyHighscore->AddScore (name, score);
+}
+
+void ASimulationGameController::QuitGamePress ()
+{
+	exitGameRef->AddToViewport (3);
+
+	_inOptions = true;
+}
+
+void ASimulationGameController::GoBackToGame ()
+{
+	exitGameRef->RemoveFromParent ();
+
+	_inOptions = false;
 }
 
 void ASimulationGameController::SpawnUnit (int index)
@@ -226,7 +276,7 @@ void ASimulationGameController::PlaceUnit ()
 
 	FVector2D percentage = FVector2D (mousePos.X / viewportBounds.X * 100, mousePos.Y / viewportBounds.Y * 100);
 
-	if (percentage.X >= 44 && percentage.X <= 55 && percentage.Y >= 81)
+	if (percentage.X > 90 && percentage.Y > 82)
 	{
 		//Enable simulation UI
 		_uiController->Enable (1, 0);
@@ -234,6 +284,14 @@ void ASimulationGameController::PlaceUnit ()
 		//Remove currently controlled unit
 		_controlledUnit->Destroy ();
 		_controlledUnit = nullptr;
+
+		//Disable open thrashbin UI
+		_uiController->Disable (10);
+
+		//Enable thrashbin UI
+		_uiController->Enable (18, 0);
+
+		_thrashBinOpen = false;
 	}
 	else if (_controlledUnit->PlaceUnit ())
 	{
@@ -292,7 +350,9 @@ void ASimulationGameController::RemoveUnit ()
 
 	//Trace to see what is under the mouse cursor
 	FHitResult hit;
-	GetWorld ()->GetFirstPlayerController ()->GetHitResultUnderCursor (ECC_Visibility, true, hit);
+
+	if (!GetWorld ()->GetFirstPlayerController ()->GetHitResultUnderCursor (ECC_Visibility, true, hit))
+		return;
 
 	if (hit.GetActor ()->GetRootComponent ()->ComponentHasTag ("Nuclear") || hit.GetActor ()->GetRootComponent ()->ComponentHasTag ("Windmill") || hit.GetActor ()->GetRootComponent ()->ComponentHasTag ("Oil") || hit.GetActor ()->GetRootComponent ()->ComponentHasTag ("message"))
 	{
@@ -662,6 +722,7 @@ void ASimulationGameController::InitializeStartUI ()
 	permanentPollutionMessageRef = CreateWidget <UUserWidget> (GetWorld ()->GetFirstPlayerController (), permanentPollutionMessage);
 	permanentPollutionMessage2Ref = CreateWidget <UUserWidget> (GetWorld ()->GetFirstPlayerController (), permanentPollutionMessage2);
 	hourGlassRef = CreateWidget <UUserWidget> (GetWorld ()->GetFirstPlayerController (), hourGlass);
+	exitGameRef = CreateWidget <UUserWidget> (GetWorld ()->GetFirstPlayerController (), exitGameUI);
 }
 
 void ASimulationGameController::GoToNextUI ()
@@ -702,6 +763,17 @@ void ASimulationGameController::QuitGame ()
 	ReloadGame ();
 }
 
+void ASimulationGameController::RestartGame ()
+{
+	Cast <UMainGameInstance> (GetWorld ()->GetGameInstance ())->Restart = true;
+
+	delete _cameraMovement;
+	delete _overallHighscore;
+	delete _dailyHighscore;
+
+	ReloadGame ();
+}
+
 void ASimulationGameController::OnSpacePress ()
 {
 	if (_simulationRunning)
@@ -716,7 +788,7 @@ int ASimulationGameController::GetCurrentTurn ()
 void ASimulationGameController::OnMouseClick ()
 {
 	if (_gameFinished)
-		ReloadGame ();
+		QuitGame ();
 	else if (_showingPollutionMessage)
 		StopShowingPollutionMessage (1);
 	else if (_showingPollutionMessage2)
@@ -752,6 +824,14 @@ void ASimulationGameController::OnMouseClick ()
 		GoToNextUI ();
 	else if (_placing)
 		RemoveUnit ();
+
+	if (_inOptions)
+		GoBackToGame ();
+}
+
+bool ASimulationGameController::GetInOptions ()
+{
+	return _inOptions;
 }
 
 void ASimulationGameController::OnMouseRelease ()
