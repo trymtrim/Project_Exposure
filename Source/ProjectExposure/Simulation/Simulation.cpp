@@ -231,6 +231,9 @@ void ASimulation::HandleResources() {
 
 	if (_currentTurn % 2 == 1 && _currentTurn != 1) {
 		currentPollution -= 2;
+		if (currentPollution < 0) {
+			currentPollution = 0;
+		}
 	}
 
 	//Loop through all the nuclear powerplants and increase and check the number of turns they exist
@@ -273,7 +276,10 @@ void ASimulation::CheckForDeath() {
 	if (dead) {
 		if (_insufficientLastRound) {
 			_controller->EndGame(false);
-			UpdateEndUI(currentPollution, 3 * _oil.Num(), 3 * _nuclear.Num(), 1 * _solar.Num(), FMath::FloorToInt(_timePlayed), _solar.Num(), _nuclear.Num(), _oil.Num(), _controller->GetPlayerName(), CalculateScore());
+			int score = CalculateScore();
+			_controller->AddHighscore(_controller->GetPlayerName(), score);
+			UpdateEndUI(currentPollution, 3 * _oil.Num(), 3 * _nuclear.Num(), 1 * _solar.Num(), FMath::FloorToInt(_timePlayed), _solar.Num(), _nuclear.Num(), _oil.Num(), _controller->GetPlayerName(), score);
+			return;
 		} else {
 			_insufficientLastRound = true;
 		}
@@ -283,7 +289,10 @@ void ASimulation::CheckForDeath() {
 	
 	if (_currentTurn == 9 && !dead) {
 		_controller->EndGame(true);
-		UpdateEndUI(currentPollution, 3 * _oil.Num(), 3 * _nuclear.Num(), 1 * _solar.Num(), FMath::FloorToInt(_timePlayed), _solar.Num(), _nuclear.Num(), _oil.Num(), _controller->GetPlayerName(), CalculateScore());
+		int score = CalculateScore();
+		_controller->AddHighscore(_controller->GetPlayerName(), score);
+		UpdateEndUI(currentPollution, 3 * _oil.Num(), 3 * _nuclear.Num(), 1 * _solar.Num(), FMath::FloorToInt(_timePlayed), _solar.Num(), _nuclear.Num(), _oil.Num(), _controller->GetPlayerName(), score);
+		return;
 	}
 
 	if (_wasteAddedThisTurn) {
@@ -456,6 +465,23 @@ int ASimulation::CalculateScore() {
 
 	if (score > 150) score = 150;
 	return score;
+}
+
+void ASimulation::UpdateHighscores(const bool isDaily, TArray<FString>& highscores) {
+	TArray<FString> output;
+	
+	TArray<FString> names = _controller->GetHighscoreNames(isDaily);
+	TArray<int> scores = _controller->GetHighscores(isDaily);
+	
+	for (int i = 0; i < names.Num(); i++)
+	{
+		FString temp = names[i] + " : ";
+		if (scores[i] == 0) temp.Append("--");
+		else temp.Append(FString::FromInt(scores[i]));
+		output.Emplace(temp);
+	}
+
+	highscores.Append(output);
 }
 
 void ASimulation::ToggleParticles(bool pActive, bool positive) {
