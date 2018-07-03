@@ -108,6 +108,9 @@ void AIntroController::StartGame ()
 
 void AIntroController::FinishName ()
 {
+	if (playerName.Len () == 0)
+		return;
+
 	//Disable keyboard UI
 	uiController->Disable (7);
 
@@ -119,7 +122,10 @@ void AIntroController::FinishName ()
 void AIntroController::AddLetter (FString letter)
 {
 	if (letter == "BACKSPACE")
-		playerName.RemoveAt (playerName.Len () - 1);
+	{
+		if (playerName.Len () > 0)
+			playerName.RemoveAt (playerName.Len () - 1);
+	}
 	else if (playerName.Len () < 15)
 		playerName += letter;
 }
