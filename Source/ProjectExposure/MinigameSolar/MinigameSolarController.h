@@ -77,6 +77,11 @@ private:
 	AActor* _controlledUnit = nullptr;
 	bool _lifting = false;
 
+	bool _pressing = false;
+	float _pressingTimer = 0.0f;
+
+	float _delayTime = 0.1f;
+
 	ASimulationGameController* _gameController;
 
 	//Game positions

@@ -50,10 +50,32 @@ void AMinigameSolarController::Tick (float DeltaTime)
 	{
 		_timer -= DeltaTime;
 
-		timerText = "00:" + FString::FromInt ((int) _timer);
+		timerText = "00:" + FString::FromInt ((int) _timer); //REMINDER - FORMAT
 
 		if (_timer <= 0.0f)
 			EndGame ();
+	}
+
+	if (_pressing)
+	{
+		_pressingTimer += DeltaTime;
+
+		if (_pressingTimer >= _delayTime)
+		{
+			FHitResult hit;
+			GetWorld ()->GetFirstPlayerController ()->GetHitResultUnderCursor (ECC_Visibility, true, hit);
+
+			if (hit.bBlockingHit)
+			{
+				if (hit.GetActor ()->GetRootComponent ()->ComponentHasTag ("Rotate"))
+					ControlUnit ();
+				else if (hit.GetActor ()->GetRootComponent ()->ComponentHasTag ("Mirror"))
+					ControlUnit ();
+			}
+
+			_pressing = false;
+			_pressingTimer = 0.0f;
+		}
 	}
 }
 
@@ -201,10 +223,15 @@ void AMinigameSolarController::ControlUnit ()
 			_controlledUnit = hit.GetActor ();
 			_lifting = true;
 
-			for (int i = 0; i < _rotators.Num (); i++)
+			TArray <UStaticMeshComponent*> staticComps;
+			_controlledUnit->GetComponents <UStaticMeshComponent> (staticComps);
+			UStaticMeshComponent* _mesh = staticComps [0];
+			_mesh->SetCollisionEnabled (ECollisionEnabled::NoCollision);
+
+			/*for (int i = 0; i < _rotators.Num (); i++)
 				_rotators [i]->Destroy ();
 
-			_rotators.Empty ();
+			_rotators.Empty ();*/
 
 			UpdateBeams ();
 		}
@@ -246,7 +273,7 @@ void AMinigameSolarController::PlaceUnit ()
 	_controlledUnit->SetActorLocation (closestGridSlot->GetActorLocation ());
 
 	//Spawn rotator
-	FActorSpawnParameters spawnParams;
+	/*FActorSpawnParameters spawnParams;
 	FRotator rotator = FRotator (0.0f, 0.0f, 0.0f);
 
 	UWorld* world = GetWorld ();
@@ -257,7 +284,12 @@ void AMinigameSolarController::PlaceUnit ()
 
 		AActor* rotate = world->SpawnActor <AActor> (_rotatePrefab, spawnPosition, rotator, spawnParams);
 		_rotators.Add (rotate);
-	}
+	}*/
+
+	TArray <UStaticMeshComponent*> staticComps;
+	_controlledUnit->GetComponents <UStaticMeshComponent> (staticComps);
+	UStaticMeshComponent* _mesh = staticComps [0];
+	_mesh->SetCollisionEnabled (ECollisionEnabled::QueryAndPhysics);
 
 	_lifting = false;
 	_controlledUnit = nullptr;
@@ -509,10 +541,10 @@ void AMinigameSolarController::GoBackToSimulation ()
 
 	_obstacles.Empty ();
 
-	for (int i = 0; i < _rotators.Num (); i++)
+	/*for (int i = 0; i < _rotators.Num (); i++)
 		_rotators [i]->Destroy ();
 
-	_rotators.Empty ();
+	_rotators.Empty ();*/
 }
 
 void AMinigameSolarController::OnMouseClick ()
@@ -531,19 +563,10 @@ void AMinigameSolarController::OnMouseClick ()
 
 		if (hit.bBlockingHit)
 		{
-			if (hit.GetActor ()->GetRootComponent ()->ComponentHasTag ("Mirror"))
+			if (hit.GetActor ()->GetRootComponent ()->ComponentHasTag ("Rotate"))
 				ControlUnit ();
-			else if (hit.GetActor ()->GetRootComponent ()->ComponentHasTag ("Rotate"))
-			{
-				for (int i = 0; i < _rotators.Num (); i++)
-				{
-					if (hit.GetActor () == _rotators [i])
-					{
-						RotateUnit (_mirrors [i]);
-						break;
-					}
-				}
-			}
+			else if (hit.GetActor ()->GetRootComponent ()->ComponentHasTag ("Mirror"))
+				_pressing = true;
 		}
 	}
 
@@ -555,6 +578,34 @@ void AMinigameSolarController::OnMouseRelease ()
 {
 	if (_lifting)
 		PlaceUnit ();
+
+	if (_pressing)
+	{
+		FHitResult hit;
+		GetWorld ()->GetFirstPlayerController ()->GetHitResultUnderCursor (ECC_Visibility, true, hit);
+
+		if (hit.bBlockingHit)
+		{
+			if (hit.GetActor ()->GetRootComponent ()->ComponentHasTag ("Rotate"))
+				ControlUnit ();
+			else if (hit.GetActor ()->GetRootComponent ()->ComponentHasTag ("Mirror"))
+			{
+				for (int i = 0; i < _mirrors.Num (); i++)
+				{
+					if (hit.GetActor () == _mirrors [i])
+					{
+						if (_pressingTimer < _delayTime)
+							RotateUnit (_mirrors [i]);
+
+						break;
+					}
+				}
+			}
+		}
+
+		_pressing = false;
+		_pressingTimer = 0.0f;
+	}
 }
 
 //Called to bind functionality to input
