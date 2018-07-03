@@ -83,6 +83,9 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, Category = "EndGame")
 	void UpdateEndUI(int pollution, int oilEnergy, int nuclearEnergy, int renewableEnergy, float timePlayed, int renewablePlaced, int nuclearPlaced, int oilPlaced, const FString& name, int score);
 
+	UFUNCTION(BlueprintImplementableEvent, Category = "EndGame")
+	void UpdateEndScreen(bool won);
+
 	void StartSimulation();
 	void StopSimulation();
 

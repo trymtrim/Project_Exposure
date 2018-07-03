@@ -276,6 +276,7 @@ void ASimulation::CheckForDeath() {
 	if (dead) {
 		if (_insufficientLastRound) {
 			_controller->EndGame(false);
+			UpdateEndScreen(false);
 			int score = CalculateScore();
 			_controller->AddHighscore(_controller->GetPlayerName(), score);
 			UpdateEndUI(currentPollution, 3 * _oil.Num(), 3 * _nuclear.Num(), 1 * _solar.Num(), FMath::FloorToInt(_timePlayed), _solar.Num(), _nuclear.Num(), _oil.Num(), _controller->GetPlayerName(), score);
@@ -289,6 +290,7 @@ void ASimulation::CheckForDeath() {
 	
 	if (_currentTurn == 9 && !dead) {
 		_controller->EndGame(true);
+		UpdateEndScreen(true);
 		int score = CalculateScore();
 		_controller->AddHighscore(_controller->GetPlayerName(), score);
 		UpdateEndUI(currentPollution, 3 * _oil.Num(), 3 * _nuclear.Num(), 1 * _solar.Num(), FMath::FloorToInt(_timePlayed), _solar.Num(), _nuclear.Num(), _oil.Num(), _controller->GetPlayerName(), score);
