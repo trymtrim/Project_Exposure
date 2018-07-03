@@ -75,6 +75,7 @@ private:
 	int _currentScoreLerp = 0;
 
 	AActor* _controlledUnit = nullptr;
+	AActor* _soonUnit = nullptr;
 	bool _lifting = false;
 
 	bool _pressing = false;
@@ -129,21 +130,25 @@ private:
 	UPROPERTY (EditAnywhere)
 	AUIController* _uiController;
 
+	int _currentIndex = 0;
+
+	TArray <int> _indexes;
+
 	//Game setup
 	UPROPERTY (EditAnywhere)
-	int _mirrorCount;
+	TArray <int> _mirrorCount;
 	UPROPERTY (EditAnywhere)
-	int _gridX;
+	TArray <int> _gridX;
 	UPROPERTY (EditAnywhere)
-	int _gridY;
+	TArray <int> _gridY;
 	UPROPERTY (EditAnywhere)
-	int _beamStartRotation;
+	TArray <int> _beamStartRotation;
 	UPROPERTY (EditAnywhere)
-	int _beamStartPositionX;
+	TArray <int> _beamStartPositionX;
 	UPROPERTY (EditAnywhere)
-	int _beamStartPositionY;
+	TArray <int> _beamStartPositionY;
 	UPROPERTY (EditAnywhere)
-	int _beamGoalPositionX;
+	TArray <int> _beamGoalPositionX;
 	UPROPERTY (EditAnywhere)
-	int _beamGoalPositionY;
+	TArray <int> _beamGoalPositionY;
 };

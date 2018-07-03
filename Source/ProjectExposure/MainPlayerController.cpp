@@ -7,13 +7,10 @@
 AMainPlayerController::AMainPlayerController ()
 {
 	bShowMouseCursor = true;
-
-	/*bAutoManageActiveCameraTarget = false;
-	PlayerCameraManagerClass = AMainCameraManager::StaticClass ();
-	SetViewTarget (GetPawn ());*/
-
-	//DefaultMouseCursor = EMouseCursor::Crosshairs;
-	//bAutoManageActiveCameraTarget = true;
+	bEnableClickEvents = true;
+	bEnableTouchEvents = false;
+	bEnableTouchOverEvents = false;
+	bEnableMouseOverEvents = false;
 }
 
 void AMainPlayerController::PlayerTick (float deltaTime)
