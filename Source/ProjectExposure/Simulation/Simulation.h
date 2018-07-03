@@ -81,10 +81,13 @@ public:
 	void UpdateTower(float towerStage, FVector color);
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "EndGame")
-	void UpdateEndUI(int cityEnergyConsumption, int oilEnergy, int nuclearEnergy, int renewableEnergy, float timePlayed, int renewablePlaced, int nuclearPlaced, int oilPlaced, const FString& name, int score);
+	void UpdateEndUI(int pollution, int oilEnergy, int nuclearEnergy, int renewableEnergy, float timePlayed, int renewablePlaced, int nuclearPlaced, int oilPlaced, const FString& name, int score);
 
 	void StartSimulation();
 	void StopSimulation();
+
+	UFUNCTION(BlueprintCallable, Category = "Feedback")
+	void CalculateFeedback();
 
 protected:
 	//Called when the game starts or when spawned
@@ -99,8 +102,8 @@ private:
 
 
 	void ToggleParticles(bool pActive, bool positive);
-	void CalculateFeedback();
 	void CalculateTower();
+	int CalculateScore();
 	void HandleResources();
 	void CheckForDeath();
 	void LerpLights(float DeltaTime);
