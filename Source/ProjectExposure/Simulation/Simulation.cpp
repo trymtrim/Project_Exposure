@@ -242,11 +242,6 @@ void ASimulation::HandleResources() {
 			_nuclearPollution++;
 			_wasteAddedThisTurn = true;
 
-			if (_firstWaste) {
-				_firstWaste = false;
-				_controller->ShowPermanentPollutionMessage();
-			}
-
 			if (_nuclear [i]->GetTurn () == 3)
 			{
 				FActorSpawnParameters spawnParams;
@@ -278,7 +273,7 @@ void ASimulation::CheckForDeath() {
 	if (dead) {
 		if (_insufficientLastRound) {
 			_controller->EndGame(false);
-			UpdateEndUI(_cityEnergyNeed, 3 * _oil.Num(), 3 * _nuclear.Num(), 3 * _solar.Num(), FMath::FloorToInt(_timePlayed), _solar.Num(), _nuclear.Num(), _oil.Num(), _controller->GetPlayerName(), CalculateScore());
+			UpdateEndUI(currentPollution, 3 * _oil.Num(), 3 * _nuclear.Num(), 1 * _solar.Num(), FMath::FloorToInt(_timePlayed), _solar.Num(), _nuclear.Num(), _oil.Num(), _controller->GetPlayerName(), CalculateScore());
 		} else {
 			_insufficientLastRound = true;
 		}
@@ -288,7 +283,14 @@ void ASimulation::CheckForDeath() {
 	
 	if (_currentTurn == 9 && !dead) {
 		_controller->EndGame(true);
-		UpdateEndUI(_cityEnergyNeed, 3 * _oil.Num(), 3 * _nuclear.Num(), 3 * _solar.Num(), FMath::FloorToInt(_timePlayed), _solar.Num(), _nuclear.Num(), _oil.Num(), _controller->GetPlayerName(), CalculateScore());
+		UpdateEndUI(currentPollution, 3 * _oil.Num(), 3 * _nuclear.Num(), 1 * _solar.Num(), FMath::FloorToInt(_timePlayed), _solar.Num(), _nuclear.Num(), _oil.Num(), _controller->GetPlayerName(), CalculateScore());
+	}
+
+	if (_wasteAddedThisTurn) {
+		if (_firstWaste) {
+			_firstWaste = false;
+			_controller->ShowPermanentPollutionMessage();
+		}
 	}
 }
 

@@ -81,7 +81,7 @@ public:
 	void UpdateTower(float towerStage, FVector color);
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "EndGame")
-	void UpdateEndUI(int cityEnergyConsumption, int oilEnergy, int nuclearEnergy, int renewableEnergy, float timePlayed, int renewablePlaced, int nuclearPlaced, int oilPlaced, const FString& name, int score);
+	void UpdateEndUI(int pollution, int oilEnergy, int nuclearEnergy, int renewableEnergy, float timePlayed, int renewablePlaced, int nuclearPlaced, int oilPlaced, const FString& name, int score);
 
 	void StartSimulation();
 	void StopSimulation();
