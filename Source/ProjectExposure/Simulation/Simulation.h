@@ -101,6 +101,7 @@ private:
 	void ToggleParticles(bool pActive, bool positive);
 	void CalculateFeedback();
 	void CalculateTower();
+	int CalculateScore();
 	void HandleResources();
 	void CheckForDeath();
 	void LerpLights(float DeltaTime);

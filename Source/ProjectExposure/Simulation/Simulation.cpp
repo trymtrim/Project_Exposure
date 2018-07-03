@@ -56,7 +56,7 @@ void ASimulation::Tick (float DeltaTime)
 {
 	Super::Tick (DeltaTime);
 
-	if (_lightLerping) LerpLights(DeltaTime);
+	//if (_lightLerping) LerpLights(DeltaTime);
 
 	if (_currentWaste)
 		ScaleNuclearWaste (DeltaTime);
@@ -179,6 +179,8 @@ void ASimulation::StartSimulation() {
 
 	//Increase all the resources 'n stuff
 	HandleResources();
+	
+	UpdateCycle(!_lightReversed, _lightLerpValue, dayLight, nightLight);
 }
 
 void ASimulation::StopSimulation() {
@@ -275,9 +277,8 @@ void ASimulation::CheckForDeath() {
 	//If we hit a lose condition this turn, check if we already screwed up the last turn, if yes game over, if no give the player one turn to fix his problems
 	if (dead) {
 		if (_insufficientLastRound) {
-			FString name = "Jeebus";
 			_controller->EndGame(false);
-			UpdateEndUI(_cityEnergyNeed, 3 * _oil.Num(), 3 * _nuclear.Num(), 3 * _solar.Num(), FMath::FloorToInt(_timePlayed), _solar.Num(), _nuclear.Num(), _oil.Num(), name, 100000);
+			UpdateEndUI(_cityEnergyNeed, 3 * _oil.Num(), 3 * _nuclear.Num(), 3 * _solar.Num(), FMath::FloorToInt(_timePlayed), _solar.Num(), _nuclear.Num(), _oil.Num(), _controller->GetPlayerName(), CalculateScore());
 		} else {
 			_insufficientLastRound = true;
 		}
@@ -285,7 +286,10 @@ void ASimulation::CheckForDeath() {
 		_insufficientLastRound = false;
 	}
 	
-	if (_currentTurn == 9 && !dead) _controller->EndGame(true);
+	if (_currentTurn == 9 && !dead) {
+		_controller->EndGame(true);
+		UpdateEndUI(_cityEnergyNeed, 3 * _oil.Num(), 3 * _nuclear.Num(), 3 * _solar.Num(), FMath::FloorToInt(_timePlayed), _solar.Num(), _nuclear.Num(), _oil.Num(), _controller->GetPlayerName(), CalculateScore());
+	}
 }
 
 void ASimulation::CalculateFeedback() {
@@ -391,6 +395,65 @@ void ASimulation::CalculateTower() {
 			UpdateTower(-0.0f, _colorOversufficient);
 		}
 	}
+}
+
+int ASimulation::CalculateScore() {
+	int score = 150;
+
+	//Add points for each survived round
+	score -= 90 - (10 * _currentTurn);
+
+	//Energy points
+	float percentage = currentEnergy / _cityEnergyNeed * 100;
+
+	//If we are negative
+	if (percentage < 100) {
+		//X -> Y
+		//0 - 60
+		if (percentage >= _feedbackNegativeScales.X && percentage < _feedbackNegativeScales.Y) {
+			score -= 15;
+		}
+		//Y -> Z
+		//60 - 80
+		else if (percentage >= _feedbackNegativeScales.Y && percentage < _feedbackNegativeScales.Z) {
+			score -= 10;
+		}
+		//Z -> 99
+		//80 - 99
+		else {
+			score -= 5;
+		}
+	}
+	//If we are positive
+	else if (percentage >= 100) {
+		//X -> Y
+		//100 - 120
+		if (percentage >= _feedbackPositiveScales.X && percentage < _feedbackPositiveScales.Y) {
+			score += 0;
+		}
+		//Y -> Z
+		//120 - 140
+		else if (percentage >= _feedbackPositiveScales.Y && percentage < _feedbackPositiveScales.Z) {
+			score += 5;
+		}
+		//Z -> infinity baby x)
+		// 140 - infinity
+		else {
+			score += 10;
+		}
+	}
+
+	//Pollution points
+	if (currentPollution < 1.0f) score += 15;
+	else if (currentPollution >= 1.0f && currentPollution < 2.0f) score += 10;
+	else if (currentPollution >= 2.0f && currentPollution < 3.0f) score += 5;
+	else if (currentPollution >= 3.0f && currentPollution < 4.0f) score -= 5;
+	else if (currentPollution >= 4.0f && currentPollution < 5.0f) score -= 10;
+	else if (currentPollution >= 5.0f && currentPollution <= 6.0f) score -= 15;
+	else score += 0;
+
+	if (score > 150) score = 150;
+	return score;
 }
 
 void ASimulation::ToggleParticles(bool pActive, bool positive) {
