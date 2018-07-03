@@ -48,7 +48,7 @@ void ASimulationGameController::BeginPlay ()
 	InitializeStartUI ();
 
 	//Initialize highscores
-	_overallHighscore = new Highscore (FPaths::ProjectContentDir () + "../highscores/Highscore.csv");
+	//_overallHighscore = new Highscore (FPaths::ProjectContentDir () + "../highscores/Highscore.csv");
 
 	//Get current date and time for daily highscore filepath
 	auto t = std::time (nullptr);
@@ -61,7 +61,7 @@ void ASimulationGameController::BeginPlay ()
 
 	FString dailyFilePath = date.c_str ();
 
-	_dailyHighscore = new Highscore (FPaths::ProjectContentDir () + "../highscores/daily/" + dailyFilePath + ".csv");
+	//_dailyHighscore = new Highscore (FPaths::ProjectContentDir () + "../highscores/daily/" + dailyFilePath + ".csv");
 }
 
 //Called every frame
