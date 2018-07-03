@@ -13,4 +13,6 @@ class PROJECTEXPOSURE_API UMainGameInstance : public UGameInstance
 	
 public:
 	FString PlayerName = "Player";
+
+	bool Restart = false;
 };

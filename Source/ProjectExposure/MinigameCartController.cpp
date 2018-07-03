@@ -361,6 +361,9 @@ void AMinigameCartController::onMouseClick ()
 	}
 	else
 		startMinigame ();
+
+	if (simulationController->GetInOptions ())
+		simulationController->GoBackToGame ();
 }
 
 // Called to bind functionality to input

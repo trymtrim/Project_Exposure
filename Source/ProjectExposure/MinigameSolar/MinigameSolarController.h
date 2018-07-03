@@ -93,12 +93,14 @@ private:
 
 	//Game stats
 	int _score = 0;
-	int _maxScore = 30;
+	int _maxScore = 45;
 
 	bool _gameStarted = false;
 	bool _endPanelShown = false;
 
 	float _timer = 60.0f;
+
+	int _endTime;
 
 	UPROPERTY () TArray <AActor*> _obstacles;
 

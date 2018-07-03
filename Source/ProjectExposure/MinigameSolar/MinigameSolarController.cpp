@@ -65,9 +65,9 @@ void AMinigameSolarController::AnimateStars (float deltaTime)
 	{
 		_starLerp = 0.0f;
 		_currentScoreLerp++;
-		_barValue = (float) _currentScoreLerp / 30.0f;
+		_barValue = (float) _currentScoreLerp / _maxScore;
 
-		endScoreText = FString::FromInt (_currentScoreLerp) + "/" + FString::FromInt (_maxScore);
+		endScoreText = "00:" + FString::FromInt (_currentScoreLerp);
 		EndScreen ();
 
 		int points = _currentScoreLerp + 1;
@@ -446,6 +446,7 @@ void AMinigameSolarController::EndGame ()
 	SetScore ((int) _timer);
 	endScoreText = "1/1";
 
+	_endTime = (int) _timer;
 	_timer = 60.0f;
 
 	//Disable solarMiniGame UI
@@ -545,6 +546,9 @@ void AMinigameSolarController::OnMouseClick ()
 			}
 		}
 	}
+
+	if (_gameController->GetInOptions ())
+		_gameController->GoBackToGame ();
 }
 
 void AMinigameSolarController::OnMouseRelease ()

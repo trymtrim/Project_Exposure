@@ -14,6 +14,8 @@
 #include "Highscore.h"
 #include "SimulationGameController.generated.h"
 
+class UUserWidget;
+
 UCLASS()
 class PROJECTEXPOSURE_API ASimulationGameController : public APawn
 {
@@ -40,8 +42,11 @@ public:
 	void EndGame (bool gameWon); //True if won, false if lost
 	void SetMinigamePerformance (MinigamePerformance performance);
 	void ShowPermanentPollutionMessage ();
+	void AddHighscore (FString name, int score);
 
 	int GetCurrentTurn ();
+
+	bool GetInOptions ();
 
 	bool CanContinue ();
 	TArray <int> GetHighscores (bool daily);
@@ -51,6 +56,14 @@ public:
 	//For blueprints
 	UFUNCTION (BlueprintCallable, Category = "ButtonPress")
 	void SpawnUnit (int index);
+	UFUNCTION (BlueprintCallable, Category = "ButtonPress")
+	void QuitGamePress ();
+	UFUNCTION (BlueprintCallable, Category = "Exit")
+	void GoBackToGame ();
+	UFUNCTION (BlueprintCallable, Category = "Exit")
+	void QuitGame ();
+	UFUNCTION (BlueprintCallable, Category = "Exit")
+	void RestartGame ();
 
 	UPROPERTY (BlueprintReadOnly)
 	FString currentTurnText = "Jaar 1";
@@ -63,6 +76,9 @@ public:
 	void ResetLevel ();
 	UFUNCTION (BlueprintImplementableEvent, Category = "ReloadGame")
 	void ReloadGame ();
+
+	UPROPERTY (BlueprintReadOnly, Category = "UI")
+	UUserWidget* exitGameRef;
 
 protected:
 	virtual void BeginPlay () override;
@@ -81,7 +97,6 @@ private:
 	void UpdateFading (float deltaTime);
 	void UpdateMovingToMine (bool toMine);
 	void CheckAFK ();
-	void QuitGame ();
 	void InitializeStartUI ();
 	void GoToNextUI ();
 	void StopShowingPollutionMessage (int index);
@@ -109,6 +124,9 @@ private:
 
 	float _minigamePerformance = 1.0f;
 
+	//Thrashbin
+	bool _thrashBinOpen = false;
+
 	UPROPERTY () AActor* _messageBox;
 	UPROPERTY () AActor* _removeBox;
 	AActor* _removePP;
@@ -118,6 +136,8 @@ private:
 
 	bool _waitingForResponse = false;
 	bool _gameFinished = false;
+
+	bool _inOptions = false;
 
 	//For minigame panels
 	bool _panelDelay = false;
@@ -231,6 +251,8 @@ private:
 	TSubclassOf <UUserWidget> hourGlass;
 	UPROPERTY ()
 	UUserWidget* hourGlassRef;
+	UPROPERTY (EditAnywhere)
+	TSubclassOf <UUserWidget> exitGameUI;
 
 	//Debug
 	UPROPERTY (EditAnywhere) bool _miniGamesOn = true;

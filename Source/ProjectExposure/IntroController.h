@@ -39,6 +39,8 @@ public:
 	void FinishName ();
 	UFUNCTION (BlueprintCallable)
 	void AddLetter (FString letter);
+	UFUNCTION (BlueprintCallable)
+	void GoToGameLevel ();
 
 	UPROPERTY (BlueprintReadOnly)
 	FString playerName = "";
@@ -67,6 +69,9 @@ private:
 
 	float _startTimer = 0.0f;
 	float _videoTimer = 0.0f;
+	float _restartGameTimer = 0.0f;
+
+	bool _restartingGame = false;
 
 	//Fading
 	void FadeIn (float delayTime, float fadeTime);
