@@ -86,6 +86,9 @@ public:
 	void StartSimulation();
 	void StopSimulation();
 
+	UFUNCTION(BlueprintCallable, Category = "Feedback")
+	void CalculateFeedback();
+
 protected:
 	//Called when the game starts or when spawned
 	virtual void BeginPlay () override;
@@ -99,7 +102,6 @@ private:
 
 
 	void ToggleParticles(bool pActive, bool positive);
-	void CalculateFeedback();
 	void CalculateTower();
 	int CalculateScore();
 	void HandleResources();
