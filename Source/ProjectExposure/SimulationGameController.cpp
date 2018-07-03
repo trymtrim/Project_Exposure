@@ -308,12 +308,18 @@ void ASimulationGameController::PlaceUnit ()
 		FVector rotation = spawnPosition - GetActorLocation ();
 		FRotator rotator = rotation.Rotation ();
 
+		if (_miniGameActive == 3)
+			spawnPosition += FVector (0.0f, 0.0f, 800.0f);
+
 		//If the current mini game has been played before, give the player the option to play it again
 		if (_miniGameActive == 1 && _mineGamePlayed || _miniGameActive == 2 && _windGamePlayed || _miniGameActive == 3 && _oilGamePlayed)
 		{
 			_messageBox = GetWorld ()->SpawnActor <AActor> (_optionalMinigameMessage, spawnPosition + FVector (0, 0, 500), rotator, spawnParams);
 			_replayPP = _controlledUnit;
 		}
+
+		if (_miniGameActive == 2)
+			_windmillPosition =_controlledUnit->GetActorLocation ();
 
 		_controlledUnit = nullptr;
 
@@ -399,10 +405,13 @@ void ASimulationGameController::RemoveUnit ()
 			
 			//Spawn the remove message
 			FActorSpawnParameters spawnParams;
-			FVector spawnPosition = unit->GetActorLocation () + FVector (0, 0, 750);
+			FVector spawnPosition = unit->GetActorLocation () + FVector (0, 0, 1250);
 
 			FVector rotation = spawnPosition - GetActorLocation ();
 			FRotator rotator = rotation.Rotation ();
+
+			if (unit->GetRootComponent ()->ComponentHasTag ("Oil"))
+				spawnPosition += FVector (0.0f, 0.0f, 800.0f);
 
 			_removeBox = GetWorld ()->SpawnActor <AActor> (_removeMessage, spawnPosition, rotator, spawnParams);
 		}
@@ -470,8 +479,6 @@ void ASimulationGameController::StartSimulation ()
 
 void ASimulationGameController::StopSimulation ()
 {
-	StartNewTurn ();
-
 	if (_messageBox)
 		_messageBox->Destroy ();
 
@@ -480,6 +487,8 @@ void ASimulationGameController::StopSimulation ()
 	hourGlassRef->RemoveFromParent ();
 
 	_simulation->StopSimulation ();
+
+	StartNewTurn ();
 }
 
 void ASimulationGameController::EnterMiniGame ()
@@ -495,7 +504,7 @@ void ASimulationGameController::EnterMiniGame ()
 		break;
 	case 2:
 		rot = GetActorLocation () - _powerPlants [_powerPlants.Num () - 1]->GetActorLocation ();
-		_cameraMovement->MoveTo (_powerPlants [_powerPlants.Num () - 1]->GetActorLocation (), rot.Rotation ().Vector ());
+		_cameraMovement->MoveTo (_powerPlants [_powerPlants.Num () - 1]->GetActorLocation (), FVector (0.0f, 324.0f, 135.0f));
 		_windGamePlayed = true;
 		FadeIn (0.5f, 0.5f);
 		FadeOut (3.5f, 0.5f);
@@ -528,8 +537,18 @@ void ASimulationGameController::ExitMiniGame ()
 		_cameraMovement->MoveTo (_mineCameraPositions [_mineCameraPositions.Num () - 1], _mineCameraRotations [_mineCameraRotations.Num () - 1]);
 		_movingFromMine = true;
 	}
-	else
+	else if (_miniGameActive == 2)
+	{
+		SetActorLocation (_windmillPosition);
 		_cameraMovement->MoveTo (_defaultPosition, _defaultRotation);
+	}
+	else
+	{
+		SetActorRotation (FRotator (_defaultRotation.Y, _defaultRotation.Z, _defaultRotation.X));
+		_cameraMovement->MoveTo (_defaultPosition, _defaultRotation);
+
+		FadeOut (0.0f, 1.5f);
+	}
 
 	//Enable resources UI
 	//_uiController->Enable (2, 0);
